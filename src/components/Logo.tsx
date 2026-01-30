@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React from 'react';
 import { Shield } from 'lucide-react';
 
@@ -21,7 +20,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
   };
 
   return (
-    <Link href="/" className={`flex items-center gap-2 ${className}`}>
+    <div className={`flex items-center gap-2 ${className}`}>
       <div className="relative">
         <Shield
           size={iconSizes[size]}
@@ -39,7 +38,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
         <span className="text-foreground">DRE</span>
         <span className="text-primary">LIX</span>
       </span>
-    </Link>
+    </div>
   );
 };
 

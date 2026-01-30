@@ -18,25 +18,25 @@ const HeroSection: React.FC = () => {
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
 
-      {/* Decorative elements */}
+      {/* Decorative elements – desaturated orange-brown, subtle */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 opacity-10">
-          <HardHat size={200} className="text-primary" />
+        <div className="absolute top-20 left-10 opacity-[0.12]">
+          <HardHat size={200} className="text-primary-muted" />
         </div>
-        <div className="absolute bottom-20 right-10 opacity-10">
-          <Shield size={250} className="text-primary" />
+        <div className="absolute bottom-20 right-10 opacity-[0.12]">
+          <Shield size={250} className="text-primary-muted" />
         </div>
-        <div className="absolute top-1/2 right-1/4 opacity-5">
-          <Glasses size={180} className="text-accent" />
+        <div className="absolute top-1/2 right-1/4 opacity-[0.08]">
+          <Glasses size={180} className="text-primary-muted" />
         </div>
       </div>
 
-      {/* Grid pattern overlay */}
+      {/* Grid pattern – neutral grey, not orange */}
       <div
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-[0.06]"
         style={{
-          backgroundImage: `linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px),
-                           linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(hsl(var(--grid-pattern)) 1px, transparent 1px),
+                           linear-gradient(90deg, hsl(var(--grid-pattern)) 1px, transparent 1px)`,
           backgroundSize: '50px 50px',
         }}
       />
@@ -62,9 +62,9 @@ const HeroSection: React.FC = () => {
             </span>
           </h1>
 
-          {/* Subtitle */}
+          {/* Subtitle – lighter grey, readable */}
           <p
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in"
+            className="text-lg md:text-xl text-muted-foreground/95 max-w-2xl mx-auto mb-10 animate-fade-in"
             style={{ animationDelay: '0.4s' }}
           >
             {t.hero.subtitle}
@@ -81,21 +81,21 @@ const HeroSection: React.FC = () => {
             </Button>
           </div>
 
-          {/* Trust indicators */}
+          {/* Trust indicators – muted orange-brown icons, crisp white text */}
           <div
-            className="mt-16 flex flex-wrap justify-center gap-8 text-muted-foreground animate-fade-in"
+            className="mt-16 flex flex-wrap justify-center gap-8 text-foreground animate-fade-in"
             style={{ animationDelay: '0.8s' }}
           >
             <div className="flex items-center gap-2">
-              <Shield className="text-primary" size={20} />
+              <Shield className="text-primary-muted" size={20} />
               <span className="text-sm font-medium">CE Certified</span>
             </div>
             <div className="flex items-center gap-2">
-              <HardHat className="text-primary" size={20} />
+              <HardHat className="text-primary-muted" size={20} />
               <span className="text-sm font-medium">EN Standards</span>
             </div>
             <div className="flex items-center gap-2">
-              <Glasses className="text-primary" size={20} />
+              <Glasses className="text-primary-muted" size={20} />
               <span className="text-sm font-medium">ISO 9001</span>
             </div>
           </div>
@@ -104,7 +104,7 @@ const HeroSection: React.FC = () => {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <ChevronDown size={32} className="text-muted-foreground" />
+        <ChevronDown size={32} className="text-foreground/70" />
       </div>
     </section>
   );

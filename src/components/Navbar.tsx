@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import Logo from './Logo';
+import LanguageSelector from './LanguageSelector';
+import DarkToggle from './DarkToggle';
 
 const Navbar: React.FC = () => {
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -33,7 +35,6 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      aria-label="Nawigacja główna"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
           ? 'bg-background/95 backdrop-blur-md shadow-lg border-b border-border'
@@ -57,29 +58,11 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Language Switcher & Mobile Menu */}
+          {/* Language & Theme & Mobile Menu */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center bg-secondary rounded-full p-1">
-              <button
-                onClick={() => setLanguage('pl')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                  language === 'pl'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                🇵🇱 PL
-              </button>
-              <button
-                onClick={() => setLanguage('en')}
-                className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                  language === 'en'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                🇬🇧 EN
-              </button>
+            <div className="flex items-center gap-3">
+              <LanguageSelector />
+              <DarkToggle />
             </div>
 
             {/* Mobile Menu Button */}
