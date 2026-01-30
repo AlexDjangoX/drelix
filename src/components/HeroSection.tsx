@@ -17,8 +17,10 @@ const HeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/30" />
+      {/* Background image */}
+      <div className="absolute inset-0 bg-[url('/gloves.jpg')] bg-cover bg-center bg-no-repeat" />
+      {/* Overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-secondary/80" />
 
       {/* Decorative elements – desaturated orange-brown, subtle */}
       <div className="absolute inset-0 overflow-hidden">
@@ -27,9 +29,6 @@ const HeroSection: React.FC = () => {
         </div>
         <div className="absolute bottom-20 right-10 opacity-[0.12]">
           <Shield size={250} className="text-primary-muted" />
-        </div>
-        <div className="absolute top-1/2 right-1/4 opacity-[0.08]">
-          <Glasses size={180} className="text-primary-muted" />
         </div>
       </div>
 
