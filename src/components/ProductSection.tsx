@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 import {
   HardHat,
   Shirt,
@@ -92,26 +93,58 @@ const ProductsSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-          {products.map((product, index) => (
-            <Card
-              key={index}
-              className="group cursor-pointer border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-glow hover:-translate-y-1"
-            >
-              <CardContent className="p-6">
+          {products.map((product, index) => {
+            const isGloves = product.key === 'productNames.gloves';
+            const cardContent = (
+              <>
                 <div
-                  className={`aspect-square rounded-xl bg-gradient-to-br ${product.color} flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}
+                  className={`aspect-square rounded-xl mb-4 overflow-hidden bg-cover bg-center group-hover:scale-105 transition-transform ${
+                    isGloves
+                      ? 'bg-[url(/thumbnails/rekawice.png)]'
+                      : `bg-gradient-to-br ${product.color} flex items-center justify-center`
+                  }`}
                 >
-                  <product.icon
-                    size={40}
-                    className="text-foreground group-hover:text-primary transition-colors"
-                  />
+                  {!isGloves && (
+                    <product.icon
+                      size={40}
+                      className="text-foreground group-hover:text-primary transition-colors"
+                    />
+                  )}
                 </div>
                 <h3 className="text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors">
                   <AnimateText k={product.key} />
                 </h3>
-              </CardContent>
-            </Card>
-          ))}
+                {isGloves && (
+                  <div className="flex justify-center mt-1">
+                    <product.icon
+                      size={40}
+                      className="text-foreground group-hover:text-primary transition-colors"
+                    />
+                  </div>
+                )}
+              </>
+            );
+            const cardClassName =
+              'group cursor-pointer border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-glow hover:-translate-y-1 h-full';
+            if (isGloves) {
+              return (
+                <Link
+                  href="/products/gloves"
+                  key={index}
+                  className="block h-full min-h-0"
+                >
+                  <Card className={cardClassName}>
+                    <CardContent className="p-6">{cardContent}</CardContent>
+                  </Card>
+                </Link>
+              );
+            }
+            return (
+              <Card key={index} className={cardClassName}>
+                <CardContent className="p-6">{cardContent}</CardContent>
+              </Card>
+            );
+          })}
         </div>
       </div>
     </section>
