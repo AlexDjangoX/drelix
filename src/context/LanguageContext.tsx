@@ -21,6 +21,7 @@ interface Translations {
     title: string;
     subtitle: string;
     cta: string;
+    scrollToMap: string;
   };
   about: {
     title: string;
@@ -101,6 +102,7 @@ const translations: Record<Language, Translations> = {
       subtitle:
         'Twoje bezpieczeństwo jest naszym priorytetem. Oferujemy najwyższej jakości odzież ochronną dla każdej branży.',
       cta: 'Zobacz produkty',
+      scrollToMap: 'Zobacz mapę i lokalizację',
     },
     about: {
       title: 'O nas',
@@ -197,6 +199,7 @@ const translations: Record<Language, Translations> = {
       subtitle:
         'Your safety is our priority. We offer the highest quality protective clothing for every industry.',
       cta: 'View Products',
+      scrollToMap: 'View location map',
     },
     about: {
       title: 'About Us',

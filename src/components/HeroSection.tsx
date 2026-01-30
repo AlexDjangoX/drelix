@@ -7,9 +7,12 @@ import Logo from './Logo';
 import { AnimateText } from './AnimateText';
 
 const HeroSection: React.FC = () => {
-
   const handleScrollToProducts = () => {
     document.querySelector('#products')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleScrollToMap = () => {
+    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -96,10 +99,18 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <ChevronDown size={32} className="text-foreground/70" />
-      </div>
+      {/* Scroll to location map */}
+      <button
+        type="button"
+        onClick={handleScrollToMap}
+        className="absolute bottom-8 left-1/2 flex flex-col items-center gap-1 -translate-x-1/2 text-foreground/70 hover:text-foreground cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+        aria-label="Scroll to location map"
+      >
+        <ChevronDown size={32} className="animate-bounce" />
+        <span className="text-xs font-medium">
+          <AnimateText k="hero.scrollToMap" animate={false} />
+        </span>
+      </button>
     </section>
   );
 };
