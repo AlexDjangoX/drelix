@@ -40,17 +40,17 @@ const Navbar: React.FC = () => {
           : 'bg-transparent'
       }`}
     >
-      <div className="container relative mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <div className="flex items-center">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center h-16 md:h-20 w-full">
+          <div className="flex items-center shrink-0">
             <LanguageSelector />
           </div>
 
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Logo size="sm" />
+          <div className="flex-1 flex justify-center min-w-0 px-2">
+            <Logo size="lg" />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 shrink-0">
             <div className="hidden md:flex items-center gap-8">
               {navItems.map((item) => (
                 <button
