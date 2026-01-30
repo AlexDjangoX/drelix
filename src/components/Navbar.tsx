@@ -40,31 +40,29 @@ const Navbar: React.FC = () => {
           : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container relative mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <Logo size="sm" />
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavClick(item.href)}
-                className="text-foreground/80 hover:text-primary transition-colors font-medium"
-              >
-                <AnimateText k={item.key} />
-              </button>
-            ))}
+          <div className="flex items-center">
+            <LanguageSelector />
           </div>
 
-          {/* Language & Theme & Mobile Menu */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <LanguageSelector />
-              <DarkToggle />
-            </div>
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <Logo size="sm" />
+          </div>
 
-            {/* Mobile Menu Button */}
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-8">
+              {navItems.map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavClick(item.href)}
+                  className="text-foreground/80 hover:text-primary transition-colors font-medium"
+                >
+                  <AnimateText k={item.key} />
+                </button>
+              ))}
+            </div>
+            <DarkToggle />
             <button
               className="md:hidden p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
