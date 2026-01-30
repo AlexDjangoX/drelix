@@ -2,15 +2,13 @@
 
 import React from 'react';
 import { Award, Users, Package } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
+import { AnimateText } from './AnimateText';
 
 const AboutSection: React.FC = () => {
-  const { language, t } = useLanguage();
-
   const stats = [
-    { icon: Award, value: '15+', label: t.about.experience },
-    { icon: Package, value: '500+', label: t.about.quality },
-    { icon: Users, value: '1000+', label: t.about.trust },
+    { icon: Award, value: '15+', labelKey: 'about.experience' as const },
+    { icon: Package, value: '500+', labelKey: 'about.quality' as const },
+    { icon: Users, value: '1000+', labelKey: 'about.trust' as const },
   ];
 
   return (
@@ -21,15 +19,10 @@ const AboutSection: React.FC = () => {
             {/* Content */}
             <div>
               <h2 className="text-3xl md:text-5xl font-black mb-6">
-                <span className="text-foreground">
-                  {t.about.title.split(' ')[0]}{' '}
-                </span>
-                <span className="text-gradient">
-                  {t.about.title.split(' ').slice(1).join(' ') || t.about.title}
-                </span>
+                <AnimateText k="about.title" />
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                {t.about.description}
+                <AnimateText k="about.description" />
               </p>
 
               {/* Stats */}
@@ -43,7 +36,7 @@ const AboutSection: React.FC = () => {
                       {stat.value}
                     </div>
                     <div className="text-xs md:text-sm text-muted-foreground">
-                      {stat.label}
+                      <AnimateText k={stat.labelKey} />
                     </div>
                   </div>
                 ))}
@@ -59,7 +52,7 @@ const AboutSection: React.FC = () => {
                       <Award size={64} className="text-primary" />
                     </div>
                     <p className="text-muted-foreground text-sm">
-                      {language === 'pl' ? 'Zdjęcie sklepu' : 'Store photo'}
+                      <AnimateText k="about.storePhoto" />
                     </p>
                   </div>
                 </div>

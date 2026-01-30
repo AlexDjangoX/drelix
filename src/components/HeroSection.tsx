@@ -2,12 +2,11 @@
 
 import React from 'react';
 import { ChevronDown, Shield, HardHat, Glasses } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
 import Logo from './Logo';
+import { AnimateText } from './AnimateText';
 
 const HeroSection: React.FC = () => {
-  const { t } = useLanguage();
 
   const handleScrollToProducts = () => {
     document.querySelector('#products')?.scrollIntoView({ behavior: 'smooth' });
@@ -51,15 +50,10 @@ const HeroSection: React.FC = () => {
 
           {/* Title */}
           <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 animate-fade-in"
+            className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 animate-fade-in text-foreground"
             style={{ animationDelay: '0.2s' }}
           >
-            <span className="text-foreground">
-              {t.hero.title.split(' ')[0]}{' '}
-            </span>
-            <span className="text-gradient">
-              {t.hero.title.split(' ').slice(1).join(' ')}
-            </span>
+            <AnimateText k="hero.title" />
           </h1>
 
           {/* Subtitle – lighter grey, readable */}
@@ -67,7 +61,7 @@ const HeroSection: React.FC = () => {
             className="text-lg md:text-xl text-muted-foreground/95 max-w-2xl mx-auto mb-10 animate-fade-in"
             style={{ animationDelay: '0.4s' }}
           >
-            {t.hero.subtitle}
+            <AnimateText k="hero.subtitle" />
           </p>
 
           {/* CTA Button */}
@@ -77,7 +71,7 @@ const HeroSection: React.FC = () => {
               onClick={handleScrollToProducts}
               className="bg-gradient-primary text-primary-foreground font-bold text-lg px-8 py-6 rounded-full shadow-glow hover:scale-105 transition-transform"
             >
-              {t.hero.cta}
+              <AnimateText k="hero.cta" />
             </Button>
           </div>
 

@@ -4,41 +4,26 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLanguage } from '@/context/LanguageContext';
+import { AnimateText } from './AnimateText';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
+const contactInfoItems = [
+  { icon: MapPin, labelKey: 'contact.address' as const, value: 'ul. Emila Zegadłowicza 43\n34-100 Wadowice' },
+  { icon: Phone, labelKey: 'contact.phone' as const, value: '+48 123 456 789' },
+  { icon: Mail, labelKey: 'contact.email' as const, value: 'kontakt@drelix.pl' },
+  { icon: Clock, labelKey: 'contact.hours' as const, valueKey: 'contact.hoursValue' as const },
+];
+
 const ContactSection: React.FC = () => {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   });
-
-  const contactInfo = [
-    {
-      icon: MapPin,
-      label: t.contact.address,
-      value: 'ul. Emila Zegadłowicza 43\n34-100 Wadowice',
-    },
-    {
-      icon: Phone,
-      label: t.contact.phone,
-      value: '+48 123 456 789',
-    },
-    {
-      icon: Mail,
-      label: t.contact.email,
-      value: 'kontakt@drelix.pl',
-    },
-    {
-      icon: Clock,
-      label: t.contact.hours,
-      value: t.contact.hoursValue,
-    },
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,10 +43,12 @@ const ContactSection: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black mb-4">
-            <span className="text-gradient">{t.contact.title}</span>
+            <span className="text-gradient">
+              <AnimateText k="contact.title" />
+            </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t.contact.subtitle}
+            <AnimateText k="contact.subtitle" />
           </p>
         </div>
 
@@ -69,7 +56,7 @@ const ContactSection: React.FC = () => {
           {/* Contact Info & Map */}
           <div>
             <div className="grid sm:grid-cols-2 gap-6 mb-8">
-              {contactInfo.map((info, index) => (
+              {contactInfoItems.map((info, index) => (
                 <div
                   key={index}
                   className="bg-card rounded-xl p-6 border border-border hover:border-primary/30 transition-colors"
@@ -80,10 +67,14 @@ const ContactSection: React.FC = () => {
                     </div>
                     <div>
                       <h4 className="text-sm font-medium text-muted-foreground mb-1">
-                        {info.label}
+                        <AnimateText k={info.labelKey} />
                       </h4>
                       <p className="text-foreground font-semibold whitespace-pre-line">
-                        {info.value}
+                        {'valueKey' in info && info.valueKey ? (
+                          <AnimateText k={info.valueKey} />
+                        ) : (
+                          'value' in info ? info.value : null
+                        )}
                       </p>
                     </div>
                   </div>
@@ -111,7 +102,7 @@ const ContactSection: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-2 text-foreground">
-                  {t.contact.form.name}
+                  <AnimateText k="contact.form.name" />
                 </label>
                 <Input
                   type="text"
@@ -127,7 +118,7 @@ const ContactSection: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium mb-2 text-foreground">
-                  {t.contact.form.email}
+                  <AnimateText k="contact.form.email" />
                 </label>
                 <Input
                   type="email"
@@ -143,7 +134,7 @@ const ContactSection: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium mb-2 text-foreground">
-                  {t.contact.form.message}
+                  <AnimateText k="contact.form.message" />
                 </label>
                 <Textarea
                   value={formData.message}
@@ -153,9 +144,7 @@ const ContactSection: React.FC = () => {
                   required
                   rows={5}
                   className="bg-secondary/50 border-border focus:border-primary resize-none"
-                  placeholder={
-                    language === 'pl' ? 'Twoja wiadomość...' : 'Your message...'
-                  }
+                  placeholder={t.contact.form.placeholderMessage}
                 />
               </div>
 
@@ -167,12 +156,12 @@ const ContactSection: React.FC = () => {
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    {language === 'pl' ? 'Wysyłanie...' : 'Sending...'}
+                    <AnimateText k="contact.form.sending" />
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
                     <Send size={18} />
-                    {t.contact.form.send}
+                    <AnimateText k="contact.form.send" />
                   </span>
                 )}
               </Button>

@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
 import Logo from './Logo';
 import LanguageSelector from './LanguageSelector';
 import DarkToggle from './DarkToggle';
+import { AnimateText } from './AnimateText';
 
 const Navbar: React.FC = () => {
-  const { t } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -21,10 +20,10 @@ const Navbar: React.FC = () => {
   }, []);
 
   const navItems = [
-    { label: t.nav.about, href: '#about' },
-    { label: t.nav.products, href: '#products' },
-    { label: t.nav.whyUs, href: '#why-us' },
-    { label: t.nav.contact, href: '#contact' },
+    { key: 'nav.about', href: '#about' },
+    { key: 'nav.products', href: '#products' },
+    { key: 'nav.whyUs', href: '#why-us' },
+    { key: 'nav.contact', href: '#contact' },
   ];
 
   const handleNavClick = (href: string) => {
@@ -53,7 +52,7 @@ const Navbar: React.FC = () => {
                 onClick={() => handleNavClick(item.href)}
                 className="text-foreground/80 hover:text-primary transition-colors font-medium"
               >
-                {item.label}
+                <AnimateText k={item.key} />
               </button>
             ))}
           </div>
@@ -84,7 +83,7 @@ const Navbar: React.FC = () => {
                 onClick={() => handleNavClick(item.href)}
                 className="block w-full text-left py-3 px-4 text-foreground/80 hover:text-primary hover:bg-secondary/50 transition-colors font-medium"
               >
-                {item.label}
+                <AnimateText k={item.key} />
               </button>
             ))}
           </div>

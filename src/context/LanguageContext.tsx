@@ -28,6 +28,7 @@ interface Translations {
     experience: string;
     quality: string;
     trust: string;
+    storePhoto: string;
   };
   products: {
     title: string;
@@ -57,12 +58,16 @@ interface Translations {
       message: string;
       send: string;
       success: string;
+      placeholderMessage: string;
+      sending: string;
     };
   };
   footer: {
     rights: string;
     privacy: string;
     terms: string;
+    quickLinksTitle: string;
+    followUs: string;
   };
   productNames: {
     helmets: string;
@@ -104,6 +109,7 @@ const translations: Record<Language, Translations> = {
       experience: 'Lat doświadczenia',
       quality: 'Produktów wysokiej jakości',
       trust: 'Zadowolonych klientów',
+      storePhoto: 'Zdjęcie sklepu',
     },
     products: {
       title: 'Nasze produkty',
@@ -150,10 +156,14 @@ const translations: Record<Language, Translations> = {
         message: 'Wiadomość',
         send: 'Wyślij wiadomość',
         success: 'Wiadomość została wysłana!',
+        placeholderMessage: 'Twoja wiadomość...',
+        sending: 'Wysyłanie...',
       },
     },
     footer: {
       rights: 'Wszelkie prawa zastrzeżone',
+      quickLinksTitle: 'Szybkie linki',
+      followUs: 'Śledź nas',
       privacy: 'Polityka prywatności',
       terms: 'Regulamin',
     },
@@ -195,6 +205,7 @@ const translations: Record<Language, Translations> = {
       experience: 'Years of experience',
       quality: 'Quality products',
       trust: 'Satisfied customers',
+      storePhoto: 'Store photo',
     },
     products: {
       title: 'Our Products',
@@ -241,10 +252,14 @@ const translations: Record<Language, Translations> = {
         message: 'Message',
         send: 'Send Message',
         success: 'Message sent successfully!',
+        placeholderMessage: 'Your message...',
+        sending: 'Sending...',
       },
     },
     footer: {
       rights: 'All rights reserved',
+      quickLinksTitle: 'Quick Links',
+      followUs: 'Follow Us',
       privacy: 'Privacy Policy',
       terms: 'Terms of Service',
     },

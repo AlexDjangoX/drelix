@@ -2,24 +2,23 @@
 
 import React from 'react';
 import { Facebook, Instagram, Linkedin } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
 import Logo from './Logo';
+import { AnimateText } from './AnimateText';
+
+const socialLinks = [
+  { icon: Facebook, href: '#', label: 'Facebook' },
+  { icon: Instagram, href: '#', label: 'Instagram' },
+  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+];
+
+const quickLinkItems = [
+  { key: 'nav.about' as const, href: '#about' },
+  { key: 'nav.products' as const, href: '#products' },
+  { key: 'nav.whyUs' as const, href: '#why-us' },
+  { key: 'nav.contact' as const, href: '#contact' },
+];
 
 const Footer: React.FC = () => {
-  const { language, t } = useLanguage();
-
-  const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-  ];
-
-  const quickLinks = [
-    { label: t.nav.about, href: '#about' },
-    { label: t.nav.products, href: '#products' },
-    { label: t.nav.whyUs, href: '#why-us' },
-    { label: t.nav.contact, href: '#contact' },
-  ];
 
   const handleLinkClick = (href: string) => {
     if (href.startsWith('#')) {
@@ -49,16 +48,16 @@ const Footer: React.FC = () => {
           {/* Quick Links */}
           <div>
             <h4 className="font-bold text-foreground mb-4">
-              {language === 'pl' ? 'Szybkie linki' : 'Quick Links'}
+              <AnimateText k="footer.quickLinksTitle" />
             </h4>
             <ul className="space-y-2">
-              {quickLinks.map((link, index) => (
+              {quickLinkItems.map((link, index) => (
                 <li key={index}>
                   <button
                     onClick={() => handleLinkClick(link.href)}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
-                    {link.label}
+                    <AnimateText k={link.key} />
                   </button>
                 </li>
               ))}
@@ -68,7 +67,7 @@ const Footer: React.FC = () => {
           {/* Social Links */}
           <div>
             <h4 className="font-bold text-foreground mb-4">
-              {language === 'pl' ? 'Śledź nas' : 'Follow Us'}
+              <AnimateText k="footer.followUs" />
             </h4>
             <div className="flex gap-4">
               {socialLinks.map((social, index) => (
@@ -88,14 +87,14 @@ const Footer: React.FC = () => {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Drelix. {t.footer.rights}.
+            © {new Date().getFullYear()} Drelix. <AnimateText k="footer.rights" />.
           </p>
           <div className="flex gap-6">
             <button className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              {t.footer.privacy}
+              <AnimateText k="footer.privacy" />
             </button>
             <button className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              {t.footer.terms}
+              <AnimateText k="footer.terms" />
             </button>
           </div>
         </div>

@@ -2,33 +2,28 @@
 
 import React from 'react';
 import { Award, Package, HeadphonesIcon, Wallet, MapPin } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
+import { AnimateText } from './AnimateText';
+
+const featureKeys = [
+  { icon: Award, titleKey: 'whyUs.quality.title', descKey: 'whyUs.quality.description' },
+  { icon: Package, titleKey: 'whyUs.range.title', descKey: 'whyUs.range.description' },
+  { icon: HeadphonesIcon, titleKey: 'whyUs.expert.title', descKey: 'whyUs.expert.description' },
+  { icon: Wallet, titleKey: 'whyUs.prices.title', descKey: 'whyUs.prices.description' },
+  { icon: MapPin, titleKey: 'whyUs.local.title', descKey: 'whyUs.local.description' },
+] as const;
 
 const WhyUsSection: React.FC = () => {
-  const { t } = useLanguage();
-
-  const features = [
-    { icon: Award, ...t.whyUs.quality },
-    { icon: Package, ...t.whyUs.range },
-    { icon: HeadphonesIcon, ...t.whyUs.expert },
-    { icon: Wallet, ...t.whyUs.prices },
-    { icon: MapPin, ...t.whyUs.local },
-  ];
+  const features = featureKeys;
 
   return (
     <section id="why-us" className="py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-black mb-4">
-            <span className="text-foreground">
-              {t.whyUs.title.split(' ')[0]}{' '}
-            </span>
-            <span className="text-gradient">
-              {t.whyUs.title.split(' ').slice(1).join(' ')}
-            </span>
+            <AnimateText k="whyUs.title" />
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t.whyUs.subtitle}
+            <AnimateText k="whyUs.subtitle" />
           </p>
         </div>
 
@@ -43,10 +38,10 @@ const WhyUsSection: React.FC = () => {
 
                 {/* Content */}
                 <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
-                  {feature.title}
+                  <AnimateText k={feature.titleKey} />
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  {feature.description}
+                  <AnimateText k={feature.descKey} />
                 </p>
 
                 {/* Decorative number */}
