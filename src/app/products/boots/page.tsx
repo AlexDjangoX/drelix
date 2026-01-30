@@ -82,13 +82,13 @@ export default function BootsPage() {
                 tabIndex={0}
               >
                 <CardContent className="p-0">
-                  <div className="aspect-2/3 relative bg-muted">
+                  <div className="aspect-2/3 relative bg-muted flex items-center justify-center">
                     <Image
                       src={boot.src}
                       alt={boot.name}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                      className="object-cover object-top group-hover:scale-105 group-active:scale-100 transition-transform duration-300"
+                      className="object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300"
                     />
                   </div>
                   <p className="p-2 sm:p-3 text-xs sm:text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors truncate">
