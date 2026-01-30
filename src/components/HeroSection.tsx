@@ -4,7 +4,7 @@ import React from 'react';
 import { ChevronDown, Shield, HardHat, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from './Logo';
-import { AnimateText } from './AnimateText';
+import { AnimateText, TwoToneHeading } from '@/components';
 
 const HeroSection: React.FC = () => {
   const handleScrollToProducts = () => {
@@ -51,12 +51,13 @@ const HeroSection: React.FC = () => {
           </div>
 
           {/* Title */}
-          <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 animate-fade-in text-foreground"
+          <TwoToneHeading
+            as="h1"
+            className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 animate-fade-in"
             style={{ animationDelay: '0.2s' }}
           >
             <AnimateText k="hero.title" />
-          </h1>
+          </TwoToneHeading>
 
           {/* Subtitle – lighter grey, readable */}
           <p

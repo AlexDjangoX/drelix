@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Award, Package, HeadphonesIcon, Wallet, MapPin } from 'lucide-react';
-import { AnimateText } from './AnimateText';
+import { AnimateText, TwoToneHeading } from '@/components';
 
 const featureKeys = [
   { icon: Award, titleKey: 'whyUs.quality.title', descKey: 'whyUs.quality.description' },
@@ -19,9 +19,9 @@ const WhyUsSection: React.FC = () => {
     <section id="why-us" className="py-20 md:py-32 bg-secondary/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black mb-4">
+          <TwoToneHeading as="h2" className="text-3xl md:text-5xl font-black mb-4">
             <AnimateText k="whyUs.title" />
-          </h2>
+          </TwoToneHeading>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             <AnimateText k="whyUs.subtitle" />
           </p>

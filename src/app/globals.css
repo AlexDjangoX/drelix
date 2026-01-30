@@ -47,6 +47,8 @@
     --sidebar-accent-foreground: 240 10% 8%;
     --sidebar-border: 220 10% 88%;
     --sidebar-ring: 24 100% 50%;
+    /* Two-tone heading: top half follows foreground (dark in light mode) */
+    --two-tone-heading-top: hsl(var(--foreground));
   }
 
   /* Dark theme (industrial – defaultTheme) */
@@ -78,6 +80,8 @@
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 220 10% 20%;
     --sidebar-ring: 24 100% 50%;
+    /* Two-tone heading: top half white in dark mode */
+    --two-tone-heading-top: hsl(0 0% 100%);
   }
 }
 

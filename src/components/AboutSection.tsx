@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Award, Users, Package } from 'lucide-react';
-import { AnimateText } from './AnimateText';
+import { AnimateText, TwoToneHeading } from '@/components';
 
 const AboutSection: React.FC = () => {
   const stats = [
@@ -18,9 +18,9 @@ const AboutSection: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div>
-              <h2 className="text-3xl md:text-5xl font-black mb-6">
+              <TwoToneHeading as="h2" className="text-3xl md:text-5xl font-black mb-6">
                 <AnimateText k="about.title" />
-              </h2>
+              </TwoToneHeading>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
                 <AnimateText k="about.description" />
               </p>

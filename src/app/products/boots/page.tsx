@@ -7,9 +7,9 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
-import { GLOVES } from '@/data/gloves';
+import { BOOTS } from '@/data/boots';
 
-export default function GlovesPage() {
+export default function BootsPage() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const openLightbox = useCallback((index: number) => setLightboxIndex(index), []);
@@ -17,13 +17,13 @@ export default function GlovesPage() {
 
   const goPrev = useCallback(() => {
     setLightboxIndex((i) =>
-      i === null ? null : (i - 1 + GLOVES.length) % GLOVES.length
+      i === null ? null : (i - 1 + BOOTS.length) % BOOTS.length
     );
   }, []);
 
   const goNext = useCallback(() => {
     setLightboxIndex((i) =>
-      i === null ? null : (i + 1) % GLOVES.length
+      i === null ? null : (i + 1) % BOOTS.length
     );
   }, []);
 
@@ -64,7 +64,7 @@ export default function GlovesPage() {
           </div>
           <div className="text-center mb-12">
             <TwoToneHeading as="h1" className="text-3xl md:text-5xl font-black mb-4">
-              <AnimateText k="productNames.gloves" />
+              <AnimateText k="productNames.footwear" />
             </TwoToneHeading>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               <AnimateText k="products.subtitle" />
@@ -72,9 +72,9 @@ export default function GlovesPage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
-            {GLOVES.map((glove, index) => (
+            {BOOTS.map((boot, index) => (
               <Card
-                key={glove.id}
+                key={boot.id}
                 className="group cursor-pointer border-border bg-card hover:border-primary/50 active:scale-[0.98] transition-all duration-300 hover:shadow-glow hover:-translate-y-1 overflow-hidden touch-manipulation"
                 onClick={() => openLightbox(index)}
                 onKeyDown={(e) => e.key === 'Enter' && openLightbox(index)}
@@ -84,15 +84,15 @@ export default function GlovesPage() {
                 <CardContent className="p-0">
                   <div className="aspect-2/3 relative bg-muted">
                     <Image
-                      src={glove.src}
-                      alt={glove.name}
+                      src={boot.src}
+                      alt={boot.name}
                       fill
                       sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                       className="object-cover object-top group-hover:scale-105 group-active:scale-100 transition-transform duration-300"
                     />
                   </div>
                   <p className="p-2 sm:p-3 text-xs sm:text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors truncate">
-                    {glove.name}
+                    {boot.name}
                   </p>
                 </CardContent>
               </Card>
@@ -152,15 +152,15 @@ export default function GlovesPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={GLOVES[lightboxIndex].src}
-              alt={GLOVES[lightboxIndex].name}
+              src={BOOTS[lightboxIndex].src}
+              alt={BOOTS[lightboxIndex].name}
               fill
               sizes="90vw"
               className="object-contain"
               priority
             />
             <p className="absolute bottom-0 left-0 right-0 text-center text-white/90 font-semibold py-2 text-sm sm:text-base">
-              {GLOVES[lightboxIndex].name}
+              {BOOTS[lightboxIndex].name}
             </p>
           </div>
 

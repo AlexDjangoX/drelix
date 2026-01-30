@@ -4,7 +4,6 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
   ReactNode,
 } from 'react';
 
@@ -76,6 +75,7 @@ interface Translations {
     gloves: string;
     footwear: string;
     clothing: string;
+    koszula: string;
     eyewear: string;
     earProtection: string;
     masks: string;
@@ -175,6 +175,7 @@ const translations: Record<Language, Translations> = {
       gloves: 'Rękawice robocze',
       footwear: 'Obuwie ochronne',
       clothing: 'Odzież ochronna',
+      koszula: 'Koszule robocze',
       eyewear: 'Okulary ochronne',
       earProtection: 'Ochrona słuchu',
       masks: 'Maski i półmaski',
@@ -272,6 +273,7 @@ const translations: Record<Language, Translations> = {
       gloves: 'Work Gloves',
       footwear: 'Safety Footwear',
       clothing: 'Protective Clothing',
+      koszula: 'Work Shirts',
       eyewear: 'Safety Glasses',
       earProtection: 'Hearing Protection',
       masks: 'Masks & Respirators',
@@ -296,23 +298,35 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
   undefined
 );
 
+const LANGUAGE_STORAGE_KEY = 'drelix-language';
+
+function getStoredLanguage(): Language {
+  if (typeof window === 'undefined') return 'pl';
+  const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  if (stored === 'pl' || stored === 'en') return stored;
+  return 'pl';
+}
+
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguageState] = useState<Language>(getStoredLanguage);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const browserLang = navigator.language.toLowerCase();
-    const lang = browserLang.startsWith('pl') ? 'pl' : 'en';
-    queueMicrotask(() => setLanguage(lang));
+  const setLanguage = React.useCallback((lang: Language) => {
+    setLanguageState(lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+    }
   }, []);
 
-  const value = {
-    language,
-    setLanguage,
-    t: translations[language],
-  };
+  const value = React.useMemo(
+    () => ({
+      language,
+      setLanguage,
+      t: translations[language],
+    }),
+    [language, setLanguage]
+  );
 
   return (
     <LanguageContext.Provider value={value}>

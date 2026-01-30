@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLanguage } from '@/context/LanguageContext';
-import { AnimateText } from './AnimateText';
+import { AnimateText, TwoToneHeading } from '@/components';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -42,11 +42,9 @@ const ContactSection: React.FC = () => {
     <section id="contact" className="py-20 md:py-32">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black mb-4">
-            <span className="text-gradient">
-              <AnimateText k="contact.title" />
-            </span>
-          </h2>
+          <TwoToneHeading as="h2" className="text-3xl md:text-5xl font-black mb-4">
+            <AnimateText k="contact.title" />
+          </TwoToneHeading>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             <AnimateText k="contact.subtitle" />
           </p>
