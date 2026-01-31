@@ -51,15 +51,15 @@ const HeroSection: React.FC = () => {
         }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
-        <div className="max-w-4xl mx-auto">
-          {/* Logo */}
-          <div className="flex justify-center mb-8 animate-fade-in">
-            <Logo size="lg" />
-          </div>
+      {/* Content – same container as navbar for width alignment */}
+      <div className="relative z-10 container mx-auto px-4 text-center w-full">
+        {/* Logo – full container width to align with navbar */}
+        <div className="flex justify-center mb-8 animate-fade-in">
+          <Logo size="lg" />
+        </div>
 
-          {/* Title */}
+        {/* Title, subtitle, CTA – constrained for readability */}
+        <div className="max-w-4xl mx-auto">
           <TwoToneHeading
             as="h1"
             className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 animate-fade-in"
@@ -68,7 +68,6 @@ const HeroSection: React.FC = () => {
             <AnimateText k="hero.title" />
           </TwoToneHeading>
 
-          {/* Subtitle – lighter grey, readable */}
           <p
             className="text-lg md:text-xl text-muted-foreground/95 max-w-2xl mx-auto mb-10 animate-fade-in"
             style={{ animationDelay: '0.4s' }}
@@ -76,7 +75,6 @@ const HeroSection: React.FC = () => {
             <AnimateText k="hero.subtitle" />
           </p>
 
-          {/* CTA Button */}
           <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
             <Button
               size="lg"
@@ -86,30 +84,30 @@ const HeroSection: React.FC = () => {
               <AnimateText k="hero.cta" />
             </Button>
           </div>
+        </div>
 
-          {/* Trust indicators – palette: primary icons, muted-foreground text */}
-          <div
-            className="mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 animate-fade-in"
-            style={{ animationDelay: '0.8s' }}
-          >
-            <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
-              <Shield className="shrink-0 text-primary" size={24} strokeWidth={2} />
-              <span className="text-sm font-medium text-muted-foreground">
-                <AnimateText k="hero.trust1" />
-              </span>
-            </div>
-            <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
-              <HardHat className="shrink-0 text-primary" size={24} strokeWidth={2} />
-              <span className="text-sm font-medium text-muted-foreground">
-                <AnimateText k="hero.trust2" />
-              </span>
-            </div>
-            <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
-              <Glasses className="shrink-0 text-primary" size={24} strokeWidth={2} />
-              <span className="text-sm font-medium text-muted-foreground">
-                <AnimateText k="hero.trust3" />
-              </span>
-            </div>
+        {/* Trust indicators – full container width to align with navbar */}
+        <div
+          className="mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 animate-fade-in"
+          style={{ animationDelay: '0.8s' }}
+        >
+          <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
+            <Shield className="shrink-0 text-primary" size={24} strokeWidth={2} />
+            <span className="text-sm font-medium text-muted-foreground">
+              <AnimateText k="hero.trust1" />
+            </span>
+          </div>
+          <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
+            <HardHat className="shrink-0 text-primary" size={24} strokeWidth={2} />
+            <span className="text-sm font-medium text-muted-foreground">
+              <AnimateText k="hero.trust2" />
+            </span>
+          </div>
+          <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
+            <Glasses className="shrink-0 text-primary" size={24} strokeWidth={2} />
+            <span className="text-sm font-medium text-muted-foreground">
+              <AnimateText k="hero.trust3" />
+            </span>
           </div>
         </div>
       </div>
