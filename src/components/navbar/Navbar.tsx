@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex items-center h-16 md:h-20 w-full">
+        <div className="flex items-center h-16 lg:h-20 w-full">
           <div className="flex items-center shrink-0">
             <LanguageSelector />
           </div>
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 shrink-0">
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden lg:flex items-center gap-8">
               {navItems.map((item) => (
                 <button
                   key={item.href}
@@ -64,17 +64,18 @@ const Navbar: React.FC = () => {
             </div>
             <DarkToggle />
             <button
-              className="md:hidden p-2"
+              className="lg:hidden p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu (hamburger visible below lg / 1024px) */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
+          <div className="lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
             {navItems.map((item) => (
               <button
                 key={item.href}
