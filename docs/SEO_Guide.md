@@ -214,7 +214,7 @@ Product metadata is driven by **`productConfig`** in `src/components/products/pr
 ## 9. robots.txt
 
 - **Source:** `src/app/robots.txt/route.ts` (dynamic; served at `/robots.txt`). Body built in `src/lib/robotsContent.ts`.
-- **Alignment with sitemap:** Both robots and sitemap use **the same** `NEXT_PUBLIC_SITE_URL` (fallback `https://drelix.pl`). The Sitemap URL in robots.txt is `${baseUrl}/sitemap.xml`, so it always matches the sitemap origin — no manual sync.
+- **Alignment with sitemap:** Both robots and sitemap use **the same** `NEXT_PUBLIC_SITE_URL` (fallback `https://drelix.org`). The Sitemap URL in robots.txt is `${baseUrl}/sitemap.xml`, so it always matches the sitemap origin — no manual sync.
 - **Policy:**
   - **Content-signal** (modern standard): `search=yes`, `ai-train=no`, `ai-input=no` — allows search indexing, reserves rights for AI training/input per EU Copyright Directive.
   - **Search engines (SEO):** Googlebot, Bingbot, Slurp, DuckDuckBot, YandexBot, Baiduspider — **Allow** `/`, **Disallow** `/api/`, `/admin/`. Only public pages (home, products, category pages) are crawlable; API and admin are excluded to eliminate useless traffic.
