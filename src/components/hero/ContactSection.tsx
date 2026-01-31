@@ -29,13 +29,31 @@ const ContactSection: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
 
-    toast.success(t.contact.form.success);
+      await res.json().catch(() => ({}));
 
-    setFormData({ name: '', email: '', message: '' });
-    setIsSubmitting(false);
+      if (!res.ok) {
+        toast.error(t.contact.form.error);
+        return;
+      }
+
+      toast.success(t.contact.form.success);
+      setFormData({ name: '', email: '', message: '' });
+    } catch {
+      toast.error(t.contact.form.error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

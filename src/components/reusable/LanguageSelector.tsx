@@ -26,11 +26,23 @@ export default function LanguageSelector() {
       whileTap={{ scale: 0.95 }}
     >
       <div className="absolute left-1.25 z-10">
-        <Image src="/uk.png" alt="EN" width={20} height={20} unoptimized />
+        <Image
+          src="/images/uk.png"
+          alt="EN"
+          width={20}
+          height={20}
+          unoptimized
+        />
       </div>
 
       <div className="absolute right-1 z-10">
-        <Image src="/pl.png" alt="PL" width={20} height={20} unoptimized />
+        <Image
+          src="/images/pl.png"
+          alt="PL"
+          width={20}
+          height={20}
+          unoptimized
+        />
       </div>
 
       <motion.div

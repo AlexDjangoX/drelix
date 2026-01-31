@@ -66,6 +66,7 @@ interface Translations {
       message: string;
       send: string;
       success: string;
+      error: string;
       placeholderMessage: string;
       sending: string;
     };
@@ -184,6 +185,7 @@ const translations: Record<Language, Translations> = {
         message: 'Wiadomość',
         send: 'Wyślij wiadomość',
         success: 'Wiadomość została wysłana!',
+        error: 'Nie udało się wysłać. Spróbuj ponownie lub napisz na kontakt@drelix.pl.',
         placeholderMessage: 'Twoja wiadomość...',
         sending: 'Wysyłanie...',
       },
@@ -300,6 +302,7 @@ const translations: Record<Language, Translations> = {
         message: 'Message',
         send: 'Send Message',
         success: 'Message sent successfully!',
+        error: 'Something went wrong. Please try again or email kontakt@drelix.pl.',
         placeholderMessage: 'Your message...',
         sending: 'Sending...',
       },

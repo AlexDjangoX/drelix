@@ -83,6 +83,9 @@ Open [http://localhost:3000](http://localhost:3000)
 
 - **`NEXT_PUBLIC_SITE_URL`** – Production domain (e.g. `https://drelix.org`). Used for canonicals, sitemap, OG, JSON-LD.
 - **`NEXT_PUBLIC_CONVEX_URL`** – Convex deployment URL (for catalog/admin).
+- **`RESEND_API_KEY`** – Resend API key (for contact form email). Get one at [resend.com](https://resend.com).
+- **`RESEND_FROM_EMAIL`** – Sender address for contact form (e.g. `noreply@drelix.org`). Must be a verified domain in Resend.
+- **`CONTACT_TO_EMAIL`** – (Optional) Recipient for contact form. Defaults to `annabadura7@gmail.com`.
 
 ### Convex (catalog)
 
