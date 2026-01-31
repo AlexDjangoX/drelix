@@ -13,34 +13,7 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/products/gloves",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/products/boots",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/products/spodnie",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/products/koszula",
+        source: "/products/:slug",
         headers: [
           {
             key: "Cache-Control",

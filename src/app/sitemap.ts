@@ -1,13 +1,7 @@
 import type { MetadataRoute } from "next";
+import { PRODUCT_SLUGS } from "./products/[slug]/productConfig";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drelix.pl";
-
-const productRoutes = [
-  { path: "/products/gloves", priority: 0.9 },
-  { path: "/products/boots", priority: 0.9 },
-  { path: "/products/spodnie", priority: 0.9 },
-  { path: "/products/koszula", priority: 0.9 },
-] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -18,11 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    ...productRoutes.map(({ path, priority }) => ({
-      url: `${baseUrl}${path}`,
+    ...PRODUCT_SLUGS.map((slug) => ({
+      url: `${baseUrl}/products/${slug}`,
       lastModified: now,
       changeFrequency: "weekly" as const,
-      priority,
+      priority: 0.9,
     })),
   ];
 }

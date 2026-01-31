@@ -45,7 +45,7 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 ## Routing & pages
 
 - **Home:** `src/app/page.tsx` – sections (Hero, About, Products, Why Us, Contact).
-- **Product catalog pages:** `src/app/products/[slug]/` – layout (metadata only) + client page (grid + lightbox). Reuse the same pattern (data from `src/data`, `next/image`, lightbox with prev/next, safe area, 44px touch targets).
+- **Product catalog pages:** Single dynamic route `src/app/products/[slug]/` – shared layout (`generateMetadata`, `generateStaticParams`), `productConfig.ts` (slug → metadata + data), one client page component (grid + lightbox). Add new categories by updating `productConfig` and data in `src/data/`.
 - **API:** Prefer not adding `/api` routes unless required; if added, keep them in `robots` disallow as per current `src/app/robots.ts`.
 
 ---

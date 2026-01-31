@@ -33,7 +33,8 @@ This document is the single source of truth for SEO on the Drelix project. Use i
 | `src/app/robots.ts` | Generates `/robots.txt`: allow `/`, disallow `/api/`, sitemap URL. |
 | `src/app/sitemap.ts` | Generates `/sitemap.xml`: homepage + all product routes. |
 | `src/components/JsonLd.tsx` | Injects LocalBusiness + WebPage JSON-LD in `<head>`. |
-| `src/app/products/*/layout.tsx` | Per-product metadata: title, description, canonical, Open Graph, Twitter. |
+| `src/app/products/[slug]/layout.tsx` | Shared product layout: `generateMetadata` and `generateStaticParams`; metadata per slug from `productConfig`. |
+| `src/app/products/[slug]/productConfig.ts` | Maps each slug (gloves, boots, spodnie, koszula) to metadata and data; add new categories here + sitemap. |
 
 ---
 
@@ -46,17 +47,16 @@ This document is the single source of truth for SEO on the Drelix project. Use i
 - **Canonical:** `metadataBase` + `alternates.canonical` = homepage URL.
 - **Open Graph:** locale `pl_PL`, alternateLocale `en_GB`, image `/og-image.png` (1200×630).
 
-### Product pages (e.g. `products/gloves/layout.tsx`)
+### Product pages (`products/[slug]`)
 
-Each product layout must define:
+Product metadata is driven by **`productConfig`** in `src/app/products/[slug]/productConfig.ts`. The shared layout uses `generateMetadata({ params })` to set:
 
-- **title** – Short, descriptive (e.g. “Rękawice robocze i ochronne”).
-- **description** – One or two sentences, include “Drelix” and location/context where relevant.
-- **alternates.canonical** – Full URL: `{siteUrl}/products/{slug}`.
-- **openGraph** – `url` (same as canonical), `title`, `description`.
-- **twitter** – At least `card: 'summary_large_image'` and `title`.
+- **title**, **description** – From `productConfig[slug].metadata`.
+- **alternates.canonical** – `{siteUrl}/products/{slug}`.
+- **openGraph** – `url`, `title`, `description`.
+- **twitter** – `card: 'summary_large_image'`, `title`.
 
-Use the same pattern for any new product or category route.
+**When adding a new product category:** Add the slug to `PRODUCT_SLUGS`, add data and metadata to `productConfig`, add the data array in `productConfig`/data files, and ensure the slug is included in the sitemap (sitemap already uses `PRODUCT_SLUGS`).
 
 ---
 
@@ -68,9 +68,9 @@ Use the same pattern for any new product or category route.
 **Included URLs:**
 
 - Homepage (priority 1, changeFrequency weekly).
-- `/products/gloves`, `/products/boots`, `/products/spodnie`, `/products/koszula` (priority 0.9, weekly).
+- One URL per slug in `PRODUCT_SLUGS`: `/products/gloves`, `/products/boots`, `/products/spodnie`, `/products/koszula` (priority 0.9, weekly). The sitemap imports `PRODUCT_SLUGS` from `productConfig`.
 
-**When adding a new page:** Add a corresponding entry in the `productRoutes` array (or equivalent) in `sitemap.ts` so it is included in the sitemap.
+**When adding a new product category:** Add the slug to `PRODUCT_SLUGS` in `src/app/products/[slug]/productConfig.ts`; the sitemap will include it automatically.
 
 ---
 
