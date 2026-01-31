@@ -87,22 +87,28 @@ const HeroSection: React.FC = () => {
             </Button>
           </div>
 
-          {/* Trust indicators – muted orange-brown icons, crisp white text */}
+          {/* Trust indicators – palette: primary icons, muted-foreground text */}
           <div
-            className="mt-16 flex flex-wrap justify-center gap-8 text-foreground animate-fade-in"
+            className="mt-16 flex flex-wrap justify-center gap-6 sm:gap-8 animate-fade-in"
             style={{ animationDelay: '0.8s' }}
           >
-            <div className="flex items-center gap-2">
-              <Shield className="text-primary-muted" size={20} />
-              <span className="text-sm font-medium">CE Certified</span>
+            <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
+              <Shield className="shrink-0 text-primary" size={24} strokeWidth={2} />
+              <span className="text-sm font-medium text-muted-foreground">
+                <AnimateText k="hero.trust1" />
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <HardHat className="text-primary-muted" size={20} />
-              <span className="text-sm font-medium">EN Standards</span>
+            <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
+              <HardHat className="shrink-0 text-primary" size={24} strokeWidth={2} />
+              <span className="text-sm font-medium text-muted-foreground">
+                <AnimateText k="hero.trust2" />
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <Glasses className="text-primary-muted" size={20} />
-              <span className="text-sm font-medium">ISO 9001</span>
+            <div className="flex items-center gap-3 rounded-full bg-primary/10 px-4 py-2.5 border border-primary/20">
+              <Glasses className="shrink-0 text-primary" size={24} strokeWidth={2} />
+              <span className="text-sm font-medium text-muted-foreground">
+                <AnimateText k="hero.trust3" />
+              </span>
             </div>
           </div>
         </div>

@@ -21,6 +21,9 @@ interface Translations {
     subtitle: string;
     cta: string;
     scrollToMap: string;
+    trust1: string;
+    trust2: string;
+    trust3: string;
   };
   about: {
     title: string;
@@ -118,6 +121,9 @@ const translations: Record<Language, Translations> = {
         'Twoje bezpieczeństwo jest naszym priorytetem. Oferujemy najwyższej jakości odzież ochronną dla każdej branży.',
       cta: 'Zobacz produkty',
       scrollToMap: 'Zobacz mapę i lokalizację',
+      trust1: 'Produkty CE',
+      trust2: 'Normy EN',
+      trust3: 'Odzież BHP',
     },
     about: {
       title: 'O nas',
@@ -231,6 +237,9 @@ const translations: Record<Language, Translations> = {
         'Your safety is our priority. We offer the highest quality protective clothing for every industry.',
       cta: 'View Products',
       scrollToMap: 'View location map',
+      trust1: 'CE-marked products',
+      trust2: 'EN compliant',
+      trust3: 'Quality workwear',
     },
     about: {
       title: 'About Us',
