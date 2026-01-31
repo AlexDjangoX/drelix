@@ -14,15 +14,6 @@ const catalogDescription =
 export const metadata: Metadata = {
   title: catalogTitle,
   description: catalogDescription,
-  keywords: [
-    'katalog produktów',
-    'odzież robocza',
-    'BHP',
-    'rękawice',
-    'obuwie ochronne',
-    'Drelix',
-    'Wadowice',
-  ],
   alternates: { canonical: `${siteUrl}/products` },
   openGraph: {
     type: 'website',

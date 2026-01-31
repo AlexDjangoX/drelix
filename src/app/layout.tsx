@@ -32,18 +32,6 @@ export const metadata: Metadata = {
   },
   description:
     'Profesjonalna odzież robocza i ochronna w Wadowicach. Kaski, kamizelki odblaskowe, rękawice, obuwie BHP. CE, EN. Ponad 500 produktów. Skontaktuj się z nami.',
-  keywords: [
-    'odzież robocza',
-    'odzież ochronna',
-    'BHP Wadowice',
-    'kaski ochronne',
-    'kamizelki odblaskowe',
-    'rękawice robocze',
-    'obuwie ochronne',
-    'drelix',
-    'workwear',
-    'safety clothing',
-  ],
   authors: [{ name: 'Drelix', url: siteUrl }],
   creator: 'Drelix',
   publisher: 'Drelix',

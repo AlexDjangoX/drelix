@@ -31,14 +31,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: config.metadata.title,
     description: config.metadata.description,
-    keywords: [
-      slug,
-      title,
-      'odzież robocza',
-      'BHP',
-      'Drelix',
-      'Wadowice',
-    ],
     alternates: { canonical },
     openGraph: {
       type: 'website',
