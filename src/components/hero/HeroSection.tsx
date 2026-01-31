@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { ChevronDown, Shield, HardHat, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo, TwoToneHeading, AnimateText } from '@/components';
+import { getHeroThumbnailPath } from '@/lib/thumbnails';
 
 const HeroSection: React.FC = () => {
   const handleScrollToProducts = () => {
@@ -16,8 +18,17 @@ const HeroSection: React.FC = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 bg-[url('/gloves.jpg')] bg-cover bg-center bg-no-repeat" />
+      {/* Background image – thumbnail from /thumbnails */}
+      <div className="absolute inset-0">
+        <Image
+          src={getHeroThumbnailPath()}
+          alt=""
+          fill
+          className="object-cover object-center"
+          priority
+          sizes="100vw"
+        />
+      </div>
       {/* Overlay for text readability */}
       <div className="absolute inset-0 bg-linear-to-br from-background/95 via-background/90 to-secondary/80" />
 

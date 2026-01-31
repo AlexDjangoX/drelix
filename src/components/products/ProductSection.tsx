@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Hand,
@@ -21,6 +22,8 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
 import { CATEGORY_SLUGS, CATEGORY_TITLE_KEYS } from '@/data/catalogCategories';
+import { getThumbnailPath } from '@/lib/thumbnails';
+import type { CategorySlug } from '@/data/catalogCategories';
 
 const CATEGORY_COLORS = [
   'from-orange-500/20 to-yellow-500/20',
@@ -99,6 +102,7 @@ const ProductsSection: React.FC = () => {
             const titleKey = CATEGORY_TITLE_KEYS[slug];
             const Icon = CATEGORY_ICONS[index];
             const color = CATEGORY_COLORS[index];
+            const thumbnailPath = getThumbnailPath(slug as CategorySlug);
             const cardClassName =
               'group cursor-pointer border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-glow hover:-translate-y-1 h-full';
             return (
@@ -110,12 +114,22 @@ const ProductsSection: React.FC = () => {
                 <Card className={cardClassName}>
                   <CardContent className="p-6">
                     <div
-                      className={`aspect-square rounded-xl mb-4 overflow-hidden bg-linear-to-br ${color} flex items-center justify-center group-hover:scale-105 transition-transform`}
+                      className={`aspect-square rounded-xl mb-4 overflow-hidden bg-linear-to-br ${color} flex items-center justify-center group-hover:scale-105 transition-transform relative`}
                     >
-                      <Icon
-                        size={40}
-                        className="text-foreground group-hover:text-primary transition-colors"
-                      />
+                      {thumbnailPath ? (
+                        <Image
+                          src={thumbnailPath}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                        />
+                      ) : (
+                        <Icon
+                          size={40}
+                          className="text-foreground group-hover:text-primary transition-colors"
+                        />
+                      )}
                     </div>
                     <h3 className="text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors">
                       <AnimateText k={titleKey} />

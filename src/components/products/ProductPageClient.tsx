@@ -74,9 +74,13 @@ export default function ProductPageClient({ slug }: Props) {
     };
   }, [lightboxIndex]);
 
-  const objectContain = ['polbuty', 'trzewiki', 'sandaly', 'kalosze'].includes(
-    slug
-  );
+  const objectContain = [
+    'gloves',
+    'polbuty',
+    'trzewiki',
+    'sandaly',
+    'kalosze',
+  ].includes(slug);
 
   if (sectionFromConvex === undefined) {
     return (

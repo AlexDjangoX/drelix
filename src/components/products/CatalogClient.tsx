@@ -22,14 +22,14 @@ function ProductCard({ row, index }: { row: CatalogRow; index: number }) {
     >
       <CardContent className="p-4">
         <div className="flex gap-4">
-          <div className="shrink-0 w-20 h-20 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+          <div className="shrink-0 w-24 h-32 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
             <Image
               src={src}
               alt={row.Nazwa || row.Kod}
-              width={80}
-              height={80}
-              className="w-full h-full object-cover"
-              sizes="80px"
+              width={96}
+              height={128}
+              className="w-full h-full object-contain"
+              sizes="96px"
               onError={() => setImgError(true)}
             />
           </div>

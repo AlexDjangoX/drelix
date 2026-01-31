@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import {
   PRODUCT_SLUGS,
   productConfig,
-} from '../../../components/products/productConfig';
+} from '@/components/products/productConfig';
 import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
@@ -14,7 +14,7 @@ export const revalidate = false;
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return PRODUCT_SLUGS.map((slug) => ({ slug }));
+  return PRODUCT_SLUGS.map((slug: string) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -56,13 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function BreadcrumbJsonLd({
-  slug,
-  name,
-}: {
-  slug: string;
-  name: string;
-}) {
+function BreadcrumbJsonLd({ slug, name }: { slug: string; name: string }) {
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -104,19 +98,13 @@ export default async function ProductLayout({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const config =
-    PRODUCT_SLUGS.includes(slug as (typeof PRODUCT_SLUGS)[number])
-      ? productConfig[slug as keyof typeof productConfig]
-      : null;
+  const config = PRODUCT_SLUGS.includes(slug as (typeof PRODUCT_SLUGS)[number])
+    ? productConfig[slug as keyof typeof productConfig]
+    : null;
 
   return (
     <>
-      {config && (
-        <BreadcrumbJsonLd
-          slug={slug}
-          name={config.metadata.title}
-        />
-      )}
+      {config && <BreadcrumbJsonLd slug={slug} name={config.metadata.title} />}
       {children}
     </>
   );
