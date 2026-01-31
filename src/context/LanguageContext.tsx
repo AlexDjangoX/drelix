@@ -34,6 +34,11 @@ interface Translations {
     title: string;
     subtitle: string;
     viewAll: string;
+    catalogTitle: string;
+    catalogSubtitle: string;
+    catalogCount: string;
+    catalogOther: string;
+    viewFullCatalog: string;
   };
   whyUs: {
     title: string;
@@ -117,6 +122,11 @@ const translations: Record<Language, Translations> = {
       title: 'Nasze produkty',
       subtitle: 'Szeroki wybór odzieży ochronnej i roboczej dla każdej branży',
       viewAll: 'Zobacz wszystkie',
+      catalogTitle: 'Katalog produktów',
+      catalogSubtitle: 'Pełna oferta sklepu – odzież robocza i ochronna, BHP.',
+      catalogCount: 'produktów',
+      catalogOther: 'Inne',
+      viewFullCatalog: 'Zobacz pełny katalog',
     },
     whyUs: {
       title: 'Dlaczego my?',
@@ -216,6 +226,11 @@ const translations: Record<Language, Translations> = {
       subtitle:
         'Wide selection of protective and work clothing for every industry',
       viewAll: 'View All',
+      catalogTitle: 'Product catalog',
+      catalogSubtitle: 'Full store offer – work and protective clothing, PPE.',
+      catalogCount: 'products',
+      catalogOther: 'Other',
+      viewFullCatalog: 'View full catalog',
     },
     whyUs: {
       title: 'Why Choose Us?',

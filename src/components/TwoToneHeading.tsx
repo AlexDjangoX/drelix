@@ -14,6 +14,8 @@ export interface TwoToneHeadingProps {
   topColor?: 'white' | 'foreground';
   /** Inline styles (e.g. for animationDelay) */
   style?: React.CSSProperties;
+  /** ID for anchor linking / aria-labelledby */
+  id?: string;
   children: React.ReactNode;
 }
 
@@ -29,10 +31,12 @@ export function TwoToneHeading({
   className,
   topColor,
   style,
+  id,
   children,
 }: TwoToneHeadingProps) {
   return (
     <Tag
+      id={id}
       className={cn(
         twoToneBase,
         topColor === 'foreground' && '[--two-tone-heading-top:hsl(var(--foreground))]',

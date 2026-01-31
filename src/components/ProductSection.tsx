@@ -93,6 +93,12 @@ const ProductsSection: React.FC = () => {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             <AnimateText k="products.subtitle" />
           </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
+          >
+            <AnimateText k="products.viewFullCatalog" />
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
