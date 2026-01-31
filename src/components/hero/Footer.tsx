@@ -2,14 +2,16 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Facebook, Instagram, Linkedin } from 'lucide-react';
+import { Facebook } from 'lucide-react';
 import { Logo } from '@/components';
 import { AnimateText } from '@/components/reusable/AnimateText';
 
 const socialLinks = [
-  { icon: Facebook, href: '#', label: 'Facebook' },
-  { icon: Instagram, href: '#', label: 'Instagram' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
+  {
+    icon: Facebook,
+    href: 'https://www.facebook.com/p/Drelix-Odzie%C5%BC-Robocza-100082156284599/',
+    label: 'Facebook',
+  },
 ];
 
 const quickLinkItems = [
