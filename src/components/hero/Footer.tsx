@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Facebook, Instagram, Linkedin } from 'lucide-react';
 import { Logo } from '@/components';
 import { AnimateText } from '@/components/reusable/AnimateText';
@@ -90,12 +91,18 @@ const Footer: React.FC = () => {
             <AnimateText k="footer.rights" />.
           </p>
           <div className="flex gap-6">
-            <button className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <Link
+              href="/privacy"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
               <AnimateText k="footer.privacy" />
-            </button>
-            <button className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link
+              href="/terms"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
               <AnimateText k="footer.terms" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
