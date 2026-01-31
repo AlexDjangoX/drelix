@@ -3,7 +3,7 @@
  * See docs/SEO_Guide.md.
  */
 
-const raw = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
+const raw = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.org';
 
 /**
  * Canonical base URL with no trailing slash. All canonicals, sitemap URLs, and

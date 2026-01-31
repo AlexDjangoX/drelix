@@ -7,8 +7,8 @@ This document is the single source of truth for SEO on the Drelix project. Use i
 ## 1. Overview
 
 - **Default language:** Polish (`pl`). English is available via client-side switch; same URL for both. **English content is not intended to rank independently in search** — Google indexes the default Polish view; the English toggle is for on-site UX only. Bots will only see Polish content as they do not execute JavaScript language toggles.
-- **Site URL:** Set via `NEXT_PUBLIC_SITE_URL` (e.g. `https://drelix.pl`). Used for canonicals, sitemap, Open Graph, and JSON-LD.
-- **Canonicals:** All canonicals resolve to the **non–trailing-slash** form; keep sitemap and internal links consistent (e.g. `https://drelix.pl/products/gloves`, not `.../gloves/`).
+- **Site URL:** Set via `NEXT_PUBLIC_SITE_URL` (e.g. `https://drelix.org`). Used for canonicals, sitemap, Open Graph, and JSON-LD.
+- **Canonicals:** All canonicals resolve to the **non–trailing-slash** form; keep sitemap and internal links consistent (e.g. `https://drelix.org/products/gloves`, not `.../gloves/`).
 - **Rendering:** Static (no revalidation). All important content is in the initial HTML for crawlers. **Trade-off:** JSON-LD and metadata (opening hours, address, phone) do not update until the next deploy; that's a conscious choice for CWV and crawlability.
 - **HTTPS:** All pages served over HTTPS. Ensure SSL certificate is valid and auto-renewing; monitor Security Issues in Google Search Console.
 - **Expected index coverage:** 25 pages (1 homepage + 1 catalog + 23 product categories). Monitor actual coverage in Google Search Console → Coverage report.
@@ -54,7 +54,7 @@ These principles inform how we implement the items in §3 "What we maintain". Th
 ### Setup
 
 1. **Verify ownership:** Add property at [Google Search Console](https://search.google.com/search-console) using DNS TXT record or HTML file upload (recommended for persistence).
-2. **Submit sitemap:** In GSC → Sitemaps, submit `https://drelix.pl/sitemap.xml`.
+2. **Submit sitemap:** In GSC → Sitemaps, submit `https://drelix.org/sitemap.xml`.
 3. **Set up email alerts:** Ensure you receive notifications for critical issues (manual actions, security issues, indexing problems).
 
 ### Weekly monitoring (5-10 minutes)
