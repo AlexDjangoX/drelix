@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { ChevronDown, Shield, HardHat, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo, TwoToneHeading, AnimateText } from '@/components';
-import { getHeroThumbnailPath } from '@/lib/thumbnails';
 
 const HeroSection: React.FC = () => {
   const handleScrollToProducts = () => {
@@ -21,8 +20,8 @@ const HeroSection: React.FC = () => {
       {/* Background image – thumbnail from /thumbnails */}
       <div className="absolute inset-0">
         <Image
-          src={getHeroThumbnailPath()}
-          alt=""
+          src="/images/hero.jpg"
+          alt="Hero image for the homepage"
           fill
           className="object-cover object-center"
           priority

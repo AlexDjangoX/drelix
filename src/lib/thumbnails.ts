@@ -17,10 +17,3 @@ const THUMBNAIL_PATHS: Partial<Record<CategorySlug, string>> = {
 export function getThumbnailPath(slug: CategorySlug): string | null {
   return THUMBNAIL_PATHS[slug] ?? null;
 }
-
-/** Slug used for hero background (must have a thumbnail). */
-export const HERO_THUMBNAIL_SLUG: CategorySlug = 'gloves';
-
-export function getHeroThumbnailPath(): string {
-  return getThumbnailPath(HERO_THUMBNAIL_SLUG) ?? '/thumbnails/gloves.png';
-}

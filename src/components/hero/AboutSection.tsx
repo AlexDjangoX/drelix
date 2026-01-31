@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Award, Users, Package } from 'lucide-react';
 import { AnimateText, TwoToneHeading } from '@/components';
 
@@ -46,19 +47,15 @@ const AboutSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Image placeholder */}
             <div className="relative">
-              <div className="aspect-square bg-linear-to-br from-secondary to-muted rounded-2xl overflow-hidden shadow-card">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Award size={64} className="text-primary" />
-                    </div>
-                    <p className="text-muted-foreground text-sm">
-                      <AnimateText k="about.storePhoto" />
-                    </p>
-                  </div>
-                </div>
+              <div className="aspect-square relative rounded-2xl overflow-hidden shadow-card">
+                <Image
+                  src="/images/drelix.jpg"
+                  alt="Drelix - odzież robocza i ochronna Wadowice"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
               {/* Decorative accent */}
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/20 rounded-2xl -z-10" />
