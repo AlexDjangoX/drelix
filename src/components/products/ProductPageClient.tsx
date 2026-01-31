@@ -11,7 +11,7 @@ import {
   productConfig,
   type ProductSlug,
   type ProductItem,
-} from './productConfig';
+} from '@/components/products/productConfig';
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';

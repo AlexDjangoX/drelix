@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import {
   PRODUCT_SLUGS,
   productConfig,
-} from '../../../components/products/productConfig';
+} from '@/components/products/productConfig';
 import ProductPageClient from '@/components/products/ProductPageClient';
 
 type Props = { params: Promise<{ slug: string }> };

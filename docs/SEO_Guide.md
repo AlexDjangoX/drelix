@@ -11,7 +11,7 @@ This document is the single source of truth for SEO on the Drelix project. Use i
 - **Canonicals:** All canonicals resolve to the **non–trailing-slash** form; keep sitemap and internal links consistent (e.g. `https://drelix.org/products/gloves`, not `.../gloves/`).
 - **Rendering:** Static (no revalidation). All important content is in the initial HTML for crawlers. **Trade-off:** JSON-LD and metadata (opening hours, address, phone) do not update until the next deploy; that's a conscious choice for CWV and crawlability.
 - **HTTPS:** All pages served over HTTPS. Ensure SSL certificate is valid and auto-renewing; monitor Security Issues in Google Search Console.
-- **Expected index coverage:** 25 pages (1 homepage + 1 catalog + 23 product categories). Monitor actual coverage in Google Search Console → Coverage report.
+- **Expected index coverage:** 27 pages (1 homepage + 1 catalog + 23 product categories + privacy + terms). Monitor actual coverage in Google Search Console → Coverage report.
 
 ---
 
@@ -61,7 +61,7 @@ These principles inform how we implement the items in §3 "What we maintain". Th
 
 | Report | What to check | Action if issues found |
 |--------|---------------|------------------------|
-| **Coverage** | "Valid" should show 25 pages. Watch for "Excluded" (soft 404s, noindex) or "Error" (server errors, 404s). | Investigate excluded/error pages; use URL Inspection Tool to debug. |
+| **Coverage** | "Valid" should show 27 pages (homepage, catalog, 23 categories, /privacy, /terms). Watch for "Excluded" (soft 404s, noindex) or "Error" (server errors, 404s). | Investigate excluded/error pages; use URL Inspection Tool to debug. |
 | **Performance** | Click-through rate (CTR), impressions, average position for key queries (e.g. "odzież robocza Wadowice"). Identify low-CTR pages (< 2%) for meta description improvements. | Optimize titles/descriptions for low-CTR high-impression pages. |
 | **Core Web Vitals** | "Good" URLs should be majority (green). Watch for "Poor" URLs (red). CWV uses **real user metrics** (75th percentile); this is different from PageSpeed Insights lab data. | Investigate poor pages; check for large images, layout shift, slow interactivity. |
 
@@ -82,7 +82,7 @@ These principles inform how we implement the items in §3 "What we maintain". Th
 - **Performance exports:** Download query/page performance data for deeper analysis in spreadsheets.
 
 **Expected metrics for Drelix:**
-- **Coverage:** 25 valid, 0 errors, excluded pages only for admin/api (as designed)
+- **Coverage:** 27 valid (homepage, catalog, 23 categories, /privacy, /terms), 0 errors, excluded pages only for admin/api (as designed)
 - **Average CTR:** 2-5% (industry standard for branded local business queries)
 - **Average position:** Top 3 for "drelix wadowice", "odzież robocza wadowice"
 - **Core Web Vitals:** 100% good URLs (with static rendering, this should be achievable)
@@ -203,6 +203,7 @@ Product metadata is driven by **`productConfig`** in `src/components/products/pr
 
 - Homepage (priority 1, weekly, lastmod: current date).
 - `/products` catalog (priority 0.9, weekly, lastmod: current date).
+- `/privacy` (Polityka prywatności) and `/terms` (Regulamin) (priority 0.5, monthly, lastmod: current date).
 - One URL per slug in `PRODUCT_SLUGS` (23 categories, e.g. `/products/gloves`, `/products/spodnie`; priority 0.9, weekly, lastmod: current date). The sitemap imports `PRODUCT_SLUGS` from `@/components/products/productConfig`.
 
 **Note on priority and changefreq:** Google [largely ignores](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#additional-notes-about-xml-sitemaps) `priority` and `changefreq` in sitemaps. We include them for other crawlers and standards compliance, but don't rely on them for Google crawl behavior. `lastmod` is more useful — set it accurately to help Google identify changed pages.
@@ -217,7 +218,7 @@ Product metadata is driven by **`productConfig`** in `src/components/products/pr
 - **Alignment with sitemap:** Both robots and sitemap use **the same** `NEXT_PUBLIC_SITE_URL` (fallback `https://drelix.org`). The Sitemap URL in robots.txt is `${baseUrl}/sitemap.xml`, so it always matches the sitemap origin — no manual sync.
 - **Policy:**
   - **Content-signal** (modern standard): `search=yes`, `ai-train=no`, `ai-input=no` — allows search indexing, reserves rights for AI training/input per EU Copyright Directive.
-  - **Search engines (SEO):** Googlebot, Bingbot, Slurp, DuckDuckBot, YandexBot, Baiduspider — **Allow** `/`, **Disallow** `/api/`, `/admin/`. Only public pages (home, products, category pages) are crawlable; API and admin are excluded to eliminate useless traffic.
+  - **Search engines (SEO):** Googlebot, Bingbot, Slurp, DuckDuckBot, YandexBot, Baiduspider — **Allow** `/`, **Disallow** `/api/`, `/admin/`. Public pages (home, products, category pages, /privacy, /terms) are crawlable; API and admin are excluded to eliminate useless traffic.
   - **AI / training crawlers:** Long list of bots (GPTBot, CCBot, ClaudeBot, PerplexityBot, etc.) — **Disallow** `/` to reduce non-search traffic and protect content use.
   - **Sitemap:** `${baseUrl}/sitemap.xml` (same origin as `src/app/sitemap.ts`).
 - **Result:** Excellent SEO (all important pages allowed, sitemap referenced) and no crawl waste on API/admin or AI scrapers.
@@ -262,7 +263,7 @@ Update when: business name, address, phone, email, or hours change; or when addi
 ### GSC Coverage monitoring
 
 **Expected state:**
-- **Valid:** 25 pages (homepage + catalog + 23 categories)
+- **Valid:** 27 pages (homepage + catalog + 23 categories + /privacy + /terms)
 - **Excluded:** `/api/*`, `/admin/*` (by design, blocked in robots.txt), `/_next/*` (Next.js internals, not public)
 - **Error:** 0 pages
 
@@ -477,7 +478,7 @@ Without it, the app falls back to `https://drelix.org` in code; ensure the deplo
 
 | I want to… | Do this… |
 |------------|-----------|
-| Check if Google is indexing my pages | Open Google Search Console → Coverage. Expect 25 valid pages. |
+| Check if Google is indexing my pages | Open Google Search Console → Coverage. Expect 27 valid pages (homepage, catalog, 23 categories, /privacy, /terms). |
 | See my search performance (clicks, impressions, CTR) | Open Google Search Console → Performance. Check weekly. |
 | Monitor Core Web Vitals (real users) | Open Google Search Console → Core Web Vitals. Aim for 100% good URLs. |
 | Check if structured data is valid | Google Search Console → Enhancements, or use [Rich Results Test](https://search.google.com/test/rich-results). |

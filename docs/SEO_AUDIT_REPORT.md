@@ -361,7 +361,7 @@ Before deploying to production and setting up Google Search Console, verify:
 ### Week 1:
 
 4. **Monitor GSC Coverage report:**
-   - Expect 25 valid pages (1 homepage + 1 catalog + 23 categories)
+   - Expect 27 valid pages (1 homepage + 1 catalog + 23 categories + /privacy + /terms)
    - Check for excluded pages (should only be /api/, /admin/, /_next/)
    - Use URL Inspection Tool to verify indexing
 
@@ -378,7 +378,7 @@ Before deploying to production and setting up Google Search Console, verify:
 ### Monthly:
 
 7. **Full SEO health check:**
-   - GSC Coverage: All 25 pages indexed?
+   - GSC Coverage: All 27 pages indexed?
    - GSC Performance: CTR improving?
    - GSC Core Web Vitals: Still 100% Good?
    - GSC Mobile Usability: Zero errors?
