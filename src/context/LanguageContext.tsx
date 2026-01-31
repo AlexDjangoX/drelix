@@ -95,6 +95,8 @@ interface Translations {
     kneeProtection: string;
     signage: string;
     accessories: string;
+    wkladki: string;
+    polar: string;
   };
 }
 
@@ -198,7 +200,7 @@ const translations: Record<Language, Translations> = {
       aprons: 'Fartuchy / Zapaski',
       sweatshirts: 'Bluzy',
       jackets: 'Kurtki',
-      fleece: 'Polary',
+      polar: 'Polary',
       eyewear: 'Okulary ochronne',
       earProtection: 'Ochrona słuchu',
       masks: 'Maski i półmaski',
@@ -209,6 +211,8 @@ const translations: Record<Language, Translations> = {
       kneeProtection: 'Nakolanniki',
       signage: 'Znaki bezpieczeństwa',
       accessories: 'Akcesoria BHP',
+      wkladki: 'Wkładki do butów',
+      polar: 'Polary',
     },
   },
   en: {
@@ -310,7 +314,7 @@ const translations: Record<Language, Translations> = {
       aprons: 'Aprons',
       sweatshirts: 'Sweatshirts',
       jackets: 'Jackets',
-      fleece: 'Fleece',
+      polar: 'Fleece',
       eyewear: 'Safety Glasses',
       earProtection: 'Hearing Protection',
       masks: 'Masks & Respirators',
@@ -321,6 +325,8 @@ const translations: Record<Language, Translations> = {
       kneeProtection: 'Knee Pads',
       signage: 'Safety Signs',
       accessories: 'Safety Accessories',
+      wkladki: 'Shoe Insoles',
+      polar: 'Fleece',
     },
   },
 };

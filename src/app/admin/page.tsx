@@ -19,10 +19,11 @@ import {
   Search,
 } from 'lucide-react';
 import { categorizeCatalog } from '@/lib/catalogCategorize';
-import type { CategoryRule } from '@/lib/catalogCategorize';
+import type { CategoryRule, CatalogSection } from '@/lib/catalogCategorize';
 import { csvToRows } from '@/lib/csvParseClient';
 import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
+import { toast } from 'sonner';
 
 type CatalogRow = Record<string, string>;
 
@@ -81,8 +82,12 @@ function ImageUploadCell({ row }: { row: CatalogRow }) {
   const imageUrl = row['imageUrl'];
 
   const handleUpload = async (file: File) => {
-    if (!file.type.startsWith('image/')) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Proszę wybrać plik graficzny');
+      return;
+    }
     setUploading(true);
+    const toastId = toast.loading('Przesyłanie zdjęcia...');
     try {
       // 1. Get upload URL
       const postUrl = await generateUploadUrl();
@@ -95,8 +100,10 @@ function ImageUploadCell({ row }: { row: CatalogRow }) {
       const { storageId } = await result.json();
       // 3. Save storageId to product
       await updateProductImage({ kod, storageId });
+      toast.success('Zdjęcie zostało zaktualizowane', { id: toastId });
     } catch (e) {
       console.error('Upload failed', e);
+      toast.error('Nie udało się przesłać zdjęcia', { id: toastId });
     } finally {
       setUploading(false);
       setDragOver(false);
@@ -139,6 +146,28 @@ function ImageUploadCell({ row }: { row: CatalogRow }) {
   );
 }
 
+function CategoryLabel({ slug }: { slug: string }) {
+  const categories = useQuery(api.catalog.listCategories);
+  const { t } = useLanguage();
+  if (!categories) return <span className="text-xs animate-pulse">...</span>;
+  const cat = categories.find(c => c.slug === slug);
+  if (!cat) return <span className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">{slug}</span>;
+  
+  const label = (() => {
+    const keys = cat.titleKey.split('.');
+    let current: unknown = t;
+    for (const key of keys) {
+      current = (current as Record<string, unknown>)?.[key];
+    }
+    return typeof current === 'string' ? current : slug;
+  })();
+  return (
+    <span className="text-xs font-medium bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+      {label}
+    </span>
+  );
+}
+
 function ProductRow({ row }: { row: CatalogRow }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<CatalogRow>(() => ({ ...row }));
@@ -155,6 +184,7 @@ function ProductRow({ row }: { row: CatalogRow }) {
   const handleSave = async () => {
     setSaving(true);
     setError(null);
+    const toastId = toast.loading('Zapisywanie zmian...');
     try {
       const updates: Record<string, string> = {};
       for (const { key } of DISPLAY_KEYS) {
@@ -165,12 +195,16 @@ function ProductRow({ row }: { row: CatalogRow }) {
       }
       if (Object.keys(updates).length === 0) {
         setEditing(false);
+        toast.dismiss(toastId);
         return;
       }
       await updateProduct({ kod, updates });
       setEditing(false);
+      toast.success('Produkt został zaktualizowany', { id: toastId });
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Save failed');
+      const msg = e instanceof Error ? e.message : 'Błąd zapisu';
+      setError(msg);
+      toast.error(msg, { id: toastId });
     } finally {
       setSaving(false);
     }
@@ -195,9 +229,7 @@ function ProductRow({ row }: { row: CatalogRow }) {
             disabled={saving}
           />
         ) : (
-          <span className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">
-            {row.categorySlug}
-          </span>
+          <CategoryLabel slug={row.categorySlug ?? ''} />
         )}
       </td>
       {DISPLAY_KEYS.map(({ key }) => (
@@ -266,70 +298,55 @@ export default function AdminPage() {
   const [dragOver, setDragOver] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [result, setResult] = useState<{
-    ok: boolean;
-    message?: string;
-    error?: string;
-  } | null>(null);
+  const [previewSections, setPreviewSections] = useState<CatalogSection[] | null>(null);
 
   const sectionsFromConvex = useQuery(api.catalog.listCatalogSections);
   const replaceCatalog = useMutation(api.catalog.replaceCatalogFromSections);
   const catalogLoading = sectionsFromConvex === undefined;
   const catalogError = sectionsFromConvex === undefined ? null : null;
 
+  const activeSections = previewSections || sectionsFromConvex;
+
+  const totalProductCount = useMemo(() => {
+    if (!activeSections) return 0;
+    return activeSections.reduce((sum, section) => sum + section.items.length, 0);
+  }, [activeSections]);
+
   const filteredSections = useMemo(() => {
-    if (!sectionsFromConvex) return null;
-    if (!searchQuery.trim()) return sectionsFromConvex;
+    if (!activeSections) return null;
+    if (!searchQuery.trim()) return activeSections;
 
     const query = searchQuery.toLowerCase();
-    return sectionsFromConvex
+    return activeSections
       .map((section) => ({
         ...section,
         items: section.items.filter(
-          (item) =>
+          (item: CatalogRow) =>
             (item.Nazwa ?? '').toLowerCase().includes(query) ||
             (item.Kod ?? '').toLowerCase().includes(query)
         ),
       }))
       .filter((section) => section.items.length > 0);
-  }, [sectionsFromConvex, searchQuery]);
+  }, [activeSections, searchQuery]);
 
-  const onDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-    const f = e.dataTransfer.files?.[0];
-    if (f && (f.name.endsWith('.csv') || f.type === 'text/csv')) {
-      setFile(f);
-      setResult(null);
+  const filteredTotalCount = useMemo(() => {
+    if (!filteredSections) return 0;
+    return filteredSections.reduce((sum, section) => sum + section.items.length, 0);
+  }, [filteredSections]);
+
+  const handleFileSelect = async (f: File) => {
+    if (!f.name.endsWith('.csv') && f.type !== 'text/csv') {
+      toast.error('Proszę wybrać plik CSV');
+      return;
     }
-  }, []);
-
-  const onDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(true);
-  }, []);
-
-  const onDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
-  }, []);
-
-  const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (f) {
-      setFile(f);
-      setResult(null);
-    }
-  }, []);
-
-  const process = async () => {
-    if (!file) return;
+    setFile(f);
     setLoading(true);
-    setResult(null);
-    try {
-      const buffer = await file.arrayBuffer();
-      const rawRows = csvToRows(buffer);
+    const toastId = toast.loading('Parsowanie pliku...');
 
+    try {
+      const buffer = await f.arrayBuffer();
+      const rawRows = csvToRows(buffer);
+      
       // Map CSV headers to Convex-safe field names
       const rows = rawRows.map((row) => ({
         Rodzaj: row['Rodzaj'] ?? '',
@@ -345,23 +362,64 @@ export default function AdminPage() {
       }));
 
       const rulesRes = await fetch('/catalogCategoryRules.json');
-      if (!rulesRes.ok) throw new Error('Failed to load category rules');
+      if (!rulesRes.ok) throw new Error('Nie udało się załadować reguł kategorii');
       const rules = (await rulesRes.json()) as CategoryRule[];
-      const sectionsToSend = categorizeCatalog(rows, rules);
-      await replaceCatalog({ sections: sectionsToSend as never });
-      setResult({
-        ok: true,
-        message: `Catalog updated: ${rows.length} products`,
-      });
-      setFile(null);
+      const categorized = categorizeCatalog(rows, rules);
+      
+      setPreviewSections(categorized);
+      toast.success(`Plik wczytany: ${rows.length} produktów w ${categorized.length} kategoriach`, { id: toastId });
     } catch (e) {
-      setResult({
-        ok: false,
-        error: e instanceof Error ? e.message : 'Network error',
-      });
+      const msg = e instanceof Error ? e.message : 'Błąd parsowania';
+      toast.error(msg, { id: toastId });
+      setFile(null);
     } finally {
       setLoading(false);
     }
+  };
+
+  const onDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    const f = e.dataTransfer.files?.[0];
+    if (f) handleFileSelect(f);
+  }, []);
+
+  const onDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(true);
+  }, []);
+
+  const onDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+  }, []);
+
+  const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) handleFileSelect(f);
+  }, []);
+
+  const processUpload = async () => {
+    if (!previewSections) return;
+    setLoading(true);
+    const toastId = toast.loading('Aktualizacja bazy danych...');
+    try {
+      await replaceCatalog({ sections: previewSections as never });
+      toast.success('Katalog został zaktualizowany pomyślnie', { id: toastId });
+      setPreviewSections(null);
+      setFile(null);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Błąd serwera';
+      toast.error(msg, { id: toastId });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelPreview = () => {
+    setPreviewSections(null);
+    setFile(null);
+    toast.info('Podgląd anulowany');
   };
 
   const logout = async () => {
@@ -372,7 +430,14 @@ export default function AdminPage() {
   return (
     <main className="container mx-auto max-w-6xl px-4 py-12">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold">Admin – Catalog</h1>
+        <div>
+          <h1 className="text-2xl font-bold">Admin – Catalog</h1>
+          {!catalogLoading && (
+            <p className="text-sm text-muted-foreground">
+              Total: {totalProductCount} products
+            </p>
+          )}
+        </div>
         <Button variant="outline" size="sm" onClick={logout} className="gap-2">
           <LogOut className="w-4 h-4" />
           Log out
@@ -381,12 +446,15 @@ export default function AdminPage() {
 
       {/* CSV upload */}
       <section className="mb-12">
-        <h2 className="text-lg font-semibold mb-3">Process new CSV</h2>
+        <h2 className="text-lg font-semibold mb-3">
+          {previewSections ? 'Podgląd nowego katalogu' : 'Procesuj nowy plik CSV'}
+        </h2>
         <p className="text-muted-foreground text-sm mb-4">
-          Upload a CSV (Kartoteki export, Windows-1250, semicolon-delimited). It
-          will replace the Convex catalog. Image paths unchanged (convention:{' '}
-          <code className="bg-muted px-1 rounded">/category/Kod.jpg</code>).
+          {previewSections 
+            ? 'Przejrzyj poniższą listę. Jeśli wszystko się zgadza, kliknij "Zatwierdź i wyślij".' 
+            : 'Wgraj plik CSV (eksport Kartoteki, Windows-1250, średnik). Zastąpi on obecny katalog w Convex.'}
         </p>
+        
         <div
           onDrop={onDrop}
           onDragOver={onDragOver}
@@ -394,7 +462,9 @@ export default function AdminPage() {
           className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
             dragOver
               ? 'border-primary bg-primary/5'
-              : 'border-muted-foreground/30'
+              : previewSections 
+                ? 'border-green-500/50 bg-green-500/5'
+                : 'border-muted-foreground/30'
           }`}
         >
           <input
@@ -403,67 +473,78 @@ export default function AdminPage() {
             onChange={onFileChange}
             className="sr-only"
             id="csv-upload"
+            disabled={loading}
           />
-          <label htmlFor="csv-upload" className="cursor-pointer block">
-            <Upload className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
+          <label htmlFor="csv-upload" className={loading ? 'cursor-not-allowed' : 'cursor-pointer block'}>
+            {previewSections ? (
+              <CheckCircle className="w-10 h-10 mx-auto text-green-500 mb-3" />
+            ) : (
+              <Upload className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
+            )}
             <span className="text-foreground font-medium">
-              {file ? file.name : 'Drag & drop CSV or click to choose'}
+              {previewSections 
+                ? 'Plik wczytany pomyślnie' 
+                : file 
+                  ? file.name 
+                  : 'Przeciągnij i upuść plik CSV lub kliknij, aby wybrać'}
             </span>
+            {previewSections && (
+              <p className="text-xs text-muted-foreground mt-1">{file?.name}</p>
+            )}
           </label>
         </div>
+
         <div className="mt-4 flex gap-3">
-          <Button
-            onClick={process}
-            disabled={!file || loading}
-            className="gap-2"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Processing…
-              </>
-            ) : (
-              'Process'
-            )}
-          </Button>
-          {file && !loading && (
-            <Button
-              variant="outline"
-              onClick={() => {
-                setFile(null);
-                setResult(null);
-              }}
-            >
-              Clear
-            </Button>
+          {previewSections ? (
+            <>
+              <Button
+                onClick={processUpload}
+                disabled={loading}
+                className="gap-2 bg-green-600 hover:bg-green-700"
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Save className="w-4 h-4" />
+                )}
+                Zatwierdź i wyślij do bazy
+              </Button>
+              <Button
+                variant="outline"
+                onClick={cancelPreview}
+                disabled={loading}
+                className="gap-2"
+              >
+                <X className="w-4 h-4" />
+                Anuluj
+              </Button>
+            </>
+          ) : (
+            file && (
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setFile(null);
+                }}
+              >
+                Wyczyść
+              </Button>
+            )
           )}
         </div>
-        {result && (
-          <div
-            className={`mt-4 flex items-center gap-2 p-3 rounded-lg text-sm ${
-              result.ok
-                ? 'bg-green-500/10 text-green-700 dark:text-green-400'
-                : 'bg-destructive/10 text-destructive'
-            }`}
-            role="alert"
-          >
-            {result.ok ? (
-              <CheckCircle className="w-4 h-4 shrink-0" />
-            ) : (
-              <AlertCircle className="w-4 h-4 shrink-0" />
-            )}
-            <span>{result.ok ? result.message : result.error}</span>
-          </div>
-        )}
       </section>
 
       {/* Catalog table by category */}
       <section>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-lg font-semibold">Products by category</h2>
+            <h2 className="text-lg font-semibold">
+              {previewSections ? 'Podgląd produktów' : 'Produkty w bazie'}
+            </h2>
             <p className="text-muted-foreground text-sm">
-              Edit a row and click Save to update the product in Convex.
+              {previewSections 
+                ? 'To są dane, które zostaną zapisane. Możesz je przeszukać przed wysłaniem.'
+                : 'Edytuj wiersz i kliknij Zapisz, aby zaktualizować produkt w Convex.'}
             </p>
           </div>
           <div className="relative w-full md:w-72">
@@ -474,6 +555,11 @@ export default function AdminPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
             />
+            {searchQuery && (
+              <p className="absolute -bottom-5 right-0 text-[10px] text-muted-foreground">
+                Found {filteredTotalCount} products
+              </p>
+            )}
           </div>
         </div>
 
@@ -529,7 +615,7 @@ export default function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {section.items.map((row, index) => (
+                      {section.items.map((row: CatalogRow, index: number) => (
                         <ProductRow
                           key={`${section.slug}-${row['Kod'] ?? index}`}
                           row={row}

@@ -38,7 +38,7 @@ export const listCatalogSections = query({
         .withIndex("by_category", (q) => q.eq("categorySlug", cat.slug))
         .collect();
       const items = await Promise.all(products.map(async (p) => {
-        const { _id, _creationTime, categorySlug, imageStorageId, ...rest } = p;
+        const { _id, _creationTime, imageStorageId, ...rest } = p;
         const imageUrl = imageStorageId ? await ctx.storage.getUrl(imageStorageId) : null;
         return { 
           ...rest, 
@@ -73,7 +73,7 @@ export const getCatalogSection = query({
       .withIndex("by_category", (q) => q.eq("categorySlug", slug))
       .collect();
     const items = await Promise.all(products.map(async (p) => {
-      const { _id, _creationTime, categorySlug, imageStorageId, ...rest } = p;
+      const { _id, _creationTime, imageStorageId, ...rest } = p;
       const imageUrl = imageStorageId ? await ctx.storage.getUrl(imageStorageId) : null;
       return { 
         ...rest, 

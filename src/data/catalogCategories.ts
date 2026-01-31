@@ -34,6 +34,8 @@ export type CatalogCategorySlug =
   | 'rainwear'
   | 'firstAid'
   | 'signage'
+  | 'polar'
+  | 'wkladki'
   | 'other';
 
 /** Product row with optional image path. */
