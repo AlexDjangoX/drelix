@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { Award, Users, Package } from 'lucide-react';
@@ -18,7 +18,10 @@ const AboutSection: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div>
-              <TwoToneHeading as="h2" className="text-3xl md:text-5xl font-black mb-6">
+              <TwoToneHeading
+                as="h2"
+                className="text-3xl md:text-5xl font-black mb-6"
+              >
                 <AnimateText k="about.title" />
               </TwoToneHeading>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
@@ -45,7 +48,7 @@ const AboutSection: React.FC = () => {
 
             {/* Image placeholder */}
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-secondary to-muted rounded-2xl overflow-hidden shadow-card">
+              <div className="aspect-square bg-linear-to-br from-secondary to-muted rounded-2xl overflow-hidden shadow-card">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center p-8">
                     <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">

@@ -48,7 +48,7 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 
 - **Home:** `src/app/page.tsx` – sections (Hero, About, Products, Why Us, Contact).
 - **Product catalog pages:** Single dynamic route `src/app/products/[slug]/` – shared layout (`generateMetadata`, `generateStaticParams`), `productConfig.ts` (slug → metadata + data), one client page component (grid + lightbox). Add new categories by updating `productConfig` and data in `src/data/`.
-- **API:** Prefer not adding `/api` routes unless required; if added, keep them in `robots` disallow as per current `src/app/robots.ts`.
+- **API:** Prefer not adding `/api` routes unless required; if added, keep them in `robots` disallow as per `src/lib/robotsContent.ts`.
 
 ---
 
@@ -104,7 +104,7 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 | SEO rules & checklist| [SEO_Guide.md](./SEO_Guide.md)           |
 | Root metadata        | `src/app/layout.tsx`                     |
 | Sitemap              | `src/app/sitemap.ts`                    |
-| robots.txt           | `src/app/robots.ts`                     |
+| robots.txt           | `src/app/robots.txt/route.ts` + `src/lib/robotsContent.ts` (same baseUrl as sitemap) |
 | Structured data      | `src/components/JsonLd.tsx`             |
 | Translations         | `src/context/LanguageContext.tsx`       |
 | Product data         | `src/data/*.ts`                         |

@@ -18,31 +18,19 @@ export default function LanguageSelector() {
 
   return (
     <motion.div
-      className="relative flex h-[32px] min-w-[82px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 shadow-inner shadow-slate-500/65 transition-all duration-300 dark:bg-gray-900 dark:shadow-slate-600"
+      className="relative flex h-8 min-w-20.5 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 shadow-inner shadow-slate-500/65 transition-all duration-300 dark:bg-gray-900 dark:shadow-slate-600"
       onClick={toggleLanguage}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >
-      <div className="absolute left-[5px] z-10">
-        <Image
-          src="/uk.png"
-          alt="EN"
-          width={20}
-          height={20}
-          unoptimized
-        />
+      <div className="absolute left-1.25 z-10">
+        <Image src="/uk.png" alt="EN" width={20} height={20} unoptimized />
       </div>
 
-      <div className="absolute right-[4px] z-10">
-        <Image
-          src="/pl.png"
-          alt="PL"
-          width={20}
-          height={20}
-          unoptimized
-        />
+      <div className="absolute right-1 z-10">
+        <Image src="/pl.png" alt="PL" width={20} height={20} unoptimized />
       </div>
 
       <motion.div

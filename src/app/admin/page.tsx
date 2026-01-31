@@ -15,12 +15,12 @@ import {
   Pencil,
   Save,
   X,
-  Image as ImageIcon,
   Search,
 } from 'lucide-react';
 import { categorizeCatalog } from '@/lib/catalogCategorize';
 import type { CategoryRule, CatalogSection } from '@/lib/catalogCategorize';
 import { csvToRows } from '@/lib/csvParseClient';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
 import { toast } from 'sonner';
@@ -128,10 +128,8 @@ function ImageUploadCell({ row }: { row: CatalogRow }) {
     >
       {uploading ? (
         <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-      ) : imageUrl ? (
-        <Image src={imageUrl} alt="" fill className="object-cover" />
       ) : (
-        <ImageIcon className="w-4 h-4 text-muted-foreground/50" />
+        <Image src={imageUrl || PLACEHOLDER_PRODUCT_IMAGE} alt="" fill className="object-cover" />
       )}
       <input
         type="file"

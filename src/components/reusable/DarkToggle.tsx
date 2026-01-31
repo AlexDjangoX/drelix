@@ -29,20 +29,20 @@ const DarkToggle = () => {
 
   return (
     <motion.div
-      className="relative flex h-[32px] min-w-[82px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 shadow-inner shadow-slate-500/65 transition-all duration-300 dark:bg-gray-900 dark:shadow-slate-600"
+      className="relative flex h-8 min-w-20.5 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 shadow-inner shadow-slate-500/65 transition-all duration-300 dark:bg-gray-900 dark:shadow-slate-600"
       onClick={toggleDarkMode}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       data-testid="dark-mode-toggle"
     >
       {/* Sun icon on the left */}
-      <div className="absolute left-[5px] z-10">
-        <Sun size={20} className="text-yellow-600 dark:text-yellow-400" />
+      <div className="absolute left-1.25 z-10">
+        <Sun size={20} className="text-amber-600 dark:text-amber-400" />
       </div>
 
       {/* Moon icon on the right */}
-      <div className="absolute right-[4px] z-10">
-        <Moon size={20} className="text-gray-400 dark:text-gray-400" />
+      <div className="absolute right-1 z-10">
+        <Moon size={20} className="text-slate-400 dark:text-slate-400" />
       </div>
 
       {/* Rolling ball that covers the icons */}

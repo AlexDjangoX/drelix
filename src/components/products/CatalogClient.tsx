@@ -3,59 +3,51 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Package } from 'lucide-react';
 import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
-import type { CatalogProduct, CatalogSection } from '@/data/catalogCategories';
+import type { CatalogSection, CatalogRow } from '@/lib/catalogCategorize';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 
 type Props = { sections: CatalogSection[]; totalCount: number };
 
-const COD = 'Kod';
-const NAZWA = 'Nazwa';
-const CENA = 'Cena netto';
-const JEDNOSTKA = 'Jednostka miary';
-
-function ProductCard({ row, index }: { row: CatalogProduct; index: number }) {
+function ProductCard({ row, index }: { row: CatalogRow; index: number }) {
   const [imgError, setImgError] = React.useState(false);
-  const showImage = Boolean(row.image) && !imgError;
+  const imageUrl = row.imageUrl ?? row.image ?? '';
+  const src = (imageUrl && !imgError) ? imageUrl : PLACEHOLDER_PRODUCT_IMAGE;
   return (
     <Card
-      key={`${row[COD]}-${index}`}
+      key={`${row.Kod}-${index}`}
       className="border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-glow overflow-hidden"
     >
       <CardContent className="p-4">
         <div className="flex gap-4">
           <div className="shrink-0 w-20 h-20 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
-            {showImage ? (
-              <Image
-                src={row.image!}
-                alt={row[NAZWA] || row[COD]}
-                width={80}
-                height={80}
-                className="w-full h-full object-cover"
-                sizes="80px"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <Package className="w-8 h-8 text-muted-foreground" aria-hidden />
-            )}
+            <Image
+              src={src}
+              alt={row.Nazwa || row.Kod}
+              width={80}
+              height={80}
+              className="w-full h-full object-cover"
+              sizes="80px"
+              onError={() => setImgError(true)}
+            />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-mono text-muted-foreground truncate" title={row[COD]}>
-              {row[COD]}
+            <p className="text-xs font-mono text-muted-foreground truncate" title={row.Kod}>
+              {row.Kod}
             </p>
-            <p className="font-semibold text-foreground mt-0.5 line-clamp-2" title={row[NAZWA]}>
-              {row[NAZWA]}
+            <p className="font-semibold text-foreground mt-0.5 line-clamp-2" title={row.Nazwa}>
+              {row.Nazwa}
             </p>
             <div className="mt-2 flex items-baseline gap-2 flex-wrap">
-              {row[CENA] ? (
+              {row.CenaNetto ? (
                 <span className="text-sm font-medium text-primary">
-                  {row[CENA]} zł <span className="text-muted-foreground font-normal">netto</span>
+                  {row.CenaNetto} zł <span className="text-muted-foreground font-normal">netto</span>
                 </span>
               ) : null}
-              {row[JEDNOSTKA] ? (
-                <span className="text-xs text-muted-foreground">/ {row[JEDNOSTKA]}</span>
+              {row.JednostkaMiary ? (
+                <span className="text-xs text-muted-foreground">/ {row.JednostkaMiary}</span>
               ) : null}
             </div>
           </div>
@@ -110,7 +102,7 @@ export default function CatalogClient({ sections, totalCount }: Props) {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 {section.items.map((row, index) => (
-                  <ProductCard key={`${section.slug}-${row[COD]}-${index}`} row={row} index={index} />
+                  <ProductCard key={`${section.slug}-${row.Kod}-${index}`} row={row} index={index} />
                 ))}
               </div>
             </section>

@@ -7,13 +7,18 @@ import { ChevronLeft, ChevronRight, X, Loader2 } from 'lucide-react';
 import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
-import { productConfig, type ProductSlug, type ProductItem } from './productConfig';
+import {
+  productConfig,
+  type ProductSlug,
+  type ProductItem,
+} from './productConfig';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 
 type Props = { slug: ProductSlug };
 
-const COD = "Kod";
+const COD = 'Kod';
 
 export default function ProductPageClient({ slug }: Props) {
   const sectionFromConvex = useQuery(api.catalog.getCatalogSection, { slug });
@@ -23,13 +28,18 @@ export default function ProductPageClient({ slug }: Props) {
   const items: ProductItem[] = React.useMemo(() => {
     if (!sectionFromConvex) return [];
     return sectionFromConvex.items.map((row) => ({
-      id: row[COD] ?? "",
-      src: row.imageUrl || `/${slug}/${row[COD] ?? ""}.jpg`,
-      name: row.Nazwa ?? "",
+      id: row[COD] ?? '',
+      src: row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
+      name: row.Nazwa ?? '',
+      price: row.CenaNetto ?? '',
+      unit: row.JednostkaMiary ?? '',
     }));
-  }, [sectionFromConvex, slug]);
+  }, [sectionFromConvex]);
 
-  const openLightbox = useCallback((index: number) => setLightboxIndex(index), []);
+  const openLightbox = useCallback(
+    (index: number) => setLightboxIndex(index),
+    []
+  );
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
   const goPrev = useCallback(() => {
@@ -39,9 +49,7 @@ export default function ProductPageClient({ slug }: Props) {
   }, [items.length]);
 
   const goNext = useCallback(() => {
-    setLightboxIndex((i) =>
-      i === null ? null : (i + 1) % items.length
-    );
+    setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length));
   }, [items.length]);
 
   useEffect(() => {
@@ -66,12 +74,17 @@ export default function ProductPageClient({ slug }: Props) {
     };
   }, [lightboxIndex]);
 
-  const objectContain = slug === 'boots';
+  const objectContain = ['polbuty', 'trzewiki', 'sandaly', 'kalosze'].includes(
+    slug
+  );
 
   if (sectionFromConvex === undefined) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin text-muted-foreground" aria-hidden />
+        <Loader2
+          className="w-10 h-10 animate-spin text-muted-foreground"
+          aria-hidden
+        />
       </div>
     );
   }
@@ -90,7 +103,10 @@ export default function ProductPageClient({ slug }: Props) {
             </Link>
           </div>
           <div className="text-center mb-12">
-            <TwoToneHeading as="h1" className="text-3xl md:text-5xl font-black mb-4">
+            <TwoToneHeading
+              as="h1"
+              className="text-3xl md:text-5xl font-black mb-4"
+            >
               <AnimateText k={titleKey} />
             </TwoToneHeading>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -125,6 +141,23 @@ export default function ProductPageClient({ slug }: Props) {
                   <p className="p-2 sm:p-3 text-xs sm:text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors truncate">
                     {item.name}
                   </p>
+                  {(item.price || item.unit) && (
+                    <p className="px-2 pb-2 sm:px-3 sm:pb-3 text-center">
+                      {item.price ? (
+                        <span className="text-sm font-medium text-primary">
+                          {item.price} zł{' '}
+                          <span className="text-muted-foreground font-normal">
+                            netto
+                          </span>
+                          {item.unit ? ` / ${item.unit}` : null}
+                        </span>
+                      ) : item.unit ? (
+                        <span className="text-xs text-muted-foreground">
+                          {item.unit}
+                        </span>
+                      ) : null}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             ))}
@@ -178,7 +211,10 @@ export default function ProductPageClient({ slug }: Props) {
 
           <div
             className="relative w-full max-w-4xl flex-1 min-h-0"
-            style={{ height: 'min(85vh, calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 4rem))' }}
+            style={{
+              height:
+                'min(85vh, calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 4rem))',
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <Image
@@ -189,9 +225,21 @@ export default function ProductPageClient({ slug }: Props) {
               className="object-contain"
               priority
             />
-            <p className="absolute bottom-0 left-0 right-0 text-center text-white/90 font-semibold py-2 text-sm sm:text-base">
-              {items[lightboxIndex].name}
-            </p>
+            <div className="absolute bottom-0 left-0 right-0 text-center py-3 px-4 rounded-t-xl bg-primary text-primary-foreground shadow-lg">
+              <p
+                className="font-semibold text-sm sm:text-base truncate max-w-full"
+                title={items[lightboxIndex].name}
+              >
+                {items[lightboxIndex].name}
+              </p>
+              {(items[lightboxIndex].price || items[lightboxIndex].unit) && (
+                <p className="text-primary-foreground/90 text-xs sm:text-sm font-normal mt-0.5">
+                  {items[lightboxIndex].price
+                    ? `${items[lightboxIndex].price} zł netto${items[lightboxIndex].unit ? ` / ${items[lightboxIndex].unit}` : ''}`
+                    : items[lightboxIndex].unit}
+                </p>
+              )}
+            </div>
           </div>
 
           <button

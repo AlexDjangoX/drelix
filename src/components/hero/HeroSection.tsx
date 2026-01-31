@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { ChevronDown, Shield, HardHat, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Logo from './Logo';
-import { AnimateText, TwoToneHeading } from '@/components';
+import { Logo, TwoToneHeading, AnimateText } from '@/components';
 
 const HeroSection: React.FC = () => {
   const handleScrollToProducts = () => {
@@ -20,7 +19,7 @@ const HeroSection: React.FC = () => {
       {/* Background image */}
       <div className="absolute inset-0 bg-[url('/gloves.jpg')] bg-cover bg-center bg-no-repeat" />
       {/* Overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-secondary/80" />
+      <div className="absolute inset-0 bg-linear-to-br from-background/95 via-background/90 to-secondary/80" />
 
       {/* Decorative elements – desaturated orange-brown, subtle */}
       <div className="absolute inset-0 overflow-hidden">

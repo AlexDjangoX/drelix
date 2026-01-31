@@ -155,17 +155,17 @@ export const createProduct = mutation({
     const kod = row.Kod ?? "";
     const existing = await ctx.db.query("products").withIndex("by_kod", (q) => q.eq("Kod", kod)).unique();
     if (existing) throw new Error(`Product with Kod ${kod} already exists`);
-    await ctx.db.patch(product._id, {
+    await ctx.db.insert("products", {
       Rodzaj: row.Rodzaj ?? "",
-      JednostkaMiary: row.JednostkaMiary ?? row["Jednostka miary"] ?? "",
-      StawkaVAT: row.StawkaVAT ?? row["Stawka VAT"] ?? "",
+      JednostkaMiary: row.JednostkaMiary ?? "",
+      StawkaVAT: row.StawkaVAT ?? "",
       Kod: row.Kod ?? "",
       Nazwa: row.Nazwa ?? "",
-      CenaNetto: row.CenaNetto ?? row["Cena netto"] ?? "",
-      KodKlasyfikacji: row.KodKlasyfikacji ?? row["Kod klasyfikacji"] ?? "",
+      CenaNetto: row.CenaNetto ?? "",
+      KodKlasyfikacji: row.KodKlasyfikacji ?? "",
       Uwagi: row.Uwagi ?? "",
-      OstatniaCenaZakupu: row.OstatniaCenaZakupu ?? row["Ostatnia cena zakupu"] ?? "",
-      OstatniaDataZakupu: row.OstatniaDataZakupu ?? row["Ostatnia data zakupu"] ?? "",
+      OstatniaCenaZakupu: row.OstatniaCenaZakupu ?? "",
+      OstatniaDataZakupu: row.OstatniaDataZakupu ?? "",
       categorySlug,
     });
     return { ok: true, kod };

@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import Logo from './Logo';
-import LanguageSelector from './LanguageSelector';
-import DarkToggle from './DarkToggle';
-import { AnimateText } from './AnimateText';
+import { AnimateText } from '@/components/reusable/AnimateText';
+import { Logo } from '@/components';
+import LanguageSelector from '@/components/reusable/LanguageSelector';
+import DarkToggle from '@/components/reusable/DarkToggle';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);

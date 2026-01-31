@@ -1,48 +1,57 @@
 /**
- * Catalog category types. Category rules live in public/catalogCategoryRules.json (admin CSV).
- * Catalog data lives in Convex.
+ * Category slugs and titleKeys aligned with public/catalogCategoryRules.json.
+ * Used for homepage cards, product pages, and sitemap.
  */
+export const CATEGORY_SLUGS = [
+  'gloves',
+  'wkladki',
+  'polbuty',
+  'trzewiki',
+  'sandaly',
+  'kalosze',
+  'caps',
+  'aprons',
+  'sweatshirts',
+  'koszula',
+  'jackets',
+  'polar',
+  'spodnie',
+  'vests',
+  'helmets',
+  'eyewear',
+  'earProtection',
+  'masks',
+  'kneeProtection',
+  'rainwear',
+  'firstAid',
+  'signage',
+  'other',
+] as const;
 
-/** Product row shape (Kartoteki CSV columns). */
-export type KartotekaRow = {
-  Rodzaj: string;
-  JednostkaMiary: string;
-  StawkaVAT: string;
-  Kod: string;
-  Nazwa: string;
-  CenaNetto: string;
-  KodKlasyfikacji: string;
-  Uwagi: string;
-  OstatniaCenaZakupu: string;
-  OstatniaDataZakupu: string;
-};
+export type CategorySlug = (typeof CATEGORY_SLUGS)[number];
 
-export type CatalogCategorySlug =
-  | 'gloves'
-  | 'polbuty'
-  | 'trzewiki'
-  | 'sandaly'
-  | 'kalosze'
-  | 'spodnie'
-  | 'vests'
-  | 'koszula'
-  | 'helmets'
-  | 'eyewear'
-  | 'earProtection'
-  | 'masks'
-  | 'kneeProtection'
-  | 'rainwear'
-  | 'firstAid'
-  | 'signage'
-  | 'polar'
-  | 'wkladki'
-  | 'other';
-
-/** Product row with optional image path. */
-export type CatalogProduct = KartotekaRow & { image?: string };
-
-export type CatalogSection = {
-  slug: CatalogCategorySlug;
-  titleKey: string;
-  items: CatalogProduct[];
+export const CATEGORY_TITLE_KEYS: Record<CategorySlug, string> = {
+  gloves: 'productNames.gloves',
+  wkladki: 'productNames.wkladki',
+  polbuty: 'productNames.polbuty',
+  trzewiki: 'productNames.trzewiki',
+  sandaly: 'productNames.sandaly',
+  kalosze: 'productNames.kalosze',
+  caps: 'productNames.caps',
+  aprons: 'productNames.aprons',
+  sweatshirts: 'productNames.sweatshirts',
+  koszula: 'productNames.koszula',
+  jackets: 'productNames.jackets',
+  polar: 'productNames.polar',
+  spodnie: 'productNames.clothing',
+  vests: 'productNames.vests',
+  helmets: 'productNames.helmets',
+  eyewear: 'productNames.eyewear',
+  earProtection: 'productNames.earProtection',
+  masks: 'productNames.masks',
+  kneeProtection: 'productNames.kneeProtection',
+  rainwear: 'productNames.rainwear',
+  firstAid: 'productNames.firstAid',
+  signage: 'productNames.signage',
+  other: 'products.catalogOther',
 };

@@ -6,7 +6,7 @@ import {
   ContactSection,
   Footer,
 } from '@/components';
-import ProductSection from '@/components/ProductSection';
+import ProductSection from '@/components/products/ProductSection';
 
 export default function Home() {
   return (

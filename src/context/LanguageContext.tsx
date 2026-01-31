@@ -85,6 +85,10 @@ interface Translations {
     footwear: string;
     clothing: string;
     koszula: string;
+    caps: string;
+    aprons: string;
+    sweatshirts: string;
+    jackets: string;
     eyewear: string;
     earProtection: string;
     masks: string;
@@ -212,7 +216,6 @@ const translations: Record<Language, Translations> = {
       signage: 'Znaki bezpieczeństwa',
       accessories: 'Akcesoria BHP',
       wkladki: 'Wkładki do butów',
-      polar: 'Polary',
     },
   },
   en: {
@@ -326,7 +329,6 @@ const translations: Record<Language, Translations> = {
       signage: 'Safety Signs',
       accessories: 'Safety Accessories',
       wkladki: 'Shoe Insoles',
-      polar: 'Fleece',
     },
   },
 };

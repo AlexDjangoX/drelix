@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
 import React from 'react';
 import { Facebook, Instagram, Linkedin } from 'lucide-react';
-import Logo from './Logo';
-import { AnimateText } from './AnimateText';
+import { Logo } from '@/components';
+import { AnimateText } from '@/components/reusable/AnimateText';
 
 const socialLinks = [
   { icon: Facebook, href: '#', label: 'Facebook' },
@@ -19,7 +19,6 @@ const quickLinkItems = [
 ];
 
 const Footer: React.FC = () => {
-
   const handleLinkClick = (href: string) => {
     if (href.startsWith('#')) {
       document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
@@ -87,7 +86,8 @@ const Footer: React.FC = () => {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Drelix. <AnimateText k="footer.rights" />.
+            © {new Date().getFullYear()} Drelix.{' '}
+            <AnimateText k="footer.rights" />.
           </p>
           <div className="flex gap-6">
             <button className="text-sm text-muted-foreground hover:text-primary transition-colors">
