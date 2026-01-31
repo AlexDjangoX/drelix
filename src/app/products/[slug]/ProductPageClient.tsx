@@ -3,18 +3,31 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Loader2 } from 'lucide-react';
 import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
-import { getProductItems, productConfig, type ProductSlug, type ProductItem } from './productConfig';
+import { productConfig, type ProductSlug, type ProductItem } from './productConfig';
+import { useQuery } from 'convex/react';
+import { api } from 'convex/_generated/api';
 
 type Props = { slug: ProductSlug };
 
+const COD = "Kod";
+
 export default function ProductPageClient({ slug }: Props) {
-  const items = getProductItems(slug);
+  const sectionFromConvex = useQuery(api.catalog.getCatalogSection, { slug });
   const { titleKey } = productConfig[slug];
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const items: ProductItem[] = React.useMemo(() => {
+    if (!sectionFromConvex) return [];
+    return sectionFromConvex.items.map((row) => ({
+      id: row[COD] ?? "",
+      src: row.imageUrl || `/${slug}/${row[COD] ?? ""}.jpg`,
+      name: row.Nazwa ?? "",
+    }));
+  }, [sectionFromConvex, slug]);
 
   const openLightbox = useCallback((index: number) => setLightboxIndex(index), []);
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
@@ -54,6 +67,14 @@ export default function ProductPageClient({ slug }: Props) {
   }, [lightboxIndex]);
 
   const objectContain = slug === 'boots';
+
+  if (sectionFromConvex === undefined) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-10 h-10 animate-spin text-muted-foreground" aria-hidden />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

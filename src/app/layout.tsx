@@ -1,74 +1,75 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 
 /** Static until redeploy; no revalidation. */
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 export const revalidate = false;
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/sonner";
-import { LanguageProvider } from "@/context/LanguageContext";
-import { JsonLd } from "@/components/JsonLd";
-import "./globals.css";
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/sonner';
+import { LanguageProvider } from '@/context/LanguageContext';
+import { JsonLd } from '@/components/JsonLd';
+import { ConvexClientProvider } from '@/context/ConvexClientProvider';
+import './globals.css';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drelix.pl";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Drelix - Odzież Robocza i Ochronna | Wadowice",
-    template: "%s | Drelix",
+    default: 'Drelix - Odzież Robocza i Ochronna | Wadowice',
+    template: '%s | Drelix',
   },
   description:
-    "Profesjonalna odzież robocza i ochronna w Wadowicach. Kaski, kamizelki odblaskowe, rękawice, obuwie BHP. CE, EN. Ponad 500 produktów. Skontaktuj się z nami.",
+    'Profesjonalna odzież robocza i ochronna w Wadowicach. Kaski, kamizelki odblaskowe, rękawice, obuwie BHP. CE, EN. Ponad 500 produktów. Skontaktuj się z nami.',
   keywords: [
-    "odzież robocza",
-    "odzież ochronna",
-    "BHP Wadowice",
-    "kaski ochronne",
-    "kamizelki odblaskowe",
-    "rękawice robocze",
-    "obuwie ochronne",
-    "drelix",
-    "workwear",
-    "safety clothing",
+    'odzież robocza',
+    'odzież ochronna',
+    'BHP Wadowice',
+    'kaski ochronne',
+    'kamizelki odblaskowe',
+    'rękawice robocze',
+    'obuwie ochronne',
+    'drelix',
+    'workwear',
+    'safety clothing',
   ],
-  authors: [{ name: "Drelix", url: siteUrl }],
-  creator: "Drelix",
-  publisher: "Drelix",
+  authors: [{ name: 'Drelix', url: siteUrl }],
+  creator: 'Drelix',
+  publisher: 'Drelix',
   formatDetection: { email: false, address: false, telephone: false },
   openGraph: {
-    type: "website",
-    locale: "pl_PL",
-    alternateLocale: ["en_GB"],
+    type: 'website',
+    locale: 'pl_PL',
+    alternateLocale: ['en_GB'],
     url: siteUrl,
-    siteName: "Drelix - Odzież Robocza i Ochronna",
-    title: "Drelix - Odzież Robocza i Ochronna | Wadowice",
+    siteName: 'Drelix - Odzież Robocza i Ochronna',
+    title: 'Drelix - Odzież Robocza i Ochronna | Wadowice',
     description:
-      "Profesjonalna odzież robocza i ochronna w Wadowicach. Ponad 500 produktów BHP. Odwiedź nas.",
+      'Profesjonalna odzież robocza i ochronna w Wadowicach. Ponad 500 produktów BHP. Odwiedź nas.',
     images: [
       {
-        url: "/og-image.png",
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: "Drelix - Odzież Robocza i Ochronna",
+        alt: 'Drelix - Odzież Robocza i Ochronna',
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Drelix - Odzież Robocza i Ochronna | Wadowice",
+    card: 'summary_large_image',
+    title: 'Drelix - Odzież Robocza i Ochronna | Wadowice',
     description:
-      "Profesjonalna odzież robocza i ochronna w Wadowicach. Ponad 500 produktów BHP.",
+      'Profesjonalna odzież robocza i ochronna w Wadowicach. Ponad 500 produktów BHP.',
   },
   robots: {
     index: true,
@@ -76,13 +77,13 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true },
   },
   alternates: { canonical: siteUrl },
-  category: "business",
+  category: 'business',
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
-  themeColor: "#ea580c",
+  themeColor: '#ea580c',
 };
 
 export default function RootLayout({
@@ -96,12 +97,19 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <JsonLd />
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="drelix-theme">
-          <LanguageProvider>
-            {children}
-            <Toaster />
-          </LanguageProvider>
-        </ThemeProvider>
+        <ConvexClientProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+            storageKey="drelix-theme"
+          >
+            <LanguageProvider>
+              {children}
+              <Toaster />
+            </LanguageProvider>
+          </ThemeProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );

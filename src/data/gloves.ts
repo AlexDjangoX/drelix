@@ -1,6 +1,6 @@
 /**
- * Glove product images in public/gloves.
- * Display name is derived from filename (part before _ or dimensions).
+ * Featured glove products for /products/gloves. Images in public/gloves.
+ * PLACEHOLDER: Will be replaced by Convex data in the future.
  */
 export const GLOVES = [
   { id: 'blutrix', src: '/gloves/BLUTRIX_672x1024.jpg', name: 'BLUTRIX' },
@@ -24,6 +24,4 @@ export const GLOVES = [
   { id: 'rtepo', src: '/gloves/RTEPO(1)_724x1024.jpg', name: 'RTEPO' },
   { id: 'sandoil-win', src: '/gloves/SANDOIL-WIN_651x1024.jpg', name: 'SANDOIL-WIN' },
   { id: 'vibraton', src: '/gloves/VIBRATON_695x1024.jpg', name: 'VIBRATON' },
-] as const;
-
-export type GloveId = (typeof GLOVES)[number]['id'];
+];

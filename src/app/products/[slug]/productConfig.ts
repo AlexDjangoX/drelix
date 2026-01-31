@@ -1,3 +1,4 @@
+// Featured product lists for /products/[slug]. PLACEHOLDER: will be replaced by Convex.
 import { GLOVES } from '@/data/gloves';
 import { BOOTS } from '@/data/boots';
 import { SPODNIE } from '@/data/spodnie';

@@ -1,14 +1,13 @@
-import type { Metadata } from 'next';
-import { getCatalogGroupedByCategory } from '@/data/catalog';
-import CatalogClient from './CatalogClient';
+import type { Metadata } from "next";
+import ProductsCatalogClient from "./ProductsCatalogClient";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drelix.pl";
 
-export const dynamic = 'force-static';
-export const revalidate = false;
+export const dynamic = "force-dynamic";
 
-const catalogTitle = 'Katalog produktów';
-const catalogDescription = 'Pełna oferta odzieży roboczej i ochronnej. Rękawice, obuwie, spodnie, koszule i inne artykuły BHP. Drelix Wadowice.';
+const catalogTitle = "Katalog produktów";
+const catalogDescription =
+  "Pełna oferta odzieży roboczej i ochronnej. Rękawice, obuwie, spodnie, koszule i inne artykuły BHP. Drelix Wadowice.";
 
 export const metadata: Metadata = {
   title: catalogTitle,
@@ -19,11 +18,9 @@ export const metadata: Metadata = {
     title: `${catalogTitle} | Drelix`,
     description: catalogDescription,
   },
-  twitter: { card: 'summary_large_image', title: `${catalogTitle} | Drelix` },
+  twitter: { card: "summary_large_image", title: `${catalogTitle} | Drelix` },
 };
 
 export default function ProductsCatalogPage() {
-  const sections = getCatalogGroupedByCategory();
-  const totalCount = sections.reduce((n, s) => n + s.items.length, 0);
-  return <CatalogClient sections={sections} totalCount={totalCount} />;
+  return <ProductsCatalogClient />;
 }

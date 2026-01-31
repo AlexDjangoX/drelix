@@ -10,6 +10,7 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS v4, design tokens in `src/app/globals.css`
 - **State:** React (useState, useContext). Language: `LanguageContext`; theme: `next-themes`
+- **Catalog backend:** Convex (products + categories). Queries/mutations in `convex/catalog.ts`; client uses `useQuery` / `useMutation` from `convex/react`.
 - **UI primitives:** `@/components/ui` (shadcn-style); shared sections in `@/components`
 
 ---
@@ -36,10 +37,10 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 
 ## Static rendering & data
 
-- **Strategy:** Static. Root and product layouts use `dynamic = "force-static"` and `revalidate = false`.
-- **Product data:** Static arrays in `src/data/` (e.g. `gloves.ts`, `boots.ts`, `spodnie.ts`, `koszula.ts`). Each exports a list of `{ id, src, name }` for images in `public/`.
-- **Shop catalog (Kartoteki):** The owner provides `src/data/Kartoteki.csv`. Run `npm run csv-to-json` (→ `Kartoteki.json`) then `npm run split-catalog` (→ `src/data/catalog/{slug}.json` + `categories.json`). Full pipeline: `npm run build-catalog`. Category rules live in `scripts/catalogCategoryRules.json`; the split script is the single source of truth for categorization. Pages import from `@/data/catalog` (e.g. `getCatalogGroupedByCategory()`, `getCatalogBySlug(slug)`) or directly from `@/data/catalog/gloves.json` etc. for smaller bundles.
-- **New product category:** Add a data file in `src/data/`, a route under `src/app/products/[slug]/` (layout + page), and a sitemap entry. See existing gloves/boots/spodnie/koszula for the pattern.
+- **Strategy:** Root and product category pages are static where possible; `/products` is dynamic and reads from Convex.
+- **Product data (featured, placeholder):** Static arrays in `src/data/` (e.g. `gloves.ts`, `boots.ts`, `spodnie.ts`, `koszula.ts`) for `/products/[slug]` pages. Each exports `{ id, src, name }` for images in `public/`. **Placeholder:** will be replaced by Convex data in the future.
+- **Shop catalog (Convex):** The main catalog lives in Convex (`convex/schema.ts`: `products`, `categories`). Public `/products` page and admin catalog UI use `api.catalog.listCatalogSections`, `api.catalog.updateProduct`, `api.catalog.replaceCatalogFromSections`. Category rules for CSV import live in `public/catalogCategoryRules.json`. To seed: use admin “Process new CSV” to upload a Kartoteki CSV (Windows-1250, semicolon-delimited) and replace the Convex catalog.
+- **New product category:** Add a data file in `src/data/`, a route under `src/app/products/[slug]/` (layout + page), and a sitemap entry. For Convex, add the category to `public/catalogCategoryRules.json`; it will be in Convex after the next CSV upload.
 
 ---
 
@@ -107,10 +108,9 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 | Structured data      | `src/components/JsonLd.tsx`             |
 | Translations         | `src/context/LanguageContext.tsx`       |
 | Product data         | `src/data/*.ts`                         |
-| Shop catalog (split) | `src/data/catalog/*.json` (generated)   |
-| Catalog rules        | `scripts/catalogCategoryRules.json`    |
-| csv→json             | `scripts/csv-to-json.mjs`              |
-| split by category    | `scripts/split-catalog-by-category.mjs`|
-| Cache headers        | `next.config.ts` → `headers()`         |
+| Shop catalog (Convex) | `convex/catalog.ts`, `convex/schema.ts` |
+| Convex data plan      | [CONVEX_DATA_PLAN.md](./CONVEX_DATA_PLAN.md) (source of truth, CRUD, fetch strategy) |
+| Catalog rules         | `public/catalogCategoryRules.json`     |
+| Cache headers         | `next.config.ts` → `headers()`        |
 
 When in doubt, prefer consistency with existing product pages (gloves, boots, spodnie, koszula) and with [SEO_Guide.md](./SEO_Guide.md).

@@ -20,6 +20,16 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Convex (catalog backend)
+
+The product catalog is stored in [Convex](https://convex.dev). To use it locally:
+
+1. **Create a Convex project** (one-time): run `npx convex dev` and follow the prompts (log in, create/link project). This generates `convex/_generated` and sets `CONVEX_DEPLOYMENT` in `.env.local`.
+2. **Set the Convex URL**: add `NEXT_PUBLIC_CONVEX_URL=<your deployment URL>` to `.env.local`. You can copy the URL from the Convex dashboard or from the output of `npx convex dev`.
+3. **Seed the catalog**: log in at `/admin/login`, then upload a Kartoteki CSV (Windows-1250, semicolon-delimited) via the admin “Process new CSV” area. That replaces the Convex catalog with the categorized products.
+
+Admin catalog edits (inline save) and the public `/products` page read/write from Convex. Without `NEXT_PUBLIC_CONVEX_URL`, the app builds using a placeholder URL; set it for real data.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
