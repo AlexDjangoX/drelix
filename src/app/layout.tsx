@@ -9,6 +9,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { JsonLd } from '@/components/JsonLd';
 import { ConvexClientProvider } from '@/context/ConvexClientProvider';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 import './globals.css';
 
 const geistSans = Geist({
@@ -21,7 +22,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
+const siteUrl = getCanonicalBaseUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

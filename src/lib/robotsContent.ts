@@ -1,6 +1,6 @@
 /**
- * Builds robots.txt body. Use the same baseUrl as sitemap.ts (NEXT_PUBLIC_SITE_URL)
- * so the Sitemap URL in robots.txt always aligns with the sitemap.
+ * Builds robots.txt body. Call with getCanonicalBaseUrl() from @/lib/seo so the
+ * Sitemap URL in robots.txt aligns with the sitemap (no trailing slash).
  */
 
 const AI_CRAWLERS = [
@@ -54,7 +54,8 @@ const AI_CRAWLERS = [
 ];
 
 export function getRobotsTxt(baseUrl: string): string {
-  const sitemapUrl = `${baseUrl}/sitemap.xml`;
+  const base = baseUrl.replace(/\/+$/, '') || baseUrl;
+  const sitemapUrl = `${base}/sitemap.xml`;
   const aiBlock = AI_CRAWLERS.map((ua) => `User-agent: ${ua}\nDisallow: /`).join('\n\n');
 
   return `# ===========================================

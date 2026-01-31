@@ -102,9 +102,10 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 | Purpose              | Location / file                          |
 |----------------------|------------------------------------------|
 | SEO rules & checklist| [SEO_Guide.md](./SEO_Guide.md)           |
+| Canonical base URL   | `src/lib/seo.ts` (`getCanonicalBaseUrl()`; used by layout, sitemap, robots, JsonLd) |
 | Root metadata        | `src/app/layout.tsx`                     |
 | Sitemap              | `src/app/sitemap.ts`                    |
-| robots.txt           | `src/app/robots.txt/route.ts` + `src/lib/robotsContent.ts` (same baseUrl as sitemap) |
+| robots.txt           | `src/app/robots.txt/route.ts` + `src/lib/robotsContent.ts` (baseUrl from `getCanonicalBaseUrl()`) |
 | Structured data      | `src/components/JsonLd.tsx`             |
 | Translations         | `src/context/LanguageContext.tsx`       |
 | Product data         | `src/data/*.ts`                         |

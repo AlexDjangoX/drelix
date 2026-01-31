@@ -1,4 +1,5 @@
 // Product category config for /products/[slug]. Aligned with catalogCategoryRules (23 categories).
+// SEO: aim for title ≤ TITLE_IDEAL_MAX (60), description ≤ DESC_IDEAL_MAX (160) — see @/lib/seo.
 import {
   CATEGORY_SLUGS,
   CATEGORY_TITLE_KEYS,

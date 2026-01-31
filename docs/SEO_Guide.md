@@ -6,9 +6,10 @@ This document is the single source of truth for SEO on the Drelix project. Use i
 
 ## 1. Overview
 
-- **Default language:** Polish (`pl`). English is available via client-side switch; same URL for both.
+- **Default language:** Polish (`pl`). English is available via client-side switch; same URL for both. **English content is not intended to rank independently in search** — Google indexes the default Polish view; the English toggle is for on-site UX only.
 - **Site URL:** Set via `NEXT_PUBLIC_SITE_URL` (e.g. `https://drelix.pl`). Used for canonicals, sitemap, Open Graph, and JSON-LD.
-- **Rendering:** Static (no revalidation). All important content is in the initial HTML for crawlers.
+- **Canonicals:** All canonicals resolve to the **non–trailing-slash** form; keep sitemap and internal links consistent (e.g. `https://drelix.pl/products/gloves`, not `.../gloves/`).
+- **Rendering:** Static (no revalidation). All important content is in the initial HTML for crawlers. **Trade-off:** JSON-LD and metadata (opening hours, address, phone) do not update until the next deploy; that’s a conscious choice for CWV and crawlability.
 
 ---
 
@@ -21,7 +22,7 @@ These principles inform how we implement the items in §2 “What we maintain”
 | **Title length** | Aim for **50–60 characters** (or ~600 px) so titles display fully in SERPs; ~90% of titles under 60 chars display without truncation. Front-load important terms; avoid keyword stuffing and repetitive boilerplate (Google may rewrite titles otherwise). |
 | **Meta description length** | Aim for **150–160 characters**. Descriptions don’t directly rank but influence CTR; keep them concise, informative, and relevant. Google may replace with page content if it fits the query better. |
 | **Canonical URLs** | Every indexable page has `alternates.canonical`. Canonicals tell Google which URL is the “main” version and help consolidate duplicate signals. |
-| **Core Web Vitals** | LCP (loading), INP (responsiveness), CLS (visual stability) matter for UX and search. We support them via static/SSG where possible, `next/image`, and minimal layout shift. Monitor in Search Console → Core Web Vitals. |
+| **Core Web Vitals** | LCP (loading), INP (responsiveness), CLS (visual stability) matter for UX and search. We support them via static/SSG where possible, `next/image`, and minimal layout shift. **Monitor:** Search Console → Core Web Vitals; one-off checks: [PageSpeed Insights](https://pagespeed.web.dev/) or Lighthouse in DevTools. |
 | **Helpful content & E-E-A-T** | Content should be created for users first. We signal **Experience, Expertise, Authoritativeness, Trustworthiness** via: accurate business info in JSON-LD and footer, real product data, clear contact and opening hours, and unique per-page titles/descriptions (no thin or copied content). |
 | **Structured data (JSON-LD)** | Schema helps Google understand meaning and context; it can unlock rich results (e.g. breadcrumbs, local business). Validate with [Google Rich Results Test](https://search.google.com/test/rich-results) or Search Console. |
 | **Mobile-first** | Google primarily uses the mobile version for indexing. Responsive layout, readable tap targets, and `viewport`/theme are already in place. |
@@ -32,7 +33,7 @@ These principles inform how we implement the items in §2 “What we maintain”
 
 | Area | Purpose |
 |------|--------|
-| **Metadata** | Title, description, keywords, Open Graph, Twitter, canonicals |
+| **Metadata** | Title, description, Open Graph, Twitter, canonicals. **Keywords:** legacy meta tag — Google ignores it; we keep it for parity and some crawlers; it is not a ranking factor. |
 | **Sitemap** | Lists all indexable URLs for search engines |
 | **robots.txt** | Tells crawlers what to allow/disallow and where the sitemap is |
 | **JSON-LD** | LocalBusiness + WebPage structured data for rich results |
@@ -45,10 +46,12 @@ These principles inform how we implement the items in §2 “What we maintain”
 
 | File | Role |
 |------|------|
-| `src/app/layout.tsx` | Root metadata (title template, default description, OG, Twitter, robots, canonical for homepage). |
-| `src/app/robots.txt/route.ts` | Serves `/robots.txt` dynamically. Uses same `NEXT_PUBLIC_SITE_URL` as sitemap so Sitemap URL in robots.txt always aligns with sitemap. Policy: Content-signal, search engines allowed, AI blocked; body from `src/lib/robotsContent.ts`. |
-| `src/app/sitemap.ts` | Generates `/sitemap.xml`: homepage, `/products`, and all product category URLs. Imports `PRODUCT_SLUGS` from `@/components/products/productConfig`. |
-| `src/components/JsonLd.tsx` | Injects LocalBusiness + WebPage JSON-LD in root `<head>`. |
+| `src/lib/seo.ts` | **Single source for canonical base URL:** `getCanonicalBaseUrl()` (strips trailing slash from `NEXT_PUBLIC_SITE_URL`). Used by layout, sitemap, robots, products pages, JsonLd. Also exports `TITLE_IDEAL_MAX` (60), `DESC_IDEAL_MAX` (160) for contributor reference. |
+| `src/app/layout.tsx` | Root metadata (title template, default description, OG, Twitter, robots, canonical for homepage). Uses `getCanonicalBaseUrl()` for `metadataBase` and canonical. |
+| `src/app/robots.txt/route.ts` | Serves `/robots.txt` dynamically. Uses `getCanonicalBaseUrl()` so Sitemap URL aligns with sitemap. Policy: Content-signal, search engines allowed, AI blocked; body from `src/lib/robotsContent.ts`. |
+| `src/app/admin/layout.tsx` | Admin area: `robots: { index: false, follow: false }` so admin pages are not indexed (edge case when linked). Primary block is robots.txt Disallow /admin/. |
+| `src/app/sitemap.ts` | Generates `/sitemap.xml`: homepage, `/products`, and all product category URLs. Uses `getCanonicalBaseUrl()`; imports `PRODUCT_SLUGS` from `@/components/products/productConfig`. |
+| `src/components/JsonLd.tsx` | Injects LocalBusiness + WebPage JSON-LD in root `<head>`. Uses `getCanonicalBaseUrl()` for `url` and `@id`. |
 | `src/app/products/page.tsx` | Catalog index: metadata (title, description, keywords, canonical, OG with image, Twitter), ItemList JSON-LD. |
 | `src/app/products/[slug]/layout.tsx` | Product category layout: `generateMetadata`, `generateStaticParams`, BreadcrumbList JSON-LD; metadata per slug from `productConfig`. |
 | `src/components/products/productConfig.ts` | Category metadata (title, description per slug) and re-exports `PRODUCT_SLUGS` from `src/data/catalogCategories.ts`. Used by sitemap, layout, pages. Add new category metadata here; slugs come from catalogCategories. |
@@ -62,7 +65,7 @@ These principles inform how we implement the items in §2 “What we maintain”
 
 - **Title template:** `%s | Drelix` so child pages get “Page title | Drelix”.
 - **Default title:** “Drelix - Odzież Robocza i Ochronna | Wadowice”.
-- **Canonical:** `metadataBase` + `alternates.canonical` = homepage URL.
+- **Canonical:** `metadataBase` + `alternates.canonical` = homepage URL. All canonicals use the non–trailing-slash form.
 - **Open Graph:** locale `pl_PL`, alternateLocale `en_GB`, image `/og-image.png` (1200×630).
 
 **Best practice:** Keep page titles within **50–60 characters** where possible; keep meta descriptions within **150–160 characters**. Avoid keyword stuffing; front-load the most important terms. Descriptions should be unique and informative per page.
@@ -113,6 +116,8 @@ Product metadata is driven by **`productConfig`** in `src/components/products/pr
   - **Sitemap:** `${baseUrl}/sitemap.xml` (same origin as `src/app/sitemap.ts`).
 - **Result:** Excellent SEO (all important pages allowed, sitemap referenced) and no crawl waste on API/admin or AI scrapers.
 
+**Note:** Blocking AI crawlers is a **content/rights policy** (e.g. EU Copyright Directive), not an SEO optimization. Google does not use Content-signal for ranking. Some AI-driven search products may send traffic; we accept that trade-off.
+
 Change policy in `src/lib/robotsContent.ts`; add/remove crawlers there. Sitemap URL stays aligned automatically.
 
 ---
@@ -138,7 +143,15 @@ Update when: business name, address, phone, email, or hours change; or when addi
 
 ---
 
-## 9. Semantic HTML & headings
+## 9. Index control (noindex, 404/410)
+
+- **Crawl vs. index:** We use **robots.txt** Disallow for `/api/` and `/admin/` so crawlers don’t request those URLs. That’s usually enough; crawlers won’t index what they don’t fetch.
+- **noindex:** For edge cases (e.g. a temporary or non-public page that is linked but must not be indexed), set `robots: { index: false, follow: false }` (or `noindex, nofollow`) in that route’s metadata.
+- **404/410:** Next.js returns 404 for unknown routes; crawlers treat that as “not found” and drop the URL over time. Use 410 for permanently removed content if you need an explicit “gone” signal.
+
+---
+
+## 10. Semantic HTML & headings
 
 - **One `<h1>` per page:** Home = hero title; product pages = product category title (e.g. “Rękawice robocze i ochronne”).
 - **Sections:** Use `<section>` with clear headings (e.g. `<TwoToneHeading as="h2">`) for “O nas”, “Produkty”, “Kontakt”, etc.
@@ -148,14 +161,14 @@ Keep a logical heading order (h1 → h2 → h3) and avoid skipping levels.
 
 ---
 
-## 10. Images
+## 11. Images
 
 - **Content images:** Always set a meaningful `alt` (e.g. product name or short description). Product grid and lightbox images already do this. Good alt text supports accessibility and image search.
 - **OG image:** `/public/og-image.png` at **1200×630** (recommended for Facebook/LinkedIn; Twitter supports same ratio). Used as default for social shares; product pages inherit unless overridden. Use descriptive `alt` on OG images in metadata where supported.
 
 ---
 
-## 11. Checklist for new pages
+## 12. Checklist for new pages
 
 When you add a new public page (e.g. a new product category):
 
@@ -167,7 +180,7 @@ When you add a new public page (e.g. a new product category):
 
 ---
 
-## 12. Environment
+## 13. Environment
 
 - **`NEXT_PUBLIC_SITE_URL`** – Must be set in production to the live domain (e.g. `https://drelix.pl`). Used for:
   - Canonical URLs  
@@ -179,7 +192,7 @@ Without it, the app falls back to `https://drelix.pl` in code; ensure the deploy
 
 ---
 
-## 13. Optional enhancements (not required)
+## 14. Optional enhancements (not required)
 
 - **Product JSON-LD:** Add individual `Product` schema per product on category pages for richer search results (we already have ItemList on catalog and BreadcrumbList on category pages).
 - **hreflang:** If you later use separate URLs per language (e.g. `/en/products/gloves`), add `hreflang` and alternate links in metadata.
@@ -187,16 +200,17 @@ Without it, the app falls back to `https://drelix.pl` in code; ensure the deploy
 
 ---
 
-## 14. Further reading
+## 15. Further reading
 
 - [Google Search Central – SEO Starter Guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide)
 - [Google Search Central – Core Web Vitals](https://developers.google.com/search/docs/appearance/core-web-vitals)
+- [PageSpeed Insights](https://pagespeed.web.dev/) (CWV and performance)
 - [Influencing title links and snippets](https://developers.google.com/search/docs/appearance/snippet) (title/description display)
 - [Google Rich Results Test](https://search.google.com/test/rich-results) (validate JSON-LD)
 
 ---
 
-## 15. Quick reference
+## 16. Quick reference
 
 | I want to… | Do this… |
 |------------|-----------|
@@ -209,4 +223,4 @@ Without it, the app falls back to `https://drelix.pl` in code; ensure the deploy
 
 ---
 
-*Last updated: verified against codebase; file map includes catalogCategories; checklist clarifies product categories vs other pages for sitemap; optional Product JSON-LD clarified. Location: docs/SEO_Guide.md.*
+*Last updated: external review incorporated — language/ranking expectation, canonicals (no trailing slash), static trade-off, keywords (legacy), AI-blocking note, index control (noindex/404/410), CWV tools. Location: docs/SEO_Guide.md.*

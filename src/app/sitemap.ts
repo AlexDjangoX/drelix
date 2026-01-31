@@ -1,11 +1,12 @@
 import type { MetadataRoute } from 'next';
 import { PRODUCT_SLUGS } from '@/components/products/productConfig';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
 /**
  * Next.js serves this at /sitemap.xml (no public/sitemap.xml needed).
- * Edit this file to change sitemap URLs; baseUrl comes from NEXT_PUBLIC_SITE_URL.
+ * Base URL: single source from getCanonicalBaseUrl() (no trailing slash).
  */
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
+const baseUrl = getCanonicalBaseUrl();
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

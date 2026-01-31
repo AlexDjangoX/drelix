@@ -1,4 +1,6 @@
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drelix.pl";
+import { getCanonicalBaseUrl } from "@/lib/seo";
+
+const siteUrl = getCanonicalBaseUrl();
 
 const localBusinessSchema = {
   "@context": "https://schema.org",

@@ -3,8 +3,9 @@ import {
   PRODUCT_SLUGS,
   productConfig,
 } from '../../../components/products/productConfig';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
+const siteUrl = getCanonicalBaseUrl();
 
 /** Static until redeploy; no revalidation. */
 export const dynamic = 'force-static';

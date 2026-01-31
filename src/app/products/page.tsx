@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import ProductsCatalogClient from '@/components/products/ProductsCatalogClient';
 import { PRODUCT_SLUGS, productConfig } from '@/components/products/productConfig';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
+const siteUrl = getCanonicalBaseUrl();
 
 export const dynamic = 'force-dynamic';
 

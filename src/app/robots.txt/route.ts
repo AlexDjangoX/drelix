@@ -1,14 +1,11 @@
 import { getRobotsTxt } from '@/lib/robotsContent';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
 /**
- * Serves /robots.txt with the same baseUrl as sitemap.ts (NEXT_PUBLIC_SITE_URL).
- * Policy (in lib/robotsContent.ts) is unchanged:
- * - Content-signal: search=yes, ai-train=no, ai-input=no (blocks AI training/input)
- * - Search engines: allowed on /, blocked from /api/, /admin/
- * - AI/training crawlers (GPTBot, CCBot, ClaudeBot, PerplexityBot, etc.): Disallow /
- * So AI training and other costly non-search traffic remain blocked.
+ * Serves /robots.txt with the same baseUrl as sitemap (getCanonicalBaseUrl).
+ * Policy (in lib/robotsContent.ts): Content-signal, search engines allowed, /api/ and /admin/ disallowed, AI crawlers blocked.
  */
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
+const baseUrl = getCanonicalBaseUrl();
 
 export function GET() {
   const body = getRobotsTxt(baseUrl);
