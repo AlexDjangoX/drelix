@@ -3,15 +3,15 @@ import { v } from "convex/values";
 
 const productFieldValidators = {
   Rodzaj: v.string(),
-  "Jednostka miary": v.string(),
-  "Stawka VAT": v.string(),
+  JednostkaMiary: v.string(),
+  StawkaVAT: v.string(),
   Kod: v.string(),
   Nazwa: v.string(),
-  "Cena netto": v.string(),
-  "Kod klasyfikacji": v.string(),
+  CenaNetto: v.string(),
+  KodKlasyfikacji: v.string(),
   Uwagi: v.string(),
-  "Ostatnia cena zakupu": v.string(),
-  "Ostatnia data zakupu": v.string(),
+  OstatniaCenaZakupu: v.string(),
+  OstatniaDataZakupu: v.string(),
 };
 
 /** Section shape for catalog UI and CSV replace. */
@@ -98,8 +98,8 @@ export const updateProduct = mutation({
       .unique();
     if (!product) throw new Error(`Product not found: ${kod}`);
     const allowedKeys = new Set([
-      "Rodzaj", "Jednostka miary", "Stawka VAT", "Kod", "Nazwa",
-      "Cena netto", "Kod klasyfikacji", "Uwagi", "Ostatnia cena zakupu", "Ostatnia data zakupu", "categorySlug", "imageStorageId"
+      "Rodzaj", "JednostkaMiary", "StawkaVAT", "Kod", "Nazwa",
+      "CenaNetto", "KodKlasyfikacji", "Uwagi", "OstatniaCenaZakupu", "OstatniaDataZakupu", "categorySlug", "imageStorageId"
     ]);
     const patch: Record<string, string> = {};
     for (const [k, v] of Object.entries(updates)) {
@@ -155,17 +155,17 @@ export const createProduct = mutation({
     const kod = row.Kod ?? "";
     const existing = await ctx.db.query("products").withIndex("by_kod", (q) => q.eq("Kod", kod)).unique();
     if (existing) throw new Error(`Product with Kod ${kod} already exists`);
-    await ctx.db.insert("products", {
+    await ctx.db.patch(product._id, {
       Rodzaj: row.Rodzaj ?? "",
-      "Jednostka miary": row["Jednostka miary"] ?? "",
-      "Stawka VAT": row["Stawka VAT"] ?? "",
+      JednostkaMiary: row.JednostkaMiary ?? row["Jednostka miary"] ?? "",
+      StawkaVAT: row.StawkaVAT ?? row["Stawka VAT"] ?? "",
       Kod: row.Kod ?? "",
       Nazwa: row.Nazwa ?? "",
-      "Cena netto": row["Cena netto"] ?? "",
-      "Kod klasyfikacji": row["Kod klasyfikacji"] ?? "",
+      CenaNetto: row.CenaNetto ?? row["Cena netto"] ?? "",
+      KodKlasyfikacji: row.KodKlasyfikacji ?? row["Kod klasyfikacji"] ?? "",
       Uwagi: row.Uwagi ?? "",
-      "Ostatnia cena zakupu": row["Ostatnia cena zakupu"] ?? "",
-      "Ostatnia data zakupu": row["Ostatnia data zakupu"] ?? "",
+      OstatniaCenaZakupu: row.OstatniaCenaZakupu ?? row["Ostatnia cena zakupu"] ?? "",
+      OstatniaDataZakupu: row.OstatniaDataZakupu ?? row["Ostatnia data zakupu"] ?? "",
       categorySlug,
     });
     return { ok: true, kod };
@@ -203,15 +203,15 @@ export const replaceCatalogFromSections = mutation({
         const row = { ...item, categorySlug } as Record<string, string>;
         await ctx.db.insert("products", {
           Rodzaj: row.Rodzaj ?? "",
-          "Jednostka miary": row["Jednostka miary"] ?? "",
-          "Stawka VAT": row["Stawka VAT"] ?? "",
+          JednostkaMiary: row.JednostkaMiary ?? row["Jednostka miary"] ?? "",
+          StawkaVAT: row.StawkaVAT ?? row["Stawka VAT"] ?? "",
           Kod: row.Kod ?? "",
           Nazwa: row.Nazwa ?? "",
-          "Cena netto": row["Cena netto"] ?? "",
-          "Kod klasyfikacji": row["Kod klasyfikacji"] ?? "",
+          CenaNetto: row.CenaNetto ?? row["Cena netto"] ?? "",
+          KodKlasyfikacji: row.KodKlasyfikacji ?? row["Kod klasyfikacji"] ?? "",
           Uwagi: row.Uwagi ?? "",
-          "Ostatnia cena zakupu": row["Ostatnia cena zakupu"] ?? "",
-          "Ostatnia data zakupu": row["Ostatnia data zakupu"] ?? "",
+          OstatniaCenaZakupu: row.OstatniaCenaZakupu ?? row["Ostatnia cena zakupu"] ?? "",
+          OstatniaDataZakupu: row.OstatniaDataZakupu ?? row["Ostatnia data zakupu"] ?? "",
           categorySlug,
         });
       }

@@ -4,15 +4,15 @@ import { v } from "convex/values";
 /** Product row from Kartoteki (CSV) plus assigned category. */
 const productFields = {
   Rodzaj: v.string(),
-  "Jednostka miary": v.string(),
-  "Stawka VAT": v.string(),
+  JednostkaMiary: v.string(),
+  StawkaVAT: v.string(),
   Kod: v.string(),
   Nazwa: v.string(),
-  "Cena netto": v.string(),
-  "Kod klasyfikacji": v.string(),
+  CenaNetto: v.string(),
+  KodKlasyfikacji: v.string(),
   Uwagi: v.string(),
-  "Ostatnia cena zakupu": v.string(),
-  "Ostatnia data zakupu": v.string(),
+  OstatniaCenaZakupu: v.string(),
+  OstatniaDataZakupu: v.string(),
   categorySlug: v.string(),
   imageStorageId: v.optional(v.string()), // Store the storageId from Convex
 };

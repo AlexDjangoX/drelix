@@ -6,15 +6,15 @@
 /** Product row shape (Kartoteki CSV columns). */
 export type KartotekaRow = {
   Rodzaj: string;
-  'Jednostka miary': string;
-  'Stawka VAT': string;
+  JednostkaMiary: string;
+  StawkaVAT: string;
   Kod: string;
   Nazwa: string;
-  'Cena netto': string;
-  'Kod klasyfikacji': string;
+  CenaNetto: string;
+  KodKlasyfikacji: string;
   Uwagi: string;
-  'Ostatnia cena zakupu': string;
-  'Ostatnia data zakupu': string;
+  OstatniaCenaZakupu: string;
+  OstatniaDataZakupu: string;
 };
 
 export type CatalogCategorySlug =

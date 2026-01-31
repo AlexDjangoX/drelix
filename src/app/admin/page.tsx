@@ -15,7 +15,13 @@ import Image from "next/image";
 type CatalogRow = Record<string, string>;
 type CatalogSection = { slug: string; titleKey: string; items: CatalogRow[] };
 
-const DISPLAY_KEYS = ["Kod", "Nazwa", "Cena netto", "Jednostka miary", "Stawka VAT"] as const;
+const DISPLAY_KEYS = [
+  { label: "Kod", key: "Kod" },
+  { label: "Nazwa", key: "Nazwa" },
+  { label: "Cena netto", key: "CenaNetto" },
+  { label: "Jednostka miary", key: "JednostkaMiary" },
+  { label: "Stawka VAT", key: "StawkaVAT" },
+] as const;
 
 function ImageUploadCell({ row }: { row: CatalogRow }) {
   const [uploading, setUploading] = useState(false);
@@ -103,7 +109,7 @@ function ProductRow({
     setError(null);
     try {
       const updates: Record<string, string> = {};
-      for (const key of DISPLAY_KEYS) {
+      for (const { key } of DISPLAY_KEYS) {
         if (draft[key] !== row[key]) updates[key] = draft[key] ?? "";
       }
       if (Object.keys(updates).length === 0) {
@@ -130,7 +136,7 @@ function ProductRow({
       <td className="p-2 align-middle">
         <ImageUploadCell row={row} />
       </td>
-      {DISPLAY_KEYS.map((key) => (
+      {DISPLAY_KEYS.map(({ key }) => (
         <td key={key} className="p-2 align-top">
           {editing ? (
             <Input
@@ -215,7 +221,22 @@ export default function AdminPage() {
     setResult(null);
     try {
       const buffer = await file.arrayBuffer();
-      const rows = csvToRows(buffer);
+      const rawRows = csvToRows(buffer);
+      
+      // Map CSV headers to Convex-safe field names
+      const rows = rawRows.map(row => ({
+        Rodzaj: row["Rodzaj"] ?? "",
+        JednostkaMiary: row["Jednostka miary"] ?? "",
+        StawkaVAT: row["Stawka VAT"] ?? "",
+        Kod: row["Kod"] ?? "",
+        Nazwa: row["Nazwa"] ?? "",
+        CenaNetto: row["Cena netto"] ?? "",
+        KodKlasyfikacji: row["Kod klasyfikacji"] ?? "",
+        Uwagi: row["Uwagi"] ?? "",
+        OstatniaCenaZakupu: row["Ostatnia cena zakupu"] ?? "",
+        OstatniaDataZakupu: row["Ostatnia data zakupu"] ?? "",
+      }));
+
       const rulesRes = await fetch("/catalogCategoryRules.json");
       if (!rulesRes.ok) throw new Error("Failed to load category rules");
       const rules = (await rulesRes.json()) as CategoryRule[];
@@ -338,9 +359,9 @@ export default function AdminPage() {
                         <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-20">
                           Photo
                         </th>
-                        {DISPLAY_KEYS.map((key) => (
+                        {DISPLAY_KEYS.map(({ label, key }) => (
                           <th key={key} className="p-2 text-xs font-semibold text-muted-foreground uppercase">
-                            {key}
+                            {label}
                           </th>
                         ))}
                         <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-24 text-right">
