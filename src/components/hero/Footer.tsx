@@ -99,6 +99,12 @@ const Footer: React.FC = () => {
             >
               <AnimateText k="footer.terms" />
             </Link>
+            <Link
+              href="/admin/login"
+              className="text-sm cursor-pointer text-muted-foreground hover:text-primary transition-colors"
+            >
+              Admin
+            </Link>
           </div>
         </div>
       </div>
