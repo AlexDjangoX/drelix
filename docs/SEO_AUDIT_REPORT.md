@@ -168,9 +168,9 @@ The Drelix website demonstrates **enterprise-grade SEO implementation** with com
 
 **Verification:**
 
-✅ **Homepage:** `https://drelix.pl` (no trailing slash)  
-✅ **Catalog:** `https://drelix.pl/products`  
-✅ **Categories:** `https://drelix.pl/products/gloves`, etc.  
+✅ **Homepage:** `https://drelix.org` (no trailing slash)  
+✅ **Catalog:** `https://drelix.org/products`  
+✅ **Categories:** `https://drelix.org/products/gloves`, etc.  
 ✅ **Source:** All use `getCanonicalBaseUrl()` from `src/lib/seo.ts`  
 ✅ **metadataBase:** Set in root layout
 
@@ -316,7 +316,7 @@ The Drelix website demonstrates **enterprise-grade SEO implementation** with com
 Before deploying to production and setting up Google Search Console, verify:
 
 - [x] **Environment variables set:**
-  - `NEXT_PUBLIC_SITE_URL=https://drelix.pl` (production URL)
+  - `NEXT_PUBLIC_SITE_URL=https://drelix.org` (production URL)
   - `NEXT_PUBLIC_CONVEX_URL=<your Convex deployment URL>`
 
 - [x] **Build and test:**
@@ -344,7 +344,7 @@ Before deploying to production and setting up Google Search Console, verify:
 1. **Set up Google Search Console:**
    - Add property at [search.google.com/search-console](https://search.google.com/search-console)
    - Verify ownership (DNS TXT record or HTML file upload)
-   - Submit sitemap: `https://drelix.pl/sitemap.xml`
+   - Submit sitemap: `https://drelix.org/sitemap.xml`
    - Set up email alerts for critical issues
 
 2. **Validate structured data:**

@@ -406,13 +406,13 @@ When you add a new public page (e.g. a new product category):
 
 ## 18. Environment
 
-- **`NEXT_PUBLIC_SITE_URL`** – Must be set in production to the live domain (e.g. `https://drelix.pl`). Used for:
+- **`NEXT_PUBLIC_SITE_URL`** – Must be set in production to the live domain (e.g. `https://drelix.org`). Used for:
   - Canonical URLs  
   - Sitemap URLs  
   - Open Graph URLs  
   - JSON-LD `url` and `@id`  
 
-Without it, the app falls back to `https://drelix.pl` in code; ensure the deployed value matches your real domain.
+Without it, the app falls back to `https://drelix.org` in code; ensure the deployed value matches your real domain.
 
 **Important:** Use `https://` (not `http://`) in production.
 
@@ -487,7 +487,7 @@ Without it, the app falls back to `https://drelix.pl` in code; ensure the deploy
 | Add a new product/category page | Add slug to `src/data/catalogCategories.ts`, metadata to `src/components/products/productConfig.ts`, write 150-200+ words, add category rule to `public/catalogCategoryRules.json` if using CSV. Sitemap and layout pick it up; ensure one h1 and good alt on images. |
 | Change what's crawlable | Edit `src/lib/robotsContent.ts` (and route in `src/app/robots.txt/route.ts` if needed). |
 | See what URLs are in the sitemap | Open `/sitemap.xml` or read `src/app/sitemap.ts`. |
-| Set production URL | Set `NEXT_PUBLIC_SITE_URL=https://drelix.pl` in hosting (e.g. Vercel env). |
+| Set production URL | Set `NEXT_PUBLIC_SITE_URL=https://drelix.org` in hosting (e.g. Vercel env). |
 | Claim/optimize Google Business Profile | Go to [business.google.com](https://business.google.com); ensure NAP matches site. |
 | Request immediate indexing of a new page | Google Search Console → URL Inspection Tool → "Request indexing". |
 | Remove keywords meta tag (recommended) | Delete `keywords` field from metadata objects in layouts/pages. |
