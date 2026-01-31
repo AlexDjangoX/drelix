@@ -51,7 +51,8 @@ These principles inform how we implement the items in §2 “What we maintain”
 | `src/components/JsonLd.tsx` | Injects LocalBusiness + WebPage JSON-LD in root `<head>`. |
 | `src/app/products/page.tsx` | Catalog index: metadata (title, description, keywords, canonical, OG with image, Twitter), ItemList JSON-LD. |
 | `src/app/products/[slug]/layout.tsx` | Product category layout: `generateMetadata`, `generateStaticParams`, BreadcrumbList JSON-LD; metadata per slug from `productConfig`. |
-| `src/components/products/productConfig.ts` | Single source for all category slugs (23): `PRODUCT_SLUGS`, `productConfig` (metadata per slug). Used by sitemap, layout, pages. Add new categories here; sitemap picks them up automatically. |
+| `src/components/products/productConfig.ts` | Category metadata (title, description per slug) and re-exports `PRODUCT_SLUGS` from `src/data/catalogCategories.ts`. Used by sitemap, layout, pages. Add new category metadata here; slugs come from catalogCategories. |
+| `src/data/catalogCategories.ts` | Source for category slugs (23): `CATEGORY_SLUGS`, `CATEGORY_TITLE_KEYS`. Used by productConfig, homepage cards, sitemap. Add new slugs here first. |
 
 ---
 
@@ -82,7 +83,7 @@ Product metadata is driven by **`productConfig`** in `src/components/products/pr
 - **openGraph** – `type`, `url`, `siteName`, `title`, `description`, `locale`, `images` (default OG image).
 - **twitter** – `card`, `title`, `description`.
 
-**When adding a new product category:** Add the slug and metadata to `productConfig` in `src/components/products/productConfig.ts` (and to `CATEGORY_SLUGS` in `src/data/catalogCategories.ts` if needed). The sitemap imports `PRODUCT_SLUGS` from productConfig and includes all slugs automatically.
+**When adding a new product category:** (1) Add the slug and `titleKey` to `src/data/catalogCategories.ts` (`CATEGORY_SLUGS`, `CATEGORY_TITLE_KEYS`). (2) Add metadata (title, description) to `src/components/products/productConfig.ts` (`metadataBySlug`, and the built `productConfig`). The sitemap imports `PRODUCT_SLUGS` from productConfig (which re-exports from catalogCategories), so the new category is included automatically. Also add the category to `public/catalogCategoryRules.json` if you use CSV import.
 
 ---
 
@@ -97,7 +98,7 @@ Product metadata is driven by **`productConfig`** in `src/components/products/pr
 - `/products` catalog (priority 0.9, weekly).
 - One URL per slug in `PRODUCT_SLUGS` (23 categories, e.g. `/products/gloves`, `/products/spodnie`; priority 0.9, weekly). The sitemap imports `PRODUCT_SLUGS` from `@/components/products/productConfig`.
 
-**When adding a new product category:** Add the slug and metadata in `src/components/products/productConfig.ts` (and `src/data/catalogCategories.ts`); the sitemap will include it automatically.
+**When adding a new product category:** Add the slug in `src/data/catalogCategories.ts` and metadata in `src/components/products/productConfig.ts`; the sitemap uses `PRODUCT_SLUGS` from productConfig and will include it automatically. No change to `sitemap.ts` is needed.
 
 ---
 
@@ -158,11 +159,11 @@ Keep a logical heading order (h1 → h2 → h3) and avoid skipping levels.
 
 When you add a new public page (e.g. a new product category):
 
-1. [ ] Add **metadata** in that route’s `layout.tsx`: title (50–60 chars ideal), description (150–160 chars ideal), canonical, openGraph, twitter.
-2. [ ] Add the URL to **`sitemap.ts`** (or the appropriate list in it).
+1. [ ] Add **metadata** in that route’s `layout.tsx` (or page): title (50–60 chars ideal), description (150–160 chars ideal), canonical, openGraph, twitter.
+2. [ ] **Sitemap:** For **product categories**, add the slug to `src/data/catalogCategories.ts` and metadata to `src/components/products/productConfig.ts` — the sitemap picks them up automatically. For **any other** new page, add its URL to `src/app/sitemap.ts`.
 3. [ ] Ensure the page has **exactly one `<h1>`** and sensible heading hierarchy (h1 → h2 → h3).
 4. [ ] If the page has content images, give them **descriptive `alt`** text.
-5. [ ] (Optional) Add **JSON-LD** (e.g. ItemList, Product) if you want rich results; validate with Google Rich Results Test.
+5. [ ] (Optional) Add **JSON-LD** (e.g. BreadcrumbList, Product) if you want rich results; validate with Google Rich Results Test.
 
 ---
 
@@ -180,7 +181,7 @@ Without it, the app falls back to `https://drelix.pl` in code; ensure the deploy
 
 ## 13. Optional enhancements (not required)
 
-- **Product JSON-LD:** Add `ItemList` or `Product` schema on product pages for richer search results.
+- **Product JSON-LD:** Add individual `Product` schema per product on category pages for richer search results (we already have ItemList on catalog and BreadcrumbList on category pages).
 - **hreflang:** If you later use separate URLs per language (e.g. `/en/products/gloves`), add `hreflang` and alternate links in metadata.
 - **OG image per product:** Override `openGraph.images` in a product layout if you want a dedicated share image for that category.
 
@@ -201,11 +202,11 @@ Without it, the app falls back to `https://drelix.pl` in code; ensure the deploy
 |------------|-----------|
 | Change site-wide title/description | Edit `src/app/layout.tsx` metadata. |
 | Change business info in search/snippets | Edit `src/components/JsonLd.tsx`. |
-| Add a new product/category page | Add slug + metadata in `src/components/products/productConfig.ts` (and `src/data/catalogCategories.ts`). Sitemap and layout pick it up; ensure one h1 and good alt on images. |
+| Add a new product/category page | Add slug to `src/data/catalogCategories.ts`, metadata to `src/components/products/productConfig.ts`, and category rule to `public/catalogCategoryRules.json` if using CSV. Sitemap and layout pick it up; ensure one h1 and good alt on images. |
 | Change what’s crawlable | Edit `src/lib/robotsContent.ts` (and route in `src/app/robots.txt/route.ts` if needed). |
 | See what URLs are in the sitemap | Open `/sitemap.xml` or read `src/app/sitemap.ts`. |
 | Set production URL | Set `NEXT_PUBLIC_SITE_URL` in hosting (e.g. Vercel env). |
 
 ---
 
-*Last updated: alignment with modern SEO (title/description length, Core Web Vitals, E-E-A-T, helpful content); file map and JSON-LD (ItemList, BreadcrumbList); robots /admin/; further reading.*
+*Last updated: verified against codebase; file map includes catalogCategories; checklist clarifies product categories vs other pages for sitemap; optional Product JSON-LD clarified. Location: docs/SEO_Guide.md.*
