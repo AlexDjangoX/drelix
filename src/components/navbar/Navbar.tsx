@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
                 <button
                   key={item.href}
                   onClick={() => handleNavClick(item.href)}
-                  className="text-foreground/80 hover:text-primary transition-colors font-medium"
+                  className="cursor-pointer text-foreground/80 hover:text-primary transition-colors font-medium"
                 >
                   <AnimateText k={item.key} />
                 </button>
@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
             </div>
             <DarkToggle />
             <button
-              className="lg:hidden p-2"
+              className="lg:hidden cursor-pointer p-2"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label={isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
             >
@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
               <button
                 key={item.href}
                 onClick={() => handleNavClick(item.href)}
-                className="block w-full text-left py-3 px-4 text-foreground/80 hover:text-primary hover:bg-secondary/50 transition-colors font-medium"
+                className="block w-full cursor-pointer text-left py-3 px-4 text-foreground/80 hover:text-primary hover:bg-secondary/50 transition-colors font-medium"
               >
                 <AnimateText k={item.key} />
               </button>

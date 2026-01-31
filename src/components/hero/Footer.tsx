@@ -13,19 +13,13 @@ const socialLinks = [
 ];
 
 const quickLinkItems = [
-  { key: 'nav.about' as const, href: '#about' },
-  { key: 'nav.products' as const, href: '#products' },
-  { key: 'nav.whyUs' as const, href: '#why-us' },
-  { key: 'nav.contact' as const, href: '#contact' },
+  { key: 'nav.about' as const, href: '/#about' },
+  { key: 'nav.products' as const, href: '/#products' },
+  { key: 'nav.whyUs' as const, href: '/#why-us' },
+  { key: 'nav.contact' as const, href: '/#contact' },
 ];
 
 const Footer: React.FC = () => {
-  const handleLinkClick = (href: string) => {
-    if (href.startsWith('#')) {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <footer
       aria-label="Stopka"
@@ -35,7 +29,9 @@ const Footer: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Logo & Description */}
           <div>
-            <Logo size="md" className="mb-4" />
+            <Link href="/" className="inline-block mb-4 cursor-pointer" aria-label="Drelix - strona główna">
+              <Logo size="md" />
+            </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Odzież Robocza Drelix
               <br />
@@ -45,7 +41,7 @@ const Footer: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Quick Links - proper links for SEO, work from any page */}
           <div>
             <h4 className="font-bold text-foreground mb-4">
               <AnimateText k="footer.quickLinksTitle" />
@@ -53,12 +49,12 @@ const Footer: React.FC = () => {
             <ul className="space-y-2">
               {quickLinkItems.map((link, index) => (
                 <li key={index}>
-                  <button
-                    onClick={() => handleLinkClick(link.href)}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                  <Link
+                    href={link.href}
+                    className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
                     <AnimateText k={link.key} />
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -75,7 +71,7 @@ const Footer: React.FC = () => {
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                  className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
                 >
                   <social.icon size={20} />
                 </a>
@@ -93,13 +89,13 @@ const Footer: React.FC = () => {
           <div className="flex gap-6">
             <Link
               href="/privacy"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="text-sm cursor-pointer text-muted-foreground hover:text-primary transition-colors"
             >
               <AnimateText k="footer.privacy" />
             </Link>
             <Link
               href="/terms"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="text-sm cursor-pointer text-muted-foreground hover:text-primary transition-colors"
             >
               <AnimateText k="footer.terms" />
             </Link>
