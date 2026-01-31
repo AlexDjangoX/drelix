@@ -1,0 +1,50 @@
+[
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "kompl",
+    "Stawka VAT": "23%",
+    "Kod": "WKŁADY",
+    "Nazwa": "WŁADY POCHŁANIAJĄCE DO MASEK PRZECIWGAZOWYCH",
+    "Cena netto": "50,40",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "34,56",
+    "Ostatnia data zakupu": "2022-04-21"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "MP/G",
+    "Nazwa": "PÓŁMASKA 12/5 SILIKON GAZ",
+    "Cena netto": "99,18",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "73,46",
+    "Ostatnia data zakupu": "2022-04-21"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "MASMIDI",
+    "Nazwa": "MASKA MASMIDI",
+    "Cena netto": "25,20",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "19,00",
+    "Ostatnia data zakupu": "2018-12-31"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "MPZAWÓR",
+    "Nazwa": "PÓŁMASKA P.PYŁ P1 ZAWÓR",
+    "Cena netto": "3,17",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "2,20",
+    "Ostatnia data zakupu": "2025-09-22"
+  }
+]

@@ -38,6 +38,7 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 
 - **Strategy:** Static. Root and product layouts use `dynamic = "force-static"` and `revalidate = false`.
 - **Product data:** Static arrays in `src/data/` (e.g. `gloves.ts`, `boots.ts`, `spodnie.ts`, `koszula.ts`). Each exports a list of `{ id, src, name }` for images in `public/`.
+- **Shop catalog (Kartoteki):** The owner provides `src/data/Kartoteki.csv`. Run `npm run csv-to-json` (→ `Kartoteki.json`) then `npm run split-catalog` (→ `src/data/catalog/{slug}.json` + `categories.json`). Full pipeline: `npm run build-catalog`. Category rules live in `scripts/catalogCategoryRules.json`; the split script is the single source of truth for categorization. Pages import from `@/data/catalog` (e.g. `getCatalogGroupedByCategory()`, `getCatalogBySlug(slug)`) or directly from `@/data/catalog/gloves.json` etc. for smaller bundles.
 - **New product category:** Add a data file in `src/data/`, a route under `src/app/products/[slug]/` (layout + page), and a sitemap entry. See existing gloves/boots/spodnie/koszula for the pattern.
 
 ---
@@ -106,6 +107,10 @@ This file is used by **Vercel Agent** (Code Review), Cursor, and other AI tools 
 | Structured data      | `src/components/JsonLd.tsx`             |
 | Translations         | `src/context/LanguageContext.tsx`       |
 | Product data         | `src/data/*.ts`                         |
+| Shop catalog (split) | `src/data/catalog/*.json` (generated)   |
+| Catalog rules        | `scripts/catalogCategoryRules.json`    |
+| csv→json             | `scripts/csv-to-json.mjs`              |
+| split by category    | `scripts/split-catalog-by-category.mjs`|
 | Cache headers        | `next.config.ts` → `headers()`         |
 
 When in doubt, prefer consistency with existing product pages (gloves, boots, spodnie, koszula) and with [SEO_Guide.md](./SEO_Guide.md).

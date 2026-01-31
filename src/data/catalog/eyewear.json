@@ -1,0 +1,38 @@
+[
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "OK",
+    "Nazwa": "OKULARY OCHRONNE MCR-CKECKLITE-T",
+    "Cena netto": "6,50",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "2,97",
+    "Ostatnia data zakupu": "2023-01-16"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "OK1",
+    "Nazwa": "OKULARY ANTI-FOG B507P",
+    "Cena netto": "7,32",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "3,32",
+    "Ostatnia data zakupu": "2024-09-02"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "OK3M",
+    "Nazwa": "3M-00-SF707S OKULARY OCHRONNE",
+    "Cena netto": "56,09",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "27,88",
+    "Ostatnia data zakupu": "2025-05-23"
+  }
+]

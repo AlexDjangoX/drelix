@@ -1,0 +1,110 @@
+[
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "par",
+    "Stawka VAT": "23%",
+    "Kod": "TRZ9002",
+    "Nazwa": "TRZEWIK OCHRONNY MĘSKI 9-002/S2-SRC/6256",
+    "Cena netto": "161,78",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "129,20",
+    "Ostatnia data zakupu": "2024-05-09"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "par",
+    "Stawka VAT": "23%",
+    "Kod": "TRZU101OB",
+    "Nazwa": "TRZEWIKI 101OB,LONGSAFE, 4WRK ALGOL",
+    "Cena netto": "60,97",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "30,65",
+    "Ostatnia data zakupu": "2025-12-18"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "par",
+    "Stawka VAT": "23%",
+    "Kod": "TRZ 9072 S3",
+    "Nazwa": "trzewik ochronny męski9072 /S3",
+    "Cena netto": "77,24",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "54,40",
+    "Ostatnia data zakupu": "2018-11-07"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "par",
+    "Stawka VAT": "23%",
+    "Kod": "TRZ123",
+    "Nazwa": "TRZEWIK ZAWODOWY 123",
+    "Cena netto": "117,89",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "88,72",
+    "Ostatnia data zakupu": "2022-12-21"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "par",
+    "Stawka VAT": "23%",
+    "Kod": "TRZ121",
+    "Nazwa": "TRZEWIKI OCHRONNE 121 S1, OB",
+    "Cena netto": "168,29",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "95,06",
+    "Ostatnia data zakupu": "2025-10-29"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "TRZ125S1",
+    "Nazwa": "TRZEWIKI OCHRONNE 125S1",
+    "Cena netto": "169,10",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "116,40",
+    "Ostatnia data zakupu": "2024-01-12"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "TRZBEAR",
+    "Nazwa": "TRZEWIKI BEARFIELD S1 I OB R02",
+    "Cena netto": "136,59",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "96,70",
+    "Ostatnia data zakupu": "2024-08-22"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "TRZ113S3",
+    "Nazwa": "TRZEWIKI BEZPIECZNE 113S3",
+    "Cena netto": "105,69",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "60,14",
+    "Ostatnia data zakupu": "2025-11-25"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "TRZ138",
+    "Nazwa": "TRZEWIKI OCIEPLANE 138S1",
+    "Cena netto": "129,26",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "77,60",
+    "Ostatnia data zakupu": "2025-12-18"
+  }
+]

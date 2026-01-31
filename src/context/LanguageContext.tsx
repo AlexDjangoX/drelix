@@ -78,6 +78,10 @@ interface Translations {
     helmets: string;
     vests: string;
     gloves: string;
+    polbuty: string;
+    trzewiki: string;
+    sandaly: string;
+    kalosze: string;
     footwear: string;
     clothing: string;
     koszula: string;
@@ -183,6 +187,10 @@ const translations: Record<Language, Translations> = {
       helmets: 'Kaski ochronne',
       vests: 'Kamizelki odblaskowe',
       gloves: 'Rękawice robocze',
+      polbuty: 'Półbuty',
+      trzewiki: 'Trzewiki',
+      sandaly: 'Sandały',
+      kalosze: 'Kalosze / gumofilce',
       footwear: 'Obuwie ochronne',
       clothing: 'Odzież ochronna',
       koszula: 'Koszule robocze',
@@ -286,6 +294,10 @@ const translations: Record<Language, Translations> = {
       helmets: 'Safety Helmets',
       vests: 'High-Visibility Vests',
       gloves: 'Work Gloves',
+      polbuty: 'Safety shoes (półbuty)',
+      trzewiki: 'Work boots (trzewiki)',
+      sandaly: 'Sandals',
+      kalosze: 'Rubber boots / wellingtons',
       footwear: 'Safety Footwear',
       clothing: 'Protective Clothing',
       koszula: 'Work Shirts',

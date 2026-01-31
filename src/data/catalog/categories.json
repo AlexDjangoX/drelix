@@ -1,0 +1,70 @@
+[
+  {
+    "slug": "gloves",
+    "titleKey": "productNames.gloves"
+  },
+  {
+    "slug": "polbuty",
+    "titleKey": "productNames.polbuty"
+  },
+  {
+    "slug": "trzewiki",
+    "titleKey": "productNames.trzewiki"
+  },
+  {
+    "slug": "sandaly",
+    "titleKey": "productNames.sandaly"
+  },
+  {
+    "slug": "kalosze",
+    "titleKey": "productNames.kalosze"
+  },
+  {
+    "slug": "spodnie",
+    "titleKey": "productNames.clothing"
+  },
+  {
+    "slug": "vests",
+    "titleKey": "productNames.vests"
+  },
+  {
+    "slug": "koszula",
+    "titleKey": "productNames.koszula"
+  },
+  {
+    "slug": "helmets",
+    "titleKey": "productNames.helmets"
+  },
+  {
+    "slug": "eyewear",
+    "titleKey": "productNames.eyewear"
+  },
+  {
+    "slug": "earProtection",
+    "titleKey": "productNames.earProtection"
+  },
+  {
+    "slug": "masks",
+    "titleKey": "productNames.masks"
+  },
+  {
+    "slug": "kneeProtection",
+    "titleKey": "productNames.kneeProtection"
+  },
+  {
+    "slug": "rainwear",
+    "titleKey": "productNames.rainwear"
+  },
+  {
+    "slug": "firstAid",
+    "titleKey": "productNames.firstAid"
+  },
+  {
+    "slug": "signage",
+    "titleKey": "productNames.signage"
+  },
+  {
+    "slug": "other",
+    "titleKey": "products.catalogOther"
+  }
+]

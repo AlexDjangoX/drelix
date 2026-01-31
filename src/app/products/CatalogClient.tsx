@@ -2,12 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Package } from 'lucide-react';
 import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
-import type { KartotekaRow } from '@/data/kartoteki';
-import type { CatalogSection } from '@/data/catalogCategories';
+import type { CatalogProduct, CatalogSection } from '@/data/catalogCategories';
 
 type Props = { sections: CatalogSection[]; totalCount: number };
 
@@ -16,7 +16,9 @@ const NAZWA = 'Nazwa';
 const CENA = 'Cena netto';
 const JEDNOSTKA = 'Jednostka miary';
 
-function ProductCard({ row, index }: { row: KartotekaRow; index: number }) {
+function ProductCard({ row, index }: { row: CatalogProduct; index: number }) {
+  const [imgError, setImgError] = React.useState(false);
+  const showImage = Boolean(row.image) && !imgError;
   return (
     <Card
       key={`${row[COD]}-${index}`}
@@ -24,8 +26,20 @@ function ProductCard({ row, index }: { row: KartotekaRow; index: number }) {
     >
       <CardContent className="p-4">
         <div className="flex gap-4">
-          <div className="shrink-0 w-14 h-14 rounded-lg bg-muted flex items-center justify-center">
-            <Package className="w-7 h-7 text-muted-foreground" aria-hidden />
+          <div className="shrink-0 w-20 h-20 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
+            {showImage ? (
+              <Image
+                src={row.image!}
+                alt={row[NAZWA] || row[COD]}
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+                sizes="80px"
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <Package className="w-8 h-8 text-muted-foreground" aria-hidden />
+            )}
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-mono text-muted-foreground truncate" title={row[COD]}>

@@ -1,0 +1,91 @@
+[
+  {
+    "slug": "gloves",
+    "titleKey": "productNames.gloves",
+    "keywords": ["RĘKAWICE", "REKAWICE"],
+    "kodPrefixes": ["R-"]
+  },
+  {
+    "slug": "polbuty",
+    "titleKey": "productNames.polbuty",
+    "keywords": ["PÓŁBUT", "PÓŁBUTY"]
+  },
+  {
+    "slug": "trzewiki",
+    "titleKey": "productNames.trzewiki",
+    "keywords": ["TRZEWIK", "TRZEWIKI"]
+  },
+  {
+    "slug": "sandaly",
+    "titleKey": "productNames.sandaly",
+    "keywords": ["SANDAŁ", "SANDAŁY", "SANDAL"]
+  },
+  {
+    "slug": "kalosze",
+    "titleKey": "productNames.kalosze",
+    "keywords": ["KALOSZE", "KALOSZ", "GUMOFILCE"]
+  },
+  {
+    "slug": "spodnie",
+    "titleKey": "productNames.clothing",
+    "keywords": ["SPODNIE", "OGRODNICZKI"]
+  },
+  {
+    "slug": "vests",
+    "titleKey": "productNames.vests",
+    "keywords": ["ODBLASKOWA", "ODBLASKOWY"]
+  },
+  {
+    "slug": "koszula",
+    "titleKey": "productNames.koszula",
+    "keywords": [
+      "KOSZULA", "KOSZULE", "BLUZA", "KURTKA", "FARTUCH", "KAMIZELKA", "POLAR", "PŁASZCZ",
+      "CZAPKA", "ZAPASKA", "KOMBINEZON", "PODKOSZULEK", "BEZRĘKAWNIK", "UBRANIE", "LHHCL"
+    ]
+  },
+  {
+    "slug": "helmets",
+    "titleKey": "productNames.helmets",
+    "keywords": ["KASK", "HEŁM", "HELM"]
+  },
+  {
+    "slug": "eyewear",
+    "titleKey": "productNames.eyewear",
+    "keywords": ["OKULARY"]
+  },
+  {
+    "slug": "earProtection",
+    "titleKey": "productNames.earProtection",
+    "keywords": ["NAUSZNIKI", "ZATYCZKI", "SŁUCH", "przeciw hałasowe"]
+  },
+  {
+    "slug": "masks",
+    "titleKey": "productNames.masks",
+    "keywords": ["MASKA", "PÓŁMASK", "WKŁADY DO MASEK", "PRZECIWGAZOWYCH", "WŁADY POCHŁANIAJĄCE"]
+  },
+  {
+    "slug": "kneeProtection",
+    "titleKey": "productNames.kneeProtection",
+    "keywords": ["NAKOLANNIKI", "NAKOLANNIK"]
+  },
+  {
+    "slug": "rainwear",
+    "titleKey": "productNames.rainwear",
+    "keywords": ["PRZECIWDESZCZOWY", "PRZECIWDESZCZOWA", "KOMPLET PCV", "PCV PRZECIWDESZCZOWY"]
+  },
+  {
+    "slug": "firstAid",
+    "titleKey": "productNames.firstAid",
+    "keywords": ["APTECZKA"]
+  },
+  {
+    "slug": "signage",
+    "titleKey": "productNames.signage",
+    "keywords": ["ZNAK BEZPIECZEŃSTWA"]
+  },
+  {
+    "slug": "other",
+    "titleKey": "products.catalogOther",
+    "keywords": []
+  }
+]

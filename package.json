@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "csv-to-json": "node scripts/csv-to-json.mjs"
+    "csv-to-json": "node scripts/csv-to-json.mjs",
+    "split-catalog": "node scripts/split-catalog-by-category.mjs",
+    "build-catalog": "npm run csv-to-json && npm run split-catalog"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",

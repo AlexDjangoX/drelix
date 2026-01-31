@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { getCatalog } from '@/data/kartoteki';
-import { getCatalogGroupedByCategory } from '@/data/catalogCategories';
+import { getCatalogGroupedByCategory } from '@/data/catalog';
 import CatalogClient from './CatalogClient';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.pl';
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default function ProductsCatalogPage() {
-  const items = getCatalog();
-  const sections = getCatalogGroupedByCategory(items);
-  return <CatalogClient sections={sections} totalCount={items.length} />;
+  const sections = getCatalogGroupedByCategory();
+  const totalCount = sections.reduce((n, s) => n + s.items.length, 0);
+  return <CatalogClient sections={sections} totalCount={totalCount} />;
 }

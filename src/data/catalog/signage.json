@@ -1,0 +1,26 @@
+[
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "ZNAK BEZP 1",
+    "Nazwa": "ZNAK BEZPIECZEŃSTWA",
+    "Cena netto": "2,44",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "1,67",
+    "Ostatnia data zakupu": "2014-07-09"
+  },
+  {
+    "Rodzaj": "Towar",
+    "Jednostka miary": "szt",
+    "Stawka VAT": "23%",
+    "Kod": "ZNAK BEZP 2",
+    "Nazwa": "ZNAK BEZPIECZEŃSTWA",
+    "Cena netto": "4,72",
+    "Kod klasyfikacji": "",
+    "Uwagi": "",
+    "Ostatnia cena zakupu": "3,46",
+    "Ostatnia data zakupu": "2014-07-09"
+  }
+]
