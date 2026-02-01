@@ -2,11 +2,34 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown, Shield, HardHat, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TwoToneHeading, AnimateText } from '@/components';
 
+const container = {
+  visible: (reduced: boolean) => ({
+    transition: reduced
+      ? { staggerChildren: 0, delayChildren: 0 }
+      : { staggerChildren: 0.1, delayChildren: 0.05 },
+  }),
+};
+
+const item = (reduced: boolean) => ({
+  hidden: { opacity: 0, y: reduced ? 0 : 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: reduced ? 0 : 0.4,
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+    },
+  },
+});
+
 const HeroSection: React.FC = () => {
+  const prefersReducedMotion = useReducedMotion();
+
   const handleScrollToProducts = () => {
     document.querySelector('#products')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -53,28 +76,35 @@ const HeroSection: React.FC = () => {
 
       {/* Main content area - flex-1 to fill available space, centered */}
       <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-8 lg:px-12 xl:px-16 py-20 sm:py-24 lg:py-32">
-        <div className="w-full max-w-4xl mx-auto text-center">
+        <motion.div
+          className="w-full max-w-4xl mx-auto text-center"
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          custom={!!prefersReducedMotion}
+        >
           {/* Heading */}
-          <TwoToneHeading
-            as="h1"
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-4 sm:mb-5 lg:mb-6 animate-fade-in text-balance leading-[1.35] tracking-wide"
-            style={{ animationDelay: '0.2s' }}
-          >
-            <AnimateText k="hero.title" />
-          </TwoToneHeading>
+          <motion.div variants={item(!!prefersReducedMotion)}>
+            <TwoToneHeading
+              as="h1"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-4 sm:mb-5 lg:mb-6 text-balance leading-[1.35] tracking-wide"
+            >
+              <AnimateText k="hero.title" />
+            </TwoToneHeading>
+          </motion.div>
 
           {/* Subtitle */}
-          <p
-            className="text-base sm:text-lg lg:text-xl text-muted-foreground/95 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-10 animate-fade-in text-pretty leading-relaxed"
-            style={{ animationDelay: '0.4s' }}
+          <motion.p
+            variants={item(!!prefersReducedMotion)}
+            className="text-base sm:text-lg lg:text-xl text-muted-foreground/95 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-10 text-pretty leading-relaxed"
           >
             <AnimateText k="hero.subtitle" />
-          </p>
+          </motion.p>
 
           {/* CTA Button */}
-          <div
-            className="animate-fade-in mb-8 sm:mb-10 lg:mb-12"
-            style={{ animationDelay: '0.6s' }}
+          <motion.div
+            variants={item(!!prefersReducedMotion)}
+            className="mb-8 sm:mb-10 lg:mb-12"
           >
             <Button
               size="lg"
@@ -83,12 +113,12 @@ const HeroSection: React.FC = () => {
             >
               <AnimateText k="hero.cta" />
             </Button>
-          </div>
+          </motion.div>
 
           {/* Trust indicators - always horizontal, wrapping naturally */}
-          <div
-            className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 animate-fade-in"
-            style={{ animationDelay: '0.8s' }}
+          <motion.div
+            variants={item(!!prefersReducedMotion)}
+            className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8"
           >
             <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 sm:px-5 sm:py-2 border border-primary/20">
               <Shield
@@ -117,8 +147,8 @@ const HeroSection: React.FC = () => {
                 <AnimateText k="hero.trust3" />
               </span>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator - fixed at bottom */}
