@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { AnimateText } from '@/components/reusable/AnimateText';
@@ -13,6 +15,9 @@ const SECTION_IDS = ['#about', '#products', '#why-us', '#contact'];
 const SCROLL_SPY_OFFSET = 120; // px from top of viewport to consider section "active"
 
 function Navbar() {
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('#about');
@@ -27,6 +32,8 @@ function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      if (!isHome) return;
 
       const sections = SECTION_IDS.map((id) => ({
         id,
@@ -48,7 +55,7 @@ function Navbar() {
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isHome]);
 
   const navItems = [
     { key: 'nav.about', href: '#about' },
@@ -93,20 +100,33 @@ function Navbar() {
 
           <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 shrink-0 min-w-0">
             <div className="hidden lg:flex items-center gap-8">
-              {navItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavClick(item.href)}
-                  className={cn(
-                    'cursor-pointer transition-colors font-medium uppercase border-b-2 border-transparent pb-0.5',
-                    activeSection === item.href
-                      ? 'text-primary border-primary'
-                      : 'text-foreground/80 hover:text-primary'
-                  )}
-                >
-                  <AnimateText k={item.key} />
-                </button>
-              ))}
+              {navItems.map((item) =>
+                isHome ? (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavClick(item.href)}
+                    className={cn(
+                      'cursor-pointer transition-colors font-medium uppercase border-b-2 border-transparent pb-0.5',
+                      activeSection === item.href
+                        ? 'text-primary border-primary'
+                        : 'text-foreground/80 hover:text-primary'
+                    )}
+                  >
+                    <AnimateText k={item.key} />
+                  </button>
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={`/${item.href}`}
+                    className={cn(
+                      'transition-colors font-medium uppercase border-b-2 border-transparent pb-0.5',
+                      'text-foreground/80 hover:text-primary'
+                    )}
+                  >
+                    <AnimateText k={item.key} />
+                  </Link>
+                )
+              )}
             </div>
             <DarkToggle />
             <button
@@ -122,20 +142,31 @@ function Navbar() {
         {/* Mobile Menu (hamburger visible below lg / 1024px) */}
         {isMobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
-            {navItems.map((item) => (
-              <button
-                key={item.href}
-                onClick={() => handleNavClick(item.href)}
-                className={cn(
-                  'block w-full cursor-pointer text-left py-3 px-4 transition-colors font-medium uppercase border-b-2 border-transparent',
-                  activeSection === item.href
-                    ? 'text-primary bg-primary/10 border-primary'
-                    : 'text-foreground/80 hover:text-primary hover:bg-secondary/50'
-                )}
-              >
-                <AnimateText k={item.key} />
-              </button>
-            ))}
+            {navItems.map((item) =>
+              isHome ? (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavClick(item.href)}
+                  className={cn(
+                    'block w-full cursor-pointer text-left py-3 px-4 transition-colors font-medium uppercase border-b-2 border-transparent',
+                    activeSection === item.href
+                      ? 'text-primary bg-primary/10 border-primary'
+                      : 'text-foreground/80 hover:text-primary hover:bg-secondary/50'
+                  )}
+                >
+                  <AnimateText k={item.key} />
+                </button>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={`/${item.href}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block w-full text-left py-3 px-4 transition-colors font-medium uppercase border-b-2 border-transparent text-foreground/80 hover:text-primary hover:bg-secondary/50"
+                >
+                  <AnimateText k={item.key} />
+                </Link>
+              )
+            )}
           </div>
         )}
       </div>

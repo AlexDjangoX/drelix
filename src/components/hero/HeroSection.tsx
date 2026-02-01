@@ -109,7 +109,7 @@ const HeroSection: React.FC = () => {
             <Button
               size="lg"
               onClick={handleScrollToProducts}
-              className="bg-gradient-primary text-primary-foreground font-bold text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full shadow-glow hover:scale-105 transition-transform"
+              className="bg-gradient-primary cursor-pointer text-primary-foreground font-bold text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full shadow-glow hover:scale-105 transition-transform"
             >
               <AnimateText k="hero.cta" />
             </Button>
