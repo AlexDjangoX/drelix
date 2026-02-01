@@ -26,7 +26,7 @@
 - **Structured data (JSON-LD):** LocalBusiness, WebPage (root); ItemList (catalog); BreadcrumbList (category pages). Validate with [Google Rich Results Test](https://search.google.com/test/rich-results).
 - **Semantic HTML:** One H1 per page, heading hierarchy (h1 → h2 → h3), `<main>`, sections.
 - **Image alt text:** Descriptive `alt` on product images.
-- **Internal linking:** Footer links to homepage sections, privacy, terms. Logo links to home.
+- **Internal linking:** Footer and navbar (on non-home routes) link to homepage sections, privacy, terms. Logo links to home.
 - **Admin noindex:** Admin area excluded from indexing via metadata and robots.txt.
 
 ### Product Management
@@ -66,7 +66,7 @@
 | **Language** | TypeScript |
 | **Styling** | Tailwind CSS v4 |
 | **Backend** | Convex |
-| **UI** | shadcn-style components |
+| **UI** | shadcn-style components, Framer Motion |
 
 ---
 
@@ -143,6 +143,16 @@ drelix/
 ├── docs/
 └── public/
 ```
+
+---
+
+## Recent Changes
+
+- **Navbar scroll progress** – A thin bar under the navbar fills left→right as the user scrolls (reading progress), using Framer Motion `useScroll` and `useSpring`.
+- **Navbar section links (route-aware)** – Section links (About, Products, Why Us, Contact) are only relevant on the homepage. On `/` they scroll to in-page sections with scroll-spy and active styling (primary color + bottom border). On other routes (e.g. `/products/[slug]`, `/privacy`) the same items are `<Link href="/#section">` so they navigate to the homepage and the target section. Fixes broken behavior on product and legal pages.
+- **Navbar active section** – Scroll-spy highlights the current section; active item is uppercase, primary color, and has a bottom border. Scroll-spy runs only on the homepage.
+- **Hero section** – Subtle entrance animations (Framer Motion): heading, subtitle, CTA, and trust pills fade in and slide up with a short stagger. Respects `prefers-reduced-motion`. Horizontal spacing increased (padding, subtitle width, gaps between trust pills).
+- **Navbar styling** – Section labels are uppercase; active tab uses a bottom border instead of text underline for visibility. Navbar uses `cn()` for conditional Tailwind classes and plain function components (no `React.FC`).
 
 ---
 
