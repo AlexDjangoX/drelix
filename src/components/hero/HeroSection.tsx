@@ -7,6 +7,9 @@ import { ChevronDown, Shield, HardHat, Glasses } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TwoToneHeading, AnimateText } from '@/components';
 
+const SLIDE_DISTANCE = 56;
+const ease = [0.25, 0.46, 0.45, 0.94] as const;
+
 const container = {
   visible: (reduced: boolean) => ({
     transition: reduced
@@ -15,15 +18,21 @@ const container = {
   }),
 };
 
-const item = (reduced: boolean) => ({
-  hidden: { opacity: 0, y: reduced ? 0 : 10 },
+const fromLeft = (reduced: boolean) => ({
+  hidden: { opacity: 0, x: reduced ? 0 : -SLIDE_DISTANCE },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: {
-      duration: reduced ? 0 : 0.4,
-      ease: [0.25, 0.46, 0.45, 0.94] as const,
-    },
+    x: 0,
+    transition: { duration: reduced ? 0 : 0.5, ease },
+  },
+});
+
+const fromRight = (reduced: boolean) => ({
+  hidden: { opacity: 0, x: reduced ? 0 : SLIDE_DISTANCE },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: reduced ? 0 : 0.5, ease },
   },
 });
 
@@ -74,8 +83,8 @@ const HeroSection: React.FC = () => {
         }}
       />
 
-      {/* Main content area - flex-1 to fill available space, centered */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-8 lg:px-12 xl:px-16 py-20 sm:py-24 lg:py-32">
+      {/* Main content area - balanced vertical gaps between blocks */}
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-8 lg:px-12 xl:px-16 py-10 sm:py-12 lg:py-16">
         <motion.div
           className="w-full max-w-4xl mx-auto text-center"
           variants={container}
@@ -83,27 +92,27 @@ const HeroSection: React.FC = () => {
           animate="visible"
           custom={!!prefersReducedMotion}
         >
-          {/* Heading */}
-          <motion.div variants={item(!!prefersReducedMotion)}>
+          {/* Heading - from left (same as ProductSection title) */}
+          <motion.div variants={fromLeft(!!prefersReducedMotion)}>
             <TwoToneHeading
               as="h1"
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-4 sm:mb-5 lg:mb-6 text-balance leading-[1.35] tracking-wide"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-5 sm:mb-6 lg:mb-8 text-balance leading-[1.35] tracking-wide"
             >
               <AnimateText k="hero.title" />
             </TwoToneHeading>
           </motion.div>
 
-          {/* Subtitle */}
+          {/* Subtitle - from right (same as ProductSection subtitle) */}
           <motion.p
-            variants={item(!!prefersReducedMotion)}
+            variants={fromRight(!!prefersReducedMotion)}
             className="text-base sm:text-lg lg:text-xl text-muted-foreground/95 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-10 text-pretty leading-relaxed"
           >
             <AnimateText k="hero.subtitle" />
           </motion.p>
 
-          {/* CTA Button */}
+          {/* CTA Button - from left */}
           <motion.div
-            variants={item(!!prefersReducedMotion)}
+            variants={fromLeft(!!prefersReducedMotion)}
             className="mb-8 sm:mb-10 lg:mb-12"
           >
             <Button
@@ -115,9 +124,9 @@ const HeroSection: React.FC = () => {
             </Button>
           </motion.div>
 
-          {/* Trust indicators - always horizontal, wrapping naturally */}
+          {/* Trust indicators - from right (same pattern as ProductSection) */}
           <motion.div
-            variants={item(!!prefersReducedMotion)}
+            variants={fromRight(!!prefersReducedMotion)}
             className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8"
           >
             <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 sm:px-5 sm:py-2 border border-primary/20">
@@ -151,11 +160,11 @@ const HeroSection: React.FC = () => {
         </motion.div>
       </div>
 
-      {/* Scroll indicator - fixed at bottom */}
+      {/* Scroll indicator - closer to content */}
       <button
         type="button"
         onClick={handleScrollToMap}
-        className="relative z-10 pb-4 sm:pb-6 mx-auto flex flex-col items-center gap-0.5 text-foreground/70 hover:text-foreground cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+        className="relative z-10 pt-2 pb-4 sm:pt-3 sm:pb-5 mx-auto flex flex-col items-center gap-0.5 text-foreground/70 hover:text-foreground cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
         aria-label="Scroll to location map"
       >
         <ChevronDown className="size-6 sm:size-7 animate-bounce" />
