@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { AnimateText } from '@/components/reusable/AnimateText';
 import { Logo } from '@/components';
@@ -10,6 +11,13 @@ import DarkToggle from '@/components/reusable/DarkToggle';
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,8 +41,13 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 min-w-[320px] transition-all duration-300 ${
+    <>
+      <motion.div
+        className="fixed inset-x-0 top-14 sm:top-16 lg:top-20 z-50 h-0.5 origin-top-left bg-primary"
+        style={{ scaleX }}
+      />
+      <nav
+        className={`fixed top-0 left-0 right-0 z-40 min-w-[320px] transition-all duration-300 ${
         isScrolled
           ? 'bg-background/95 backdrop-blur-md shadow-lg border-b border-border'
           : 'bg-transparent'
@@ -94,6 +107,7 @@ const Navbar: React.FC = () => {
         )}
       </div>
     </nav>
+    </>
   );
 };
 
