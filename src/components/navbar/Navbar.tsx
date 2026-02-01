@@ -34,23 +34,28 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 min-w-[320px] transition-all duration-300 ${
         isScrolled
           ? 'bg-background/95 backdrop-blur-md shadow-lg border-b border-border'
           : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center h-16 lg:h-20 w-full">
-          <div className="flex items-center shrink-0">
+      <div className="container mx-auto px-2 sm:px-4">
+        <div className="flex items-center h-14 sm:h-16 lg:h-20 w-full gap-1 sm:gap-2">
+          <div className="flex items-center shrink-0 min-w-0">
             <LanguageSelector />
           </div>
 
-          <div className="flex-1 flex justify-center min-w-0 px-2">
-            <Logo size="lg" />
+          <div className="flex-1 flex justify-center min-w-0 overflow-hidden px-1 sm:px-2">
+            <span className="max-[480px]:block min-[481px]:hidden shrink-0">
+              <Logo size="sm" className="shrink-0" />
+            </span>
+            <span className="max-[480px]:hidden min-[481px]:block shrink-0">
+              <Logo size="lg" className="shrink-0" />
+            </span>
           </div>
 
-          <div className="flex items-center gap-4 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 shrink-0 min-w-0">
             <div className="hidden lg:flex items-center gap-8">
               {navItems.map((item) => (
                 <button
@@ -64,11 +69,11 @@ const Navbar: React.FC = () => {
             </div>
             <DarkToggle />
             <button
-              className="lg:hidden cursor-pointer p-2"
+              className="lg:hidden cursor-pointer p-1.5 sm:p-2 shrink-0"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label={isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
