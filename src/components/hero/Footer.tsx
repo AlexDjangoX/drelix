@@ -29,9 +29,9 @@ const Footer: React.FC = () => {
       className="bg-secondary/50 border-t border-border"
     >
       <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+        <div className="grid sm:grid-cols-3 gap-8 mb-8">
           {/* Logo & Description */}
-          <div>
+          <div className="text-center sm:text-left flex flex-col items-center sm:items-start">
             <Link
               href="/"
               className="inline-block mb-4 cursor-pointer"
@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Quick Links - proper links for SEO, work from any page */}
-          <div>
+          <div className="text-center sm:text-left">
             <h4 className="font-bold text-foreground mb-4">
               <AnimateText k="footer.quickLinksTitle" />
             </h4>
@@ -68,11 +68,11 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Social Links */}
-          <div>
+          <div className="text-center sm:text-left">
             <h4 className="font-bold text-foreground mb-4">
               <AnimateText k="footer.followUs" />
             </h4>
-            <div className="flex gap-4">
+            <div className="flex gap-4 justify-center sm:justify-start">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
