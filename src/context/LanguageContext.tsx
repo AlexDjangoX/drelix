@@ -1,11 +1,6 @@
-"use client";
+'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-} from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 type Language = 'pl' | 'en';
 
@@ -178,14 +173,15 @@ const translations: Record<Language, Translations> = {
       phone: 'Telefon',
       email: 'Email',
       hours: 'Godziny otwarcia',
-      hoursValue: 'Pon-Pt: 8:00-17:00, Sob: 8:00-13:00',
+      hoursValue: 'Pn–Pt: 8:00–16:00\nSob: 9:00–12:00',
       form: {
         name: 'Imię i nazwisko',
         email: 'Email',
         message: 'Wiadomość',
         send: 'Wyślij wiadomość',
         success: 'Wiadomość została wysłana!',
-        error: 'Nie udało się wysłać. Spróbuj ponownie lub napisz na kontakt@drelix.pl.',
+        error:
+          'Nie udało się wysłać. Spróbuj ponownie lub napisz na annabadura7@gmail.com.',
         placeholderMessage: 'Twoja wiadomość...',
         sending: 'Wysyłanie...',
       },
@@ -295,14 +291,15 @@ const translations: Record<Language, Translations> = {
       phone: 'Phone',
       email: 'Email',
       hours: 'Opening Hours',
-      hoursValue: 'Mon-Fri: 8:00-17:00, Sat: 8:00-13:00',
+      hoursValue: 'Sun: closed\nMon–Fri: 8 am–4 pm\nSat: 9 am–12 pm',
       form: {
         name: 'Full name',
         email: 'Email',
         message: 'Message',
         send: 'Send Message',
         success: 'Message sent successfully!',
-        error: 'Something went wrong. Please try again or email kontakt@drelix.pl.',
+        error:
+          'Something went wrong. Please try again or email annabadura7@gmail.com.',
         placeholderMessage: 'Your message...',
         sending: 'Sending...',
       },

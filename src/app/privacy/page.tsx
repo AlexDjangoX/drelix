@@ -41,10 +41,10 @@ export default function PrivacyPage() {
               </h2>
               <p>
                 Administratorem Twoich danych osobowych jest <strong>Drelix</strong> (odzież robocza i ochronna),
-                ul. Emila Zegadłowicza 43, 34-100 Wadowice, Polska.
+                Emila Zegadłowicza 43, 34-100 Wadowice, Polska.
               </p>
               <p>
-                Kontakt: e-mail <a href="mailto:kontakt@drelix.pl">kontakt@drelix.pl</a>, telefon +48 123 456 789.
+                Kontakt: e-mail <a href="mailto:annabadura7@gmail.com">annabadura7@gmail.com</a>, telefon +48 725 695 933.
               </p>
             </section>
 
@@ -107,7 +107,7 @@ export default function PrivacyPage() {
                 <a href="https://uodo.gov.pl" target="_blank" rel="noopener noreferrer">uodo.gov.pl</a>.
               </p>
               <p>
-                W sprawach danych osobowych pisz na: <a href="mailto:kontakt@drelix.pl">kontakt@drelix.pl</a>.
+                W sprawach danych osobowych pisz na: <a href="mailto:annabadura7@gmail.com">annabadura7@gmail.com</a>.
               </p>
             </section>
 

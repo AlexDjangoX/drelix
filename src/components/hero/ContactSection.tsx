@@ -10,9 +10,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 const contactInfoItems = [
-  { icon: MapPin, labelKey: 'contact.address' as const, value: 'ul. Emila Zegadłowicza 43\n34-100 Wadowice' },
-  { icon: Phone, labelKey: 'contact.phone' as const, value: '+48 123 456 789' },
-  { icon: Mail, labelKey: 'contact.email' as const, value: 'kontakt@drelix.pl' },
+  { icon: MapPin, labelKey: 'contact.address' as const, value: 'Emila Zegadłowicza 43\n34-100 Wadowice' },
+  { icon: Phone, labelKey: 'contact.phone' as const, value: '+48 725 695 933' },
+  { icon: Mail, labelKey: 'contact.email' as const, value: 'annabadura7@gmail.com' },
   { icon: Clock, labelKey: 'contact.hours' as const, valueKey: 'contact.hoursValue' as const },
 ];
 

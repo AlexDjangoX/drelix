@@ -11,6 +11,7 @@ const socialLinks = [
     icon: Facebook,
     href: 'https://www.facebook.com/p/Drelix-Odzie%C5%BC-Robocza-100082156284599/',
     label: 'Facebook',
+    className: 'text-[#1877F2] hover:bg-[#1877F2]/10 hover:text-[#1877F2]',
   },
 ];
 
@@ -31,13 +32,17 @@ const Footer: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Logo & Description */}
           <div>
-            <Link href="/" className="inline-block mb-4 cursor-pointer" aria-label="Drelix - strona główna">
+            <Link
+              href="/"
+              className="inline-block mb-4 cursor-pointer"
+              aria-label="Drelix - strona główna"
+            >
               <Logo size="md" />
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Odzież Robocza Drelix
               <br />
-              ul. Emila Zegadłowicza 43
+              Emila Zegadłowicza 43
               <br />
               34-100 Wadowice
             </p>
@@ -73,7 +78,7 @@ const Footer: React.FC = () => {
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                  className={`w-10 h-10 rounded-lg bg-secondary flex items-center justify-center transition-colors cursor-pointer ${'className' in social && social.className ? social.className : 'text-muted-foreground hover:text-primary hover:bg-primary/10'}`}
                 >
                   <social.icon size={20} />
                 </a>
