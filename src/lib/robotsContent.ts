@@ -87,9 +87,12 @@ export function getRobotsTxt(baseUrl: string): string {
 # ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF
 # RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT
 # AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.
+# (Content-signal is not in RFC 9309; omitted so Google validates. AI bots blocked below.)
 
 User-agent: *
-Content-signal: search=yes, ai-train=no, ai-input=no
+Allow: /
+Disallow: /api/
+Disallow: /admin/
 
 # ===========================================
 # SEARCH ENGINE CRAWLERS – ALLOWED (SEO)
