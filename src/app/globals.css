@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+/* Montserrat loaded via next/font in layout.tsx (no render-blocking @import) */
 @import "tw-animate-css";
 @import "tailwindcss";
 
@@ -96,7 +96,7 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-montserrat), ui-sans-serif, sans-serif;
   }
 }
 
