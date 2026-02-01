@@ -2,7 +2,7 @@
  * Thumbnail images in /public/thumbnails. Filenames match category slugs.
  * Used for hero background and product category cards (homepage).
  */
-import type { CategorySlug } from '@/data/catalogCategories';
+import type { CategorySlug } from '@/lib/types';
 
 /** Slugs that have a thumbnail in /thumbnails (name matches slug; .png or .jpeg). */
 const THUMBNAIL_PATHS: Partial<Record<CategorySlug, string>> = {

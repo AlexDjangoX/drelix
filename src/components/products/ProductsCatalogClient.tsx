@@ -4,7 +4,7 @@ import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import { Loader2 } from 'lucide-react';
 import CatalogClient from '@/components/products/CatalogClient';
-import { CatalogSection } from '@/lib/catalogCategorize';
+import type { CatalogSection } from '@/lib/types';
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 
 function mapConvexSectionsToCatalog(
@@ -20,6 +20,8 @@ function mapConvexSectionsToCatalog(
     items: items.map((row) => ({
       ...row,
       imageUrl: row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
+      thumbnailUrl:
+        row.thumbnailUrl || row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
     })),
   }));
 }

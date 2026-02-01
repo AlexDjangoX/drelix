@@ -38,12 +38,17 @@ export const listCatalogSections = query({
         .withIndex("by_category", (q) => q.eq("categorySlug", cat.slug))
         .collect();
       const items = await Promise.all(products.map(async (p) => {
-        const { _id, _creationTime, imageStorageId, ...rest } = p;
-        const imageUrl = imageStorageId ? await ctx.storage.getUrl(imageStorageId) : null;
-        return { 
-          ...rest, 
-          imageStorageId: imageStorageId ?? "", 
-          imageUrl: imageUrl ?? "" 
+        const { _id, _creationTime, imageStorageId, thumbnailStorageId, ...rest } = p;
+        const [imageUrl, thumbnailUrl] = await Promise.all([
+          imageStorageId ? ctx.storage.getUrl(imageStorageId) : null,
+          thumbnailStorageId ? ctx.storage.getUrl(thumbnailStorageId) : null,
+        ]);
+        return {
+          ...rest,
+          imageStorageId: imageStorageId ?? "",
+          imageUrl: imageUrl ?? "",
+          thumbnailStorageId: thumbnailStorageId ?? "",
+          thumbnailUrl: thumbnailUrl ?? "",
         } as Record<string, string>;
       }));
       if (items.length > 0) {
@@ -73,12 +78,17 @@ export const getCatalogSection = query({
       .withIndex("by_category", (q) => q.eq("categorySlug", slug))
       .collect();
     const items = await Promise.all(products.map(async (p) => {
-      const { _id, _creationTime, imageStorageId, ...rest } = p;
-      const imageUrl = imageStorageId ? await ctx.storage.getUrl(imageStorageId) : null;
-      return { 
-        ...rest, 
-        imageStorageId: imageStorageId ?? "", 
-        imageUrl: imageUrl ?? "" 
+      const { _id, _creationTime, imageStorageId, thumbnailStorageId, ...rest } = p;
+      const [imageUrl, thumbnailUrl] = await Promise.all([
+        imageStorageId ? ctx.storage.getUrl(imageStorageId) : null,
+        thumbnailStorageId ? ctx.storage.getUrl(thumbnailStorageId) : null,
+      ]);
+      return {
+        ...rest,
+        imageStorageId: imageStorageId ?? "",
+        imageUrl: imageUrl ?? "",
+        thumbnailStorageId: thumbnailStorageId ?? "",
+        thumbnailUrl: thumbnailUrl ?? "",
       } as Record<string, string>;
     }));
     return { slug: cat.slug, titleKey: cat.titleKey, items };
@@ -99,7 +109,7 @@ export const updateProduct = mutation({
     if (!product) throw new Error(`Product not found: ${kod}`);
     const allowedKeys = new Set([
       "Rodzaj", "JednostkaMiary", "StawkaVAT", "Kod", "Nazwa",
-      "CenaNetto", "KodKlasyfikacji", "Uwagi", "OstatniaCenaZakupu", "OstatniaDataZakupu", "categorySlug", "imageStorageId"
+      "CenaNetto", "KodKlasyfikacji", "Uwagi", "OstatniaCenaZakupu", "OstatniaDataZakupu", "categorySlug", "imageStorageId", "thumbnailStorageId"
     ]);
     const patch: Record<string, string> = {};
     for (const [k, v] of Object.entries(updates)) {
@@ -120,25 +130,51 @@ export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
 
-/** Update a product's image storage ID. */
+/** Update a product's image storage IDs (large + optional thumbnail). */
 export const updateProductImage = mutation({
   args: {
     kod: v.string(),
     storageId: v.string(),
+    thumbnailStorageId: v.optional(v.string()),
   },
-  handler: async (ctx, { kod, storageId }) => {
+  handler: async (ctx, { kod, storageId, thumbnailStorageId }) => {
     const product = await ctx.db
       .query("products")
       .withIndex("by_kod", (q) => q.eq("Kod", kod))
       .unique();
     if (!product) throw new Error(`Product not found: ${kod}`);
-    
-    // Delete old image if it exists
-    if (product.imageStorageId) {
-      await ctx.storage.delete(product.imageStorageId);
-    }
-    
-    await ctx.db.patch(product._id, { imageStorageId: storageId });
+
+    const toDelete: string[] = [];
+    if (product.imageStorageId) toDelete.push(product.imageStorageId);
+    if (product.thumbnailStorageId) toDelete.push(product.thumbnailStorageId);
+    await Promise.all(toDelete.map((id) => ctx.storage.delete(id)));
+
+    const patch: { imageStorageId: string; thumbnailStorageId?: string } = { imageStorageId: storageId };
+    if (thumbnailStorageId !== undefined) patch.thumbnailStorageId = thumbnailStorageId;
+    await ctx.db.patch(product._id, patch);
+    return { ok: true };
+  },
+});
+
+/** Remove a product's images (large + thumbnail) from storage and clear IDs. */
+export const clearProductImage = mutation({
+  args: { kod: v.string() },
+  handler: async (ctx, { kod }) => {
+    const product = await ctx.db
+      .query("products")
+      .withIndex("by_kod", (q) => q.eq("Kod", kod))
+      .unique();
+    if (!product) throw new Error(`Product not found: ${kod}`);
+
+    const toDelete: string[] = [];
+    if (product.imageStorageId) toDelete.push(product.imageStorageId);
+    if (product.thumbnailStorageId) toDelete.push(product.thumbnailStorageId);
+    await Promise.all(toDelete.map((id) => ctx.storage.delete(id)));
+
+    await ctx.db.patch(product._id, {
+      imageStorageId: undefined,
+      thumbnailStorageId: undefined,
+    });
     return { ok: true };
   },
 });

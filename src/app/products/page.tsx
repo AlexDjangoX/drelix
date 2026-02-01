@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ProductsCatalogClient from '@/components/products/ProductsCatalogClient';
-import { PRODUCT_SLUGS, productConfig } from '@/components/products/productConfig';
+import { CatalogItemListJsonLd } from '@/components/products/CatalogItemListJsonLd';
 import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
@@ -37,32 +37,6 @@ export const metadata: Metadata = {
     description: catalogDescription,
   },
 };
-
-function CatalogItemListJsonLd() {
-  const itemListSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: catalogTitle,
-    description: catalogDescription,
-    numberOfItems: PRODUCT_SLUGS.length,
-    itemListElement: PRODUCT_SLUGS.map((slug, index) => {
-      const config = productConfig[slug as keyof typeof productConfig];
-      return {
-        '@type': 'ListItem',
-        position: index + 1,
-        name: config?.metadata.title ?? slug,
-        url: `${siteUrl}/products/${slug}`,
-      };
-    }),
-  };
-  const json = JSON.stringify(itemListSchema).replace(/</g, '\\u003c');
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: json }}
-    />
-  );
-}
 
 export default function ProductsCatalogPage() {
   return (

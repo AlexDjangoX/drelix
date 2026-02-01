@@ -1,44 +1,66 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Loader2, Lock } from "lucide-react";
-import { toast } from "sonner";
+import { useActionState, useEffect, useEffectEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
+import { LoginSubmitButton } from '@/components/admin';
+import { Lock } from 'lucide-react';
+import { toast } from 'sonner';
+
+type LoginState = { success: boolean; error: string | null } | null;
+
+async function submitLogin(
+  _prev: LoginState,
+  formData: FormData
+): Promise<LoginState> {
+  const password = (formData.get('password') as string) ?? '';
+
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok) {
+      return { success: true, error: null };
+    }
+    return {
+      success: false,
+      error: (data.error as string) || 'Błąd logowania',
+    };
+  } catch {
+    return { success: false, error: 'Wystąpił błąd sieciowy' };
+  }
+}
 
 export default function AdminLoginPage() {
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [state, formAction] = useActionState(submitLogin, null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        toast.success("Zalogowano pomyślnie");
-        router.push("/admin");
-        router.refresh();
-      } else {
-        toast.error(data.error || "Błąd logowania");
-      }
-    } catch (error) {
-      toast.error("Wystąpił błąd sieciowy");
-    } finally {
-      setLoading(false);
+  const onStateChange = useEffectEvent(() => {
+    if (!state) return;
+    if (state.success) {
+      toast.success('Zalogowano pomyślnie');
+      router.push('/admin');
+      router.refresh();
+    } else if (state.error) {
+      toast.error(state.error);
     }
-  };
+  });
+
+  useEffect(() => {
+    if (!state) return;
+    onStateChange();
+  }, [state]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
@@ -55,27 +77,17 @@ export default function AdminLoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form action={formAction} className="space-y-4">
             <div className="space-y-2">
               <Input
                 type="password"
+                name="password"
                 placeholder="Hasło"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
                 autoFocus
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Logowanie...
-                </>
-              ) : (
-                "Zaloguj"
-              )}
-            </Button>
+            <LoginSubmitButton />
           </form>
         </CardContent>
       </Card>

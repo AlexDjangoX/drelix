@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useEffectEvent } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, useScroll, useSpring } from 'framer-motion';
@@ -29,33 +29,33 @@ function Navbar() {
     restDelta: 0.001,
   });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+  const onScroll = useEffectEvent(() => {
+    setIsScrolled(window.scrollY > 50);
 
-      if (!isHome) return;
+    if (!isHome) return;
 
-      const sections = SECTION_IDS.map((id) => ({
-        id,
-        el: document.querySelector(id),
-      })).filter((s): s is { id: string; el: Element } => s.el != null);
+    const sections = SECTION_IDS.map((id) => ({
+      id,
+      el: document.querySelector(id),
+    })).filter((s): s is { id: string; el: Element } => s.el != null);
 
-      let current: string = SECTION_IDS[0];
-      for (const { id, el } of sections) {
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= SCROLL_SPY_OFFSET && rect.bottom >= SCROLL_SPY_OFFSET) {
-          current = id;
-          break;
-        }
-        if (rect.top < SCROLL_SPY_OFFSET) current = id;
+    let current: string = SECTION_IDS[0];
+    for (const { id, el } of sections) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= SCROLL_SPY_OFFSET && rect.bottom >= SCROLL_SPY_OFFSET) {
+        current = id;
+        break;
       }
-      setActiveSection(current);
-    };
+      if (rect.top < SCROLL_SPY_OFFSET) current = id;
+    }
+    setActiveSection(current);
+  });
 
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isHome]);
+  useEffect(() => {
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const navItems = [
     { key: 'nav.about', href: '#about' },
@@ -83,33 +83,75 @@ function Navbar() {
             : 'bg-transparent'
         )}
       >
-      <div className="container mx-auto px-2 sm:px-4">
-        <div className="flex items-center h-14 sm:h-16 lg:h-20 w-full gap-1 sm:gap-2">
-          <div className="flex items-center shrink-0 min-w-0">
-            <LanguageSelector />
+        <div className="container mx-auto px-2 sm:px-4">
+          <div className="flex items-center h-14 sm:h-16 lg:h-20 w-full gap-1 sm:gap-2">
+            <div className="flex items-center shrink-0 min-w-0">
+              <LanguageSelector />
+            </div>
+
+            <div className="flex-1 flex justify-center min-w-0 overflow-hidden px-1 sm:px-2">
+              <span className="max-[480px]:block min-[481px]:hidden shrink-0">
+                <Logo size="sm" className="shrink-0" />
+              </span>
+              <span className="max-[480px]:hidden min-[481px]:block shrink-0">
+                <Logo size="lg" className="shrink-0" />
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 shrink-0 min-w-0">
+              <div className="hidden lg:flex items-center gap-8">
+                {navItems.map((item) =>
+                  isHome ? (
+                    <button
+                      key={item.href}
+                      onClick={() => handleNavClick(item.href)}
+                      className={cn(
+                        'cursor-pointer transition-colors font-medium uppercase border-b-2 border-transparent pb-0.5',
+                        activeSection === item.href
+                          ? 'text-primary border-primary'
+                          : 'text-foreground/80 hover:text-primary'
+                      )}
+                    >
+                      <AnimateText k={item.key} />
+                    </button>
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={`/${item.href}`}
+                      className={cn(
+                        'transition-colors font-medium uppercase border-b-2 border-transparent pb-0.5',
+                        'text-foreground/80 hover:text-primary'
+                      )}
+                    >
+                      <AnimateText k={item.key} />
+                    </Link>
+                  )
+                )}
+              </div>
+              <DarkToggle />
+              <button
+                className="lg:hidden cursor-pointer p-1.5 sm:p-2 shrink-0"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
+              >
+                {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
 
-          <div className="flex-1 flex justify-center min-w-0 overflow-hidden px-1 sm:px-2">
-            <span className="max-[480px]:block min-[481px]:hidden shrink-0">
-              <Logo size="sm" className="shrink-0" />
-            </span>
-            <span className="max-[480px]:hidden min-[481px]:block shrink-0">
-              <Logo size="lg" className="shrink-0" />
-            </span>
-          </div>
-
-          <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 shrink-0 min-w-0">
-            <div className="hidden lg:flex items-center gap-8">
+          {/* Mobile Menu (hamburger visible below lg / 1024px) */}
+          {isMobileMenuOpen && (
+            <div className="lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
               {navItems.map((item) =>
                 isHome ? (
                   <button
                     key={item.href}
                     onClick={() => handleNavClick(item.href)}
                     className={cn(
-                      'cursor-pointer transition-colors font-medium uppercase border-b-2 border-transparent pb-0.5',
+                      'block w-full cursor-pointer text-left py-3 px-4 transition-colors font-medium uppercase border-b-2 border-transparent',
                       activeSection === item.href
-                        ? 'text-primary border-primary'
-                        : 'text-foreground/80 hover:text-primary'
+                        ? 'text-primary bg-primary/10 border-primary'
+                        : 'text-foreground/80 hover:text-primary hover:bg-secondary/50'
                     )}
                   >
                     <AnimateText k={item.key} />
@@ -118,59 +160,17 @@ function Navbar() {
                   <Link
                     key={item.href}
                     href={`/${item.href}`}
-                    className={cn(
-                      'transition-colors font-medium uppercase border-b-2 border-transparent pb-0.5',
-                      'text-foreground/80 hover:text-primary'
-                    )}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block w-full text-left py-3 px-4 transition-colors font-medium uppercase border-b-2 border-transparent text-foreground/80 hover:text-primary hover:bg-secondary/50"
                   >
                     <AnimateText k={item.key} />
                   </Link>
                 )
               )}
             </div>
-            <DarkToggle />
-            <button
-              className="lg:hidden cursor-pointer p-1.5 sm:p-2 shrink-0"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
-            >
-              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
-          </div>
+          )}
         </div>
-
-        {/* Mobile Menu (hamburger visible below lg / 1024px) */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-border bg-background/95 backdrop-blur-md">
-            {navItems.map((item) =>
-              isHome ? (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavClick(item.href)}
-                  className={cn(
-                    'block w-full cursor-pointer text-left py-3 px-4 transition-colors font-medium uppercase border-b-2 border-transparent',
-                    activeSection === item.href
-                      ? 'text-primary bg-primary/10 border-primary'
-                      : 'text-foreground/80 hover:text-primary hover:bg-secondary/50'
-                  )}
-                >
-                  <AnimateText k={item.key} />
-                </button>
-              ) : (
-                <Link
-                  key={item.href}
-                  href={`/${item.href}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-left py-3 px-4 transition-colors font-medium uppercase border-b-2 border-transparent text-foreground/80 hover:text-primary hover:bg-secondary/50"
-                >
-                  <AnimateText k={item.key} />
-                </Link>
-              )
-            )}
-          </div>
-        )}
-      </div>
-    </nav>
+      </nav>
     </>
   );
 }

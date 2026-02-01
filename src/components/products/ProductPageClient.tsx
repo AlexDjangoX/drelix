@@ -1,17 +1,20 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import {
+  useState,
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, X, Loader2 } from 'lucide-react';
 import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
-import {
-  productConfig,
-  type ProductSlug,
-  type ProductItem,
-} from '@/components/products/productConfig';
+import { productConfig } from '@/components/products/productConfig';
+import type { ProductItem, ProductSlug } from '@/lib/types';
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
@@ -25,11 +28,12 @@ export default function ProductPageClient({ slug }: Props) {
   const { titleKey } = productConfig[slug];
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const items: ProductItem[] = React.useMemo(() => {
+  const items: ProductItem[] = useMemo(() => {
     if (!sectionFromConvex) return [];
     return sectionFromConvex.items.map((row) => ({
       id: row[COD] ?? '',
-      src: row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
+      src: row.thumbnailUrl || row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
+      largeSrc: row.imageUrl || row.thumbnailUrl || PLACEHOLDER_PRODUCT_IMAGE,
       name: row.Nazwa ?? '',
       price: row.CenaNetto ?? '',
       unit: row.JednostkaMiary ?? '',
@@ -52,16 +56,17 @@ export default function ProductPageClient({ slug }: Props) {
     setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length));
   }, [items.length]);
 
+  const onKeydown = useEffectEvent((e: KeyboardEvent) => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') goPrev();
+    if (e.key === 'ArrowRight') goNext();
+  });
+
   useEffect(() => {
     if (lightboxIndex === null) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowLeft') goPrev();
-      if (e.key === 'ArrowRight') goNext();
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [lightboxIndex, closeLightbox, goPrev, goNext]);
+    window.addEventListener('keydown', onKeydown);
+    return () => window.removeEventListener('keydown', onKeydown);
+  }, [lightboxIndex]);
 
   useEffect(() => {
     if (lightboxIndex !== null) {
@@ -222,7 +227,7 @@ export default function ProductPageClient({ slug }: Props) {
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={items[lightboxIndex].src}
+              src={items[lightboxIndex].largeSrc}
               alt={items[lightboxIndex].name}
               fill
               sizes="90vw"

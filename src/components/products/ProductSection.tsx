@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion, useInView } from 'framer-motion';
@@ -24,7 +24,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
 import { CATEGORY_SLUGS, CATEGORY_TITLE_KEYS } from '@/data/catalogCategories';
 import { getThumbnailPath } from '@/lib/thumbnails';
-import type { CategorySlug } from '@/data/catalogCategories';
+import type { CategorySlug } from '@/lib/types';
 
 const SLIDE_DISTANCE = 56;
 const ease = [0.25, 0.46, 0.45, 0.94] as const;
@@ -120,8 +120,8 @@ const CATEGORY_ICONS: LucideIcon[] = [
 ];
 
 const ProductsSection: React.FC = () => {
-  const sectionRef = React.useRef<HTMLDivElement>(null);
-  const gridRef = React.useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.05 });
   const isGridInView = useInView(gridRef, { once: false, amount: 0.08 });
   const prefersReducedMotion = useReducedMotion();
@@ -179,30 +179,30 @@ const ProductsSection: React.FC = () => {
                   className="block h-full min-h-0"
                 >
                   <Card className={cardClassName}>
-                  <CardContent className="p-6">
-                    <div
-                      className={`aspect-square rounded-xl mb-4 overflow-hidden bg-linear-to-br ${color} flex items-center justify-center group-hover:scale-105 transition-transform relative`}
-                    >
-                      {thumbnailPath ? (
-                        <Image
-                          src={thumbnailPath}
-                          alt=""
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                        />
-                      ) : (
-                        <Icon
-                          size={40}
-                          className="text-foreground group-hover:text-primary transition-colors"
-                        />
-                      )}
-                    </div>
-                    <h3 className="text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors">
-                      <AnimateText k={titleKey} />
-                    </h3>
-                  </CardContent>
-                </Card>
+                    <CardContent className="p-6">
+                      <div
+                        className={`aspect-square rounded-xl mb-4 overflow-hidden bg-linear-to-br ${color} flex items-center justify-center group-hover:scale-105 transition-transform relative`}
+                      >
+                        {thumbnailPath ? (
+                          <Image
+                            src={thumbnailPath}
+                            alt=""
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                          />
+                        ) : (
+                          <Icon
+                            size={40}
+                            className="text-foreground group-hover:text-primary transition-colors"
+                          />
+                        )}
+                      </div>
+                      <h3 className="text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors">
+                        <AnimateText k={titleKey} />
+                      </h3>
+                    </CardContent>
+                  </Card>
                 </Link>
               </motion.div>
             );

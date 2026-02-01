@@ -14,7 +14,8 @@ const productFields = {
   OstatniaCenaZakupu: v.string(),
   OstatniaDataZakupu: v.string(),
   categorySlug: v.string(),
-  imageStorageId: v.optional(v.string()), // Store the storageId from Convex
+  imageStorageId: v.optional(v.string()), // Large image (lightbox, hero)
+  thumbnailStorageId: v.optional(v.string()), // Small image (grids, lists)
 };
 
 export default defineSchema({

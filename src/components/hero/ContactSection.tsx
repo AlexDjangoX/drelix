@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
+import React, { useActionState, useEffect, useEffectEvent } from 'react';
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLanguage } from '@/context/LanguageContext';
 import { AnimateText, TwoToneHeading } from '@/components';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { ContactSubmitButton } from '@/components/hero/ContactSubmitButton';
 
 const contactInfoItems = [
   {
@@ -28,45 +28,57 @@ const contactInfoItems = [
   },
 ];
 
+type ContactState = { error: string | null; success: boolean } | null;
+
+async function submitContact(
+  _prev: ContactState,
+  formData: FormData
+): Promise<ContactState> {
+  const name = (formData.get('name') as string)?.trim() ?? '';
+  const email = (formData.get('email') as string)?.trim() ?? '';
+  const message = (formData.get('message') as string)?.trim() ?? '';
+
+  if (!name || !email || !message) {
+    return { error: 'Name, email and message are required', success: false };
+  }
+
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message }),
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      return {
+        error: (data.error as string) || 'Failed to send',
+        success: false,
+      };
+    }
+    return { error: null, success: true };
+  } catch {
+    return { error: 'Network error', success: false };
+  }
+}
+
 const ContactSection: React.FC = () => {
   const { t } = useLanguage();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+  const [state, formAction] = useActionState(submitContact, null);
+
+  const onStateChange = useEffectEvent(() => {
+    if (!state) return;
+    if (state.success) {
+      toast.success(t.contact.form.success);
+    } else if (state.error) {
+      toast.error(state.error);
+    }
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        }),
-      });
-
-      await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        toast.error(t.contact.form.error);
-        return;
-      }
-
-      toast.success(t.contact.form.success);
-      setFormData({ name: '', email: '', message: '' });
-    } catch {
-      toast.error(t.contact.form.error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  useEffect(() => {
+    if (!state) return;
+    onStateChange();
+  }, [state]);
 
   return (
     <section id="contact" className="py-20 md:py-32">
@@ -84,12 +96,9 @@ const ContactSection: React.FC = () => {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          {/* Main Grid: stacks on mobile, side-by-side on lg+ */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-stretch">
-            {/* Left Column: Map (priority) + Contact Info */}
             <div className="flex flex-col gap-5">
-              {/* Google Maps Embed - prominent placement */}
-              <div className="rounded-xl overflow-hidden border border-border shadow-card min-h-[280px] md:min-h-[320px] lg:flex-1 lg:min-h-[360px]">
+              <div className="rounded-xl overflow-hidden border border-border shadow-card min-h-70 md:min-h-80 lg:flex-1 lg:min-h-90">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2571.5!2d19.4895!3d49.8833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716900d8dc43f2b%3A0x9c8f5a3f9a0d7c8e!2sul.%20Emila%20Zegad%C5%82owicza%2043%2C%2034-100%20Wadowice%2C%20Poland!5e0!3m2!1sen!2spl!4v1234567890"
                   width="100%"
@@ -102,7 +111,6 @@ const ContactSection: React.FC = () => {
                 />
               </div>
 
-              {/* Contact Info Cards - stacked on mobile, 2x2 on sm+ */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {contactInfoItems.map((info, index) => (
                   <div
@@ -131,10 +139,10 @@ const ContactSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Contact Form */}
             <div className="bg-card rounded-2xl p-6 md:p-8 border border-border shadow-card h-fit lg:h-full flex flex-col">
               <form
-                onSubmit={handleSubmit}
+                action={formAction}
+                key={state?.success ? 'submitted' : 'form'}
                 className="flex flex-col gap-5 flex-1"
               >
                 <div>
@@ -143,10 +151,7 @@ const ContactSection: React.FC = () => {
                   </label>
                   <Input
                     type="text"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+                    name="name"
                     required
                     className="bg-secondary/50 border-border focus:border-primary"
                     placeholder="Jan Kowalski"
@@ -159,48 +164,26 @@ const ContactSection: React.FC = () => {
                   </label>
                   <Input
                     type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
+                    name="email"
                     required
                     className="bg-secondary/50 border-border focus:border-primary"
                     placeholder="jan@example.com"
                   />
                 </div>
 
-                <div className="flex flex-col flex-1 min-h-[120px]">
+                <div className="flex flex-col flex-1 min-h-30">
                   <label className="block text-sm font-medium mb-2 text-foreground">
                     <AnimateText k="contact.form.message" />
                   </label>
                   <Textarea
-                    value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
+                    name="message"
                     required
                     className="bg-secondary/50 border-border focus:border-primary resize-none flex-1 min-h-[120px]"
                     placeholder={t.contact.form.placeholderMessage}
                   />
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-gradient-primary text-primary-foreground font-bold py-6 rounded-xl hover:scale-[1.02] transition-transform disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <AnimateText k="contact.form.sending" />
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <Send size={18} />
-                      <AnimateText k="contact.form.send" />
-                    </span>
-                  )}
-                </Button>
+                <ContactSubmitButton />
               </form>
             </div>
           </div>

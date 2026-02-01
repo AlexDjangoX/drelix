@@ -10,7 +10,7 @@ import { LanguageProvider } from '@/context/LanguageContext';
 import { JsonLd } from '@/components/JsonLd';
 import { ConvexClientProvider } from '@/context/ConvexClientProvider';
 import { getCanonicalBaseUrl } from '@/lib/seo';
-import './globals.css';
+import '@/app/globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
