@@ -52,12 +52,12 @@ const HeroSection: React.FC = () => {
       />
 
       {/* Main content area - flex-1 to fill available space, centered */}
-      <div className="relative z-10 flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32">
+      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-8 lg:px-12 xl:px-16 py-20 sm:py-24 lg:py-32">
         <div className="w-full max-w-4xl mx-auto text-center">
           {/* Heading */}
           <TwoToneHeading
             as="h1"
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-4 sm:mb-5 lg:mb-6 animate-fade-in text-balance"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-4 sm:mb-5 lg:mb-6 animate-fade-in text-balance leading-[1.35] tracking-wide"
             style={{ animationDelay: '0.2s' }}
           >
             <AnimateText k="hero.title" />
@@ -65,7 +65,7 @@ const HeroSection: React.FC = () => {
 
           {/* Subtitle */}
           <p
-            className="text-base sm:text-lg lg:text-xl text-muted-foreground/95 max-w-2xl mx-auto mb-6 sm:mb-8 lg:mb-10 animate-fade-in text-pretty leading-relaxed"
+            className="text-base sm:text-lg lg:text-xl text-muted-foreground/95 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-10 animate-fade-in text-pretty leading-relaxed"
             style={{ animationDelay: '0.4s' }}
           >
             <AnimateText k="hero.subtitle" />
@@ -87,10 +87,10 @@ const HeroSection: React.FC = () => {
 
           {/* Trust indicators - always horizontal, wrapping naturally */}
           <div
-            className="flex flex-wrap justify-center gap-2 sm:gap-3 animate-fade-in"
+            className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8 animate-fade-in"
             style={{ animationDelay: '0.8s' }}
           >
-            <div className="flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 sm:px-4 sm:py-2 border border-primary/20">
+            <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 sm:px-5 sm:py-2 border border-primary/20">
               <Shield
                 className="shrink-0 text-primary size-4 sm:size-5"
                 strokeWidth={2}
@@ -99,7 +99,7 @@ const HeroSection: React.FC = () => {
                 <AnimateText k="hero.trust1" />
               </span>
             </div>
-            <div className="flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 sm:px-4 sm:py-2 border border-primary/20">
+            <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 sm:px-5 sm:py-2 border border-primary/20">
               <HardHat
                 className="shrink-0 text-primary size-4 sm:size-5"
                 strokeWidth={2}
@@ -108,7 +108,7 @@ const HeroSection: React.FC = () => {
                 <AnimateText k="hero.trust2" />
               </span>
             </div>
-            <div className="flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 sm:px-4 sm:py-2 border border-primary/20">
+            <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 sm:px-5 sm:py-2 border border-primary/20">
               <Glasses
                 className="shrink-0 text-primary size-4 sm:size-5"
                 strokeWidth={2}
