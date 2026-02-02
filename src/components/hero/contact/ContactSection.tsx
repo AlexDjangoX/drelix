@@ -7,7 +7,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { AnimateText, TwoToneHeading } from '@/components';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ContactSubmitButton } from '@/components/hero/ContactSubmitButton';
+import { ContactSubmitButton } from '@/components/hero/contact/ContactSubmitButton';
 
 const contactInfoItems = [
   {
