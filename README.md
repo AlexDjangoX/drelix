@@ -6,6 +6,50 @@
 
 ---
 
+## Executive Summary
+
+**What this site is:**
+
+- Informational website for a brick-and-mortar workwear supplier
+- Product catalog managed via admin interface (Convex backend)
+- SEO-optimized for local discovery in Polish market
+
+**What it is not:**
+
+- Not an e-commerce platform (no online transactions)
+- Not targeting international markets (Polish-language SEO only)
+- Not a progressive web app (standard responsive website)
+
+**Success criteria:**
+
+- Google Search Console indexing of all public pages
+- Lighthouse mobile score >90
+- Admin product management workflow operational
+- Legal compliance (GDPR, Polish consumer law)
+
+**Intentionally out of scope:**
+
+- Multi-language SEO (English is UI-only, not indexed)
+- Online payment processing
+- User accounts or authentication (except admin)
+- Real-time inventory tracking
+
+---
+
+## Who This Document Is For
+
+**Developers** – Architecture decisions, file locations, implementation details (see: SEO Reference, Project Structure)
+
+**SEO Specialists** – Technical SEO audit, structured data, performance metrics (see: SEO Reference sections 1-8)
+
+**Business Stakeholders** – Goals, success metrics, legal compliance (see: Executive Summary, What We Set Out to Achieve)
+
+**Auditors** – Verification methods, measurable outcomes, legal pages (see: Verification & Monitoring, Legal Pages)
+
+**Future Maintainers** – Quick reference, operational risks, update expectations (see: Quick Reference, Operational Risks)
+
+---
+
 ## What We Set Out to Achieve
 
 1. **SEO as a core requirement** – Not an afterthought. Metadata, sitemap, robots.txt, structured data, internal linking, and performance optimization built into the architecture.
@@ -69,7 +113,10 @@ This section documents concrete SEO implementations with file locations and tech
 - Crawl policy:
   - Allow: `User-agent: *` on public routes
   - Disallow: `/api/`, `/admin/`, `/_next/`
-  - Blocks AI scrapers: `User-agent: GPTBot`, `CCBot`, `ChatGPT-User`, `Google-Extended`
+  - Blocks AI training crawlers: `User-agent: GPTBot`, `CCBot`, `ChatGPT-User`, `Google-Extended`
+
+**Rationale:** Business decision to restrict content use in AI training datasets while remaining discoverable in traditional search. Policy is reversible by modifying `src/lib/robotsContent.ts`. No expected downside for human-initiated AI discovery (users can still paste URLs into ChatGPT).
+
 - References sitemap: `Sitemap: https://drelix.org/sitemap.xml`
 - Accessible at: `https://drelix.org/robots.txt`
 
@@ -225,7 +272,7 @@ Search engines favor accessible sites. Implementations:
 - Lighthouse Mobile: 91/100 (Performance)
 - Initial JavaScript bundle: Reduced from ~250 KiB unused to <100 KiB
 - LCP: Hero image loads in ~1.5s on 4G mobile
-- CLS: 0 layout shift (sized placeholders, Suspense boundaries)
+- CLS: Effectively zero in Lighthouse testing (sized placeholders, Suspense boundaries with fixed heights)
 
 ### Product Management
 
@@ -240,7 +287,12 @@ Search engines favor accessible sites. Implementations:
 
 ### Bilingual UI
 
-- Polish default. English toggle (client-side). Same URL for both. Bots see Polish only. No hreflang.
+- Polish default. English toggle (client-side, `LanguageContext`). Same URL for both languages.
+- Search engines are served Polish content by default (no hreflang tags).
+
+**Rationale:** This approach avoids duplicate content issues and indexing complexity for a business targeting the Polish market exclusively. English is provided for occasional international visitors but is not optimized for search engines.
+
+**If English SEO becomes a goal:** Implement URL-based locale routing (`/en/products`) and add hreflang tags. This would require duplicate content strategy and separate metadata per locale.
 
 ---
 
@@ -344,6 +396,46 @@ drelix/
 
 ---
 
+## Operational Risks
+
+**Convex Dependency**
+
+- **Risk:** Convex service availability = site content availability
+- **Impact:** Product catalog, admin area, sitemap generation all depend on Convex
+- **Mitigation:** Convex has >99.9% uptime SLA. Static pages (homepage, legal) remain functional during outages. Consider implementing static fallback for critical catalog pages if availability becomes a concern.
+
+**Dynamic Sitemap Generation**
+
+- **Risk:** Build-time failure if Convex is unreachable
+- **Impact:** Deployment fails, sitemap becomes stale
+- **Mitigation:** Next.js ISR could be added for sitemap route. Monitor build logs. Convex availability during builds is high.
+
+**Experimental Next.js Features**
+
+- **Risk:** `experimental.inlineCss: true` may break or change behavior in Next.js updates
+- **Impact:** Render-blocking CSS returns, performance regression
+- **Mitigation:** Test Lighthouse scores after each Next.js upgrade. Feature flag can be disabled in `next.config.ts` without code changes.
+
+**Image Hosting**
+
+- **Risk:** Product images stored in Convex Cloud, remote URL changes
+- **Impact:** Broken images on category pages
+- **Mitigation:** `next.config.ts` remote patterns configured for `*.convex.cloud`. If Convex URL changes, update environment variable and redeploy.
+
+**Search Engine Algorithm Changes**
+
+- **Risk:** Google updates may affect ranking factors (e.g., Core Web Vitals weighting)
+- **Impact:** Rankings drop despite code not changing
+- **Mitigation:** Monitor Google Search Console weekly. Performance metrics logged. Document baseline scores (Lighthouse 91/100 as of Feb 2026).
+
+**Admin Access**
+
+- **Risk:** Single admin login point (`/admin/login`), no 2FA
+- **Impact:** Unauthorized catalog modifications if credentials compromised
+- **Mitigation:** Strong password policy. Consider adding Convex Auth or OAuth if team grows beyond single admin.
+
+---
+
 ## Quick Reference
 
 | Task                           | Location                                                                    |
@@ -356,4 +448,23 @@ drelix/
 
 ---
 
-_This README documents what was built and how. Live results (rankings, traffic, indexing) depend on deployment, GSC setup, content, and market conditions._
+## Document Maintenance
+
+**Last Reviewed:** February 2026  
+**Owner:** Development Team  
+**Review Cadence:** Quarterly, or after major Next.js/Convex upgrades  
+**Update Triggers:**
+
+- Next.js version updates (check experimental features)
+- Lighthouse score regression >5 points
+- New product categories added (update SEO metadata)
+- Legal/GDPR requirement changes
+
+**Version History:**
+
+- Feb 2026: Performance optimization (Lighthouse 77→91), code splitting, operational risks added
+- Initial: SEO architecture, structured data, local business setup
+
+---
+
+_This README documents what was built and how. Live results (rankings, traffic, indexing) depend on deployment, Google Search Console setup, content quality, and market conditions._
