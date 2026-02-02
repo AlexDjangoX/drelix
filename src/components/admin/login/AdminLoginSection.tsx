@@ -4,9 +4,9 @@ import { useActionState, useEffect, useEffectEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { LoginHeader } from './LoginHeader';
-import { LoginForm } from './LoginForm';
-import { submitLogin } from './submitLogin';
+import { LoginHeader } from '@/components/admin/login';
+import { LoginForm } from '@/components/admin/login';
+import { submitLogin } from '@/components/admin/login';
 
 export function AdminLoginSection() {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LOGIN_STRINGS } from './loginData';
+import { LOGIN_STRINGS } from '@/components/admin/login/loginData';
 
 export function LoginBackLink() {
   return (
