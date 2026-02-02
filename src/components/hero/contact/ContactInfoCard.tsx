@@ -17,9 +17,9 @@ export function ContactInfoCard({ item }: ContactInfoCardProps) {
           <Icon className="text-primary" size={18} aria-hidden />
         </div>
         <div className="min-w-0">
-          <h4 className="text-xs font-medium text-muted-foreground mb-0.5">
+          <span className="text-xs font-medium text-muted-foreground mb-0.5 block">
             <AnimateText k={item.labelKey} />
-          </h4>
+          </span>
           <p className="text-sm text-foreground font-semibold whitespace-pre-line wrap-break-word">
             {content}
           </p>

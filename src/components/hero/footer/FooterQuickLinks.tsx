@@ -5,9 +5,9 @@ import { QUICK_LINK_ITEMS } from '@/components/hero/footer';
 export function FooterQuickLinks() {
   return (
     <div className="text-center sm:text-left">
-      <h4 className="font-bold text-foreground mb-4">
+      <h3 className="font-bold text-foreground mb-4">
         <AnimateText k="footer.quickLinksTitle" />
-      </h4>
+      </h3>
       <ul className="space-y-2">
         {QUICK_LINK_ITEMS.map((link) => (
           <li key={link.id}>

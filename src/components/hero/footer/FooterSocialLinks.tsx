@@ -4,9 +4,9 @@ import { SOCIAL_LINKS } from '@/components/hero/footer';
 export function FooterSocialLinks() {
   return (
     <div className="text-center sm:text-left">
-      <h4 className="font-bold text-foreground mb-4">
+      <h3 className="font-bold text-foreground mb-4">
         <AnimateText k="footer.followUs" />
-      </h4>
+      </h3>
       <div className="flex gap-4 justify-center sm:justify-start">
         {SOCIAL_LINKS.map((social) => {
           const Icon = social.icon;
