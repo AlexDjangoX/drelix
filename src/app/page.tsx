@@ -1,12 +1,29 @@
-import {
-  Navbar,
-  HeroSection,
-  AboutSection,
-  ProductSection,
-  WhyUsSection,
-  ContactSection,
-  Footer,
-} from '@/components';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { Navbar, HeroSection, AboutSection, Footer } from '@/components';
+
+const ProductSection = dynamic(
+  () => import('@/components/products/ProductSection'),
+  {
+    ssr: true,
+  }
+);
+const WhyUsSection = dynamic(
+  () => import('@/components/hero/why-us/WhyUsSection'),
+  {
+    ssr: true,
+  }
+);
+const ContactSection = dynamic(
+  () => import('@/components/hero/contact/ContactSection'),
+  {
+    ssr: true,
+  }
+);
+
+function SectionFallback() {
+  return <div className="py-20 md:py-32" />;
+}
 
 export default function Home() {
   return (
@@ -15,9 +32,15 @@ export default function Home() {
       <main id="main-content" role="main" aria-label="Treść główna">
         <HeroSection />
         <AboutSection />
-        <ProductSection />
-        <WhyUsSection />
-        <ContactSection />
+        <Suspense fallback={<SectionFallback />}>
+          <ProductSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <WhyUsSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback />}>
+          <ContactSection />
+        </Suspense>
       </main>
       <Footer />
     </div>

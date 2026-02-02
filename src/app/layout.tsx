@@ -90,6 +90,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" suppressHydrationWarning>
+      <head>
+        <link
+          rel="preconnect"
+          href={
+            process.env.NEXT_PUBLIC_CONVEX_URL ?? 'https://cloud.convex.cloud'
+          }
+        />
+        <link rel="dns-prefetch" href="https://www.google.com" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
