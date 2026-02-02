@@ -166,7 +166,7 @@ This section documents concrete SEO implementations with file locations and tech
 - Structure: Homepage → Products → [Category Name]
 - Applied to: `/products/[slug]` pages
 
-**Validation:** Test at [Google Rich Results Test](https://search.google.com/test/rich-results)
+**Validation:** Test at [Google Rich Results Test](https://search.google.com/test/rich-results). Homepage validated Feb 2026: 2 valid items (LocalBusiness, Organization), eligible for rich results.
 
 #### **4. Performance (Core Web Vitals Impact on SEO)**
 
@@ -266,6 +266,10 @@ Search engines favor accessible sites. Implementations:
 - PageSpeed Insights: Check Core Web Vitals
 - Mobile-Friendly Test: Confirm responsive design
 - Lighthouse: Audit performance, accessibility, SEO
+
+**Validated (Feb 2026)**
+
+- **Rich Results Test** (homepage): 2 valid items detected — LocalBusiness ✓, Organization ✓. Crawl successful, indexing allowed. [Test result](https://search.google.com/test/rich-results/result?id=IXtTy6Oar9EEbP7fEMTJRQ)
 
 **Measurable Outcomes**
 
