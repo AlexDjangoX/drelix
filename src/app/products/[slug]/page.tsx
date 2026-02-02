@@ -1,19 +1,13 @@
 import { notFound } from 'next/navigation';
-import {
-  PRODUCT_SLUGS,
-  productConfig,
-} from '@/components/products/productConfig';
+import { fetchQuery } from 'convex/nextjs';
+import { api } from 'convex/_generated/api';
 import ProductPageClient from '@/components/products/ProductPageClient';
 
 type Props = { params: Promise<{ slug: string }> };
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  if (!PRODUCT_SLUGS.includes(slug as (typeof PRODUCT_SLUGS)[number])) {
-    notFound();
-  }
-  const config = productConfig[slug as keyof typeof productConfig];
-  if (!config) notFound();
-
-  return <ProductPageClient slug={slug as keyof typeof productConfig} />;
+  const section = await fetchQuery(api.catalog.getCatalogSection, { slug });
+  if (!section) notFound();
+  return <ProductPageClient slug={slug} />;
 }
