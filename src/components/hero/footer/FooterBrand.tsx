@@ -1,8 +1,6 @@
-'use client';
-
 import Link from 'next/link';
 import { Logo } from '@/components';
-import { FOOTER_ADDRESS } from '@/components/hero/footer/footerData';
+import { FOOTER_ADDRESS } from '@/components/hero/footer';
 
 export function FooterBrand() {
   return (

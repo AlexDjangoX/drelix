@@ -3,7 +3,7 @@
 import { AnimateText } from '@/components';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ContactSubmitButton } from '@/components/hero/contact/ContactSubmitButton';
+import { ContactSubmitButton } from '@/components/hero/contact';
 
 type ContactState = { error: string | null; success: boolean } | null;
 

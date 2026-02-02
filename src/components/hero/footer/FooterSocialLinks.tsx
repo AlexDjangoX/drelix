@@ -1,7 +1,5 @@
-'use client';
-
 import { AnimateText } from '@/components';
-import { SOCIAL_LINKS } from '@/components/hero/footer/footerData';
+import { SOCIAL_LINKS } from '@/components/hero/footer';
 
 export function FooterSocialLinks() {
   return (

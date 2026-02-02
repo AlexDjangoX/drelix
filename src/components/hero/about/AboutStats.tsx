@@ -1,7 +1,4 @@
-'use client';
-
-import { StatCard } from '@/components/hero/about/StatCard';
-import { ABOUT_STATS } from '@/components/hero/about/statsData';
+import { StatCard, ABOUT_STATS } from '@/components/hero/about';
 
 export function AboutStats() {
   return (

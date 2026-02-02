@@ -5,5 +5,6 @@ export { ContactInfoCard } from '@/components/hero/contact/ContactInfoCard';
 export { ContactInfoGrid } from '@/components/hero/contact/ContactInfoGrid';
 export { ContactMap } from '@/components/hero/contact/ContactMap';
 export { ContactSubmitButton } from '@/components/hero/contact/ContactSubmitButton';
+export { submitContact } from '@/components/hero/contact/submitContact';
 export { CONTACT_INFO_ITEMS } from '@/components/hero/contact/contactInfoData';
 export type { ContactInfoItem } from '@/components/hero/contact/contactInfoData';

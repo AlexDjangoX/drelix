@@ -1,7 +1,4 @@
-'use client';
-
-import { ContactInfoCard } from '@/components/hero/contact/ContactInfoCard';
-import { CONTACT_INFO_ITEMS } from '@/components/hero/contact/contactInfoData';
+import { ContactInfoCard, CONTACT_INFO_ITEMS } from '@/components/hero/contact';
 
 export function ContactInfoGrid() {
   return (

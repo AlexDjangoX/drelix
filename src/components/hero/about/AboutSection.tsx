@@ -1,7 +1,4 @@
-'use client';
-
-import { AboutContent } from '@/components/hero/about/AboutContent';
-import { AboutImage } from '@/components/hero/about/AboutImage';
+import { AboutContent, AboutImage } from '@/components/hero/about';
 
 export default function AboutSection() {
   return (

@@ -1,7 +1,5 @@
-'use client';
-
 import { AnimateText } from '@/components';
-import type { ContactInfoItem } from '@/components/hero/contact/contactInfoData';
+import type { ContactInfoItem } from '@/components/hero/contact';
 
 type ContactInfoCardProps = {
   item: ContactInfoItem;

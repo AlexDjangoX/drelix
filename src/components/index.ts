@@ -1,9 +1,9 @@
 export { AnimateText } from '@/components/reusable/AnimateText';
 export { TwoToneHeading } from '@/components/reusable/TwoToneHeading';
-export { default as AboutSection } from '@/components/hero/about/AboutSection';
-export { default as ContactSection } from '@/components/hero/contact/ContactSection';
-export { default as Footer } from '@/components/hero/footer/Footer';
-export { default as HeroSection } from '@/components/hero/hero-section/HeroSection';
+export { AboutSection } from '@/components/hero/about';
+export { ContactSection } from '@/components/hero/contact';
+export { Footer } from '@/components/hero/footer';
+export { HeroSection } from '@/components/hero/hero-section';
 export { default as Logo } from '@/components/reusable/Logo';
 export { default as Navbar } from '@/components/navbar/Navbar';
 export { default as NavLink } from '@/components/navbar/NavLink';

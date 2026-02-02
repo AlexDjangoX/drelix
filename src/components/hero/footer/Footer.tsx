@@ -1,9 +1,9 @@
-'use client';
-
-import { FooterBottomBar } from '@/components/hero/footer/FooterBottomBar';
-import { FooterBrand } from '@/components/hero/footer/FooterBrand';
-import { FooterQuickLinks } from '@/components/hero/footer/FooterQuickLinks';
-import { FooterSocialLinks } from '@/components/hero/footer/FooterSocialLinks';
+import {
+  FooterBottomBar,
+  FooterBrand,
+  FooterQuickLinks,
+  FooterSocialLinks,
+} from '@/components/hero/footer';
 
 export default function Footer() {
   return (

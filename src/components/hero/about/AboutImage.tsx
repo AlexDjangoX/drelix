@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 const IMAGE_ALT = 'Drelix - odzież robocza i ochronna Wadowice';

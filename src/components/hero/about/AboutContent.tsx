@@ -1,7 +1,5 @@
-'use client';
-
 import { AnimateText, TwoToneHeading } from '@/components';
-import { AboutStats } from '@/components/hero/about/AboutStats';
+import { AboutStats } from '@/components/hero/about';
 
 export function AboutContent() {
   return (

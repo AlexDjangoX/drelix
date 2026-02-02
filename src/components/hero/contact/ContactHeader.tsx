@@ -1,5 +1,3 @@
-'use client';
-
 import { AnimateText, TwoToneHeading } from '@/components';
 
 export function ContactHeader() {

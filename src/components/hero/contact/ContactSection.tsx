@@ -3,11 +3,13 @@
 import { useActionState, useEffect, useEffectEvent } from 'react';
 import { toast } from 'sonner';
 import { useLanguage } from '@/context/LanguageContext';
-import { ContactForm } from '@/components/hero/contact/ContactForm';
-import { ContactHeader } from '@/components/hero/contact/ContactHeader';
-import { ContactInfoGrid } from '@/components/hero/contact/ContactInfoGrid';
-import { ContactMap } from '@/components/hero/contact/ContactMap';
-import { submitContact } from '@/components/hero/contact/submitContact';
+import {
+  ContactForm,
+  ContactHeader,
+  ContactInfoGrid,
+  ContactMap,
+  submitContact,
+} from '@/components/hero/contact';
 
 export default function ContactSection() {
   const { t } = useLanguage();
