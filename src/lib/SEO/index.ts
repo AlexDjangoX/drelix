@@ -1,6 +1,2 @@
-export {
-  getCanonicalBaseUrl,
-  TITLE_IDEAL_MAX,
-  DESC_IDEAL_MAX,
-} from '@/lib/seo/seo';
+export { getCanonicalBaseUrl, TITLE_IDEAL_MAX, DESC_IDEAL_MAX } from './seo';
 export { getRobotsTxt } from '@/lib/seo/robotsContent';

@@ -1,4 +1,4 @@
-import { getCanonicalBaseUrl } from '@/lib/seo/seo';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
 

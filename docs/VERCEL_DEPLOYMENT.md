@@ -45,12 +45,12 @@ Step-by-step guide to deploy the Drelix site to Vercel and connect your domain v
 
    Click **“Environment Variables”** and add:
 
-   | Name                     | Value                                                                      | Environment         |
-   | ------------------------ | -------------------------------------------------------------------------- | ------------------- |
-   | `NEXT_PUBLIC_SITE_URL`   | `https://drelix.org`                                                       | Production, Preview |
-   | `NEXT_PUBLIC_CONVEX_URL` | Your Convex deployment URL                                                 | Production, Preview |
-   | `ADMIN_PASSWORD`         | Strong password for admin login                                            | Production, Preview |
-   | `JWT_SECRET`             | Random secret for session signing (optional; falls back to ADMIN_PASSWORD) | Production, Preview |
+   | Name                     | Value                                                                          | Environment         |
+   | ------------------------ | ------------------------------------------------------------------------------ | ------------------- |
+   | `NEXT_PUBLIC_SITE_URL`   | `https://drelix.org`                                                           | Production, Preview |
+   | `NEXT_PUBLIC_CONVEX_URL` | Your Convex deployment URL                                                     | Production, Preview |
+   | `ADMIN_PASSWORD`         | Strong password for admin login                                                | Production, Preview |
+   | `JWT_SECRET`             | Random secret for session signing (recommended; run `openssl rand -base64 32`) | Production, Preview |
    - **NEXT_PUBLIC_SITE_URL**
      - Must be `https://drelix.org` (no trailing slash).
      - Used for canonicals, sitemap, Open Graph, JSON-LD.
@@ -63,7 +63,7 @@ Step-by-step guide to deploy the Drelix site to Vercel and connect your domain v
      - Required for admin login. Use a strong, unique password.
 
    - **JWT_SECRET**
-     - Optional. If set, used to sign admin session JWTs (more secure than using ADMIN_PASSWORD). If unset, ADMIN_PASSWORD is used for backwards compatibility.
+     - Recommended. Used to sign admin session JWTs (more secure than using ADMIN_PASSWORD). Generate with: `openssl rand -base64 32`. If unset, ADMIN_PASSWORD is used as fallback.
 
    Leave **Environment** as **Production** (and **Preview** if you want preview deployments to work the same).
 
