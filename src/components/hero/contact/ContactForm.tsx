@@ -58,7 +58,7 @@ export function ContactForm({
           <Textarea
             name="message"
             required
-            className="bg-secondary/50 border-border focus:border-primary resize-none flex-1 min-h-[120px]"
+            className="bg-secondary/50 border-border focus:border-primary resize-none flex-1 min-h-30"
             placeholder={placeholderMessage}
           />
         </div>

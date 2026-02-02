@@ -20,7 +20,7 @@ export function ContactInfoCard({ item }: ContactInfoCardProps) {
           <h4 className="text-xs font-medium text-muted-foreground mb-0.5">
             <AnimateText k={item.labelKey} />
           </h4>
-          <p className="text-sm text-foreground font-semibold whitespace-pre-line break-words">
+          <p className="text-sm text-foreground font-semibold whitespace-pre-line wrap-break-word">
             {content}
           </p>
         </div>

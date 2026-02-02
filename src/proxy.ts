@@ -17,13 +17,15 @@ export async function proxy(request: NextRequest) {
 
     try {
       // Verify JWT
-      const secret = new TextEncoder().encode(process.env.ADMIN_PASSWORD || 'default-secret-change-me');
+      const secret = new TextEncoder().encode(process.env.ADMIN_PASSWORD ?? '');
       await jwtVerify(sessionCookie.value, secret);
       return NextResponse.next();
     } catch (error) {
       console.error('Admin session verification failed:', error);
       // Invalid or expired session
-      const response = NextResponse.redirect(new URL('/admin/login', request.url));
+      const response = NextResponse.redirect(
+        new URL('/admin/login', request.url)
+      );
       response.cookies.delete(COOKIE_NAME);
       return response;
     }
