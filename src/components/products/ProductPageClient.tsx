@@ -13,19 +13,48 @@ import { ChevronLeft, ChevronRight, X, Loader2 } from 'lucide-react';
 import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
+import { useLanguage } from '@/context/LanguageContext';
 import { productConfig } from '@/components/products/productConfig';
-import type { ProductItem, ProductSlug } from '@/lib/types';
+import type { ProductItem } from '@/lib/types';
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 
-type Props = { slug: ProductSlug };
+type Props = { slug: string };
 
 const COD = 'Kod';
 
+function resolveTitle(
+  t: Record<string, unknown>,
+  titleKey: string,
+  slug: string
+): string {
+  const keys = titleKey.split('.');
+  let current: unknown = t;
+  for (const key of keys) {
+    current =
+      current != null && typeof current === 'object'
+        ? (current as Record<string, unknown>)[key]
+        : undefined;
+  }
+  const text = typeof current === 'string' ? current : '';
+  return text.trim() || slug;
+}
+
 export default function ProductPageClient({ slug }: Props) {
+  const { t } = useLanguage();
   const sectionFromConvex = useQuery(api.catalog.getCatalogSection, { slug });
-  const { titleKey } = productConfig[slug];
+  const config = productConfig[slug as keyof typeof productConfig];
+  const displayTitle = sectionFromConvex?.displayName;
+  const titleKey =
+    config?.titleKey ??
+    sectionFromConvex?.titleKey ??
+    'products.catalogCustomCategory';
+  const resolvedTitle = resolveTitle(
+    t as unknown as Record<string, unknown>,
+    titleKey,
+    slug
+  );
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const items: ProductItem[] = useMemo(() => {
@@ -98,6 +127,10 @@ export default function ProductPageClient({ slug }: Props) {
     );
   }
 
+  if (sectionFromConvex === null) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -116,7 +149,7 @@ export default function ProductPageClient({ slug }: Props) {
               as="h1"
               className="text-3xl md:text-5xl font-black mb-4"
             >
-              <AnimateText k={titleKey} />
+              {displayTitle ?? resolvedTitle}
             </TwoToneHeading>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               <AnimateText k="products.subtitle" />
