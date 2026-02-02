@@ -1,18 +1,29 @@
-import type { WhyUsFeatureItem } from '@/components/hero/why-us';
-import { AnimateText } from '@/components';
+'use client';
 
-type WhyUsFeatureCardProps = WhyUsFeatureItem & { index: number };
+import { motion } from 'framer-motion';
+import { AnimateText } from '@/components/reusable/AnimateText';
+import { fadeUpVariants } from '@/lib/animations';
+import type { WhyUsFeatureItem } from '@/components/hero/why-us';
+
+type WhyUsFeatureCardProps = WhyUsFeatureItem & {
+  index: number;
+  reducedMotion: boolean;
+};
 
 export function WhyUsFeatureCard({
   icon: Icon,
   titleKey,
   descKey,
   index,
+  reducedMotion,
 }: WhyUsFeatureCardProps) {
   const numberLabel = (index + 1).toString().padStart(2, '0');
 
   return (
-    <div className="relative group">
+    <motion.div
+      variants={fadeUpVariants(reducedMotion)}
+      className="relative group"
+    >
       <div className="bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all duration-300 h-full shadow-card hover:shadow-glow">
         <div className="w-16 h-16 rounded-xl bg-gradient-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
           <Icon size={32} className="text-primary-foreground" aria-hidden />
@@ -32,6 +43,6 @@ export function WhyUsFeatureCard({
           {numberLabel}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

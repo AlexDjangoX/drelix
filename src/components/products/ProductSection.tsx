@@ -9,12 +9,12 @@ import {
 
 export default function ProductSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: false, amount: 0.05 });
+  const isInView = useInView(sectionRef, { once: true, amount: 0.05 });
   const prefersReducedMotion = useReducedMotion();
   const reducedMotion = !!prefersReducedMotion;
 
   return (
-    <section id="products" className="py-20 md:py-32">
+    <section id="products" className="py-20 md:py-32 overflow-x-hidden">
       <div ref={sectionRef} className="container mx-auto px-4">
         <ProductSectionHeader
           reducedMotion={reducedMotion}

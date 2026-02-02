@@ -18,7 +18,7 @@ export function ProductSectionCategoryGrid({
   reducedMotion,
 }: ProductSectionCategoryGridProps) {
   const gridRef = useRef<HTMLDivElement>(null);
-  const isGridInView = useInView(gridRef, { once: false, amount: 0.08 });
+  const isGridInView = useInView(gridRef, { once: true, amount: 0.08 });
 
   return (
     <motion.div
