@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import ProductsCatalogClient from '@/components/products/ProductsCatalogClient';
 import { ProductsCatalogJsonLd } from '@/components/products/ProductsCatalogJsonLd';
-import { getCanonicalBaseUrl } from '@/lib/seo/seo';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
 

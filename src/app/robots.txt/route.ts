@@ -1,5 +1,4 @@
-import { getRobotsTxt } from '@/lib/seo/robotsContent';
-import { getCanonicalBaseUrl } from '@/lib/seo/seo';
+import { getRobotsTxt, getCanonicalBaseUrl } from '@/lib/seo';
 
 /**
  * Serves /robots.txt with the same baseUrl as sitemap (getCanonicalBaseUrl).

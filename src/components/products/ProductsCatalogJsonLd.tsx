@@ -2,7 +2,7 @@ import {
   PRODUCT_SLUGS,
   productConfig,
 } from '@/components/products/productConfig';
-import { getCanonicalBaseUrl } from '@/lib/seo/seo';
+import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
 const catalogTitle = 'Katalog produktów';
