@@ -1,7 +1,6 @@
-import {
-  PRODUCT_SLUGS,
-  productConfig,
-} from '@/components/products/productConfig';
+import { fetchQuery } from 'convex/nextjs';
+import { api } from 'convex/_generated/api';
+import { productConfig } from '@/components/products/productConfig';
 import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
@@ -9,20 +8,23 @@ const catalogTitle = 'Katalog produktów';
 const catalogDescription =
   'Pełna oferta odzieży roboczej i ochronnej. Rękawice, obuwie, spodnie, koszule i inne artykuły BHP. Drelix Wadowice.';
 
-export function ProductsCatalogJsonLd() {
+export async function ProductsCatalogJsonLd() {
+  const sections = await fetchQuery(api.catalog.listCatalogSections);
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: catalogTitle,
     description: catalogDescription,
-    numberOfItems: PRODUCT_SLUGS.length,
-    itemListElement: PRODUCT_SLUGS.map((slug, index) => {
-      const config = productConfig[slug as keyof typeof productConfig];
+    numberOfItems: sections.length,
+    itemListElement: sections.map((section, index) => {
+      const config = productConfig[section.slug as keyof typeof productConfig];
+      const name =
+        section.displayName ?? config?.metadata.title ?? section.slug;
       return {
         '@type': 'ListItem',
         position: index + 1,
-        name: config?.metadata.title ?? slug,
-        url: `${siteUrl}/products/${slug}`,
+        name,
+        url: `${siteUrl}/products/${section.slug}`,
       };
     }),
   };
