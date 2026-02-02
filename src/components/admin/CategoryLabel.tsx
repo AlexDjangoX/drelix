@@ -20,6 +20,14 @@ export function CategoryLabel({ slug }: Props) {
       </span>
     );
 
+  if (cat.displayName) {
+    return (
+      <span className="text-xs font-medium bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+        {cat.displayName}
+      </span>
+    );
+  }
+
   const keys = cat.titleKey.split('.');
   let current: unknown = t;
   for (const key of keys) {
