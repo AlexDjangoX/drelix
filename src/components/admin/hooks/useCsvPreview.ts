@@ -46,8 +46,14 @@ export function useCsvPreview() {
       const rulesRes = await fetch('/catalogCategoryRules.json');
       if (!rulesRes.ok)
         throw new Error('Nie udało się załadować reguł kategorii');
-      const rules = (await rulesRes.json()) as CategoryRule[];
-      const categorized = categorizeCatalog(rows, rules);
+      const rulesData = (await rulesRes.json()) as
+        | CategoryRule[]
+        | { rules: CategoryRule[]; excludeKods?: string[] };
+      const rules = Array.isArray(rulesData) ? rulesData : rulesData.rules;
+      const excludeKods = Array.isArray(rulesData)
+        ? []
+        : (rulesData.excludeKods ?? []);
+      const categorized = categorizeCatalog(rows, rules, excludeKods);
 
       setPreviewSections(categorized);
       toast.success(
