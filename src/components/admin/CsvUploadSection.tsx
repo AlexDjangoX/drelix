@@ -91,7 +91,7 @@ export function CsvUploadSection({
             <Button
               onClick={onProcessUpload}
               disabled={loading}
-              className="gap-2 bg-green-600 hover:bg-green-700"
+              className="gap-2 bg-green-600 hover:bg-green-700 cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -104,7 +104,7 @@ export function CsvUploadSection({
               variant="outline"
               onClick={onCancelPreview}
               disabled={loading}
-              className="gap-2"
+              className="gap-2 cursor-pointer"
             >
               <X className="w-4 h-4" />
               Anuluj
@@ -112,7 +112,11 @@ export function CsvUploadSection({
           </>
         ) : (
           file && (
-            <Button variant="outline" onClick={onClearFile}>
+            <Button
+              variant="outline"
+              onClick={onClearFile}
+              className="cursor-pointer"
+            >
               Wyczyść
             </Button>
           )
