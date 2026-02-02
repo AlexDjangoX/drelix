@@ -12,11 +12,14 @@ export type CategoryRule = {
   titleKey: string;
   keywords?: string[];
   kodPrefixes?: string[];
+  /** Exact Kod values that always match this category (overrides keyword/prefix scoring). */
+  exactKods?: string[];
 };
 
 export type CatalogSection = {
   slug: string;
   titleKey: string;
+  displayName?: string;
   items: CatalogRow[];
 };
 
