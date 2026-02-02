@@ -9,7 +9,7 @@ const catalogTitle = 'Katalog produktów';
 const catalogDescription =
   'Pełna oferta odzieży roboczej i ochronnej. Rękawice, obuwie, spodnie, koszule i inne artykuły BHP. Drelix Wadowice.';
 
-export function CatalogItemListJsonLd() {
+export function ProductsCatalogJsonLd() {
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',

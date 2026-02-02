@@ -2,11 +2,11 @@ import {
   Navbar,
   HeroSection,
   AboutSection,
+  ProductSection,
   WhyUsSection,
   ContactSection,
   Footer,
 } from '@/components';
-import ProductSection from '@/components/products/ProductSection';
 
 export default function Home() {
   return (

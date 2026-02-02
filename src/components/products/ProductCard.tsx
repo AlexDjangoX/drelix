@@ -24,7 +24,7 @@ export function ProductCard({ row, index }: Props) {
           <div className="shrink-0 w-24 h-32 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
             <Image
               src={src}
-              alt={row.Nazwa ?? ''}
+              alt={row.Nazwa || row.Kod}
               width={96}
               height={128}
               className="w-full h-full object-contain"

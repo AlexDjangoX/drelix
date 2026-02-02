@@ -8,7 +8,10 @@ import type { CatalogSection } from '@/lib/types';
 
 type Props = { sections: CatalogSection[]; totalCount: number };
 
-export default function CatalogClient({ sections, totalCount }: Props) {
+export default function ProductsCatalogContent({
+  sections,
+  totalCount,
+}: Props) {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

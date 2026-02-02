@@ -3,7 +3,7 @@
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import { Loader2 } from 'lucide-react';
-import CatalogClient from '@/components/products/CatalogClient';
+import ProductsCatalogContent from '@/components/products/ProductsCatalogContent';
 import type { CatalogSection } from '@/lib/types';
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
 
@@ -43,5 +43,5 @@ export default function ProductsCatalogClient() {
   const sections = mapConvexSectionsToCatalog(sectionsFromConvex);
   const totalCount = sections.reduce((n, s) => n + s.items.length, 0);
 
-  return <CatalogClient sections={sections} totalCount={totalCount} />;
+  return <ProductsCatalogContent sections={sections} totalCount={totalCount} />;
 }

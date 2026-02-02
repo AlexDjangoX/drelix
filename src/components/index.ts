@@ -6,5 +6,5 @@ export { Footer } from '@/components/hero/footer';
 export { HeroSection } from '@/components/hero/hero-section';
 export { default as Logo } from '@/components/reusable/Logo';
 export { Navbar, NavLink } from '@/components/navbar';
-export { default as ProductSection } from '@/components/products/ProductSection';
+export { ProductSection } from '@/components/products';
 export { WhyUsSection } from '@/components/hero/why-us';

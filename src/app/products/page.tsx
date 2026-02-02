@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ProductsCatalogClient from '@/components/products/ProductsCatalogClient';
-import { CatalogItemListJsonLd } from '@/components/products/CatalogItemListJsonLd';
+import { ProductsCatalogJsonLd } from '@/components/products/ProductsCatalogJsonLd';
 import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 export default function ProductsCatalogPage() {
   return (
     <>
-      <CatalogItemListJsonLd />
+      <ProductsCatalogJsonLd />
       <ProductsCatalogClient />
     </>
   );
