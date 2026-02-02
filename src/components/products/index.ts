@@ -5,9 +5,7 @@ export { ProductSectionHeader } from '@/components/products/ProductSectionHeader
 export {
   CATEGORY_COLORS,
   CATEGORY_ICONS,
-  PRODUCT_SECTION_CATEGORIES,
 } from '@/components/products/productSectionData';
-export type { ProductSectionCategory } from '@/components/products/productSectionData';
 export {
   SLIDE_DISTANCE,
   EASE,
