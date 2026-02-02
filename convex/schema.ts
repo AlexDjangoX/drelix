@@ -37,5 +37,7 @@ export default defineSchema({
   categories: defineTable({
     slug: v.string(),
     titleKey: v.string(),
+    displayName: v.optional(v.string()), // Custom name for admin-created categories
+    createdAt: v.optional(v.number()), // Timestamp; admin-created categories get this, sorted to top
   }).index('by_slug', ['slug']),
 });
