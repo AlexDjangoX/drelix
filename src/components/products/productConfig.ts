@@ -1,14 +1,11 @@
-// Product category config for /products/[slug]. Aligned with catalogCategoryRules (23 categories).
+// Product category metadata for /products/[slug]. SEO fallback for known categories.
+// Convex is the source of truth for category slugs; this provides title/description when available.
 // SEO: aim for title ≤ TITLE_IDEAL_MAX (60), description ≤ DESC_IDEAL_MAX (160) — see @/lib/seo.
-import {
-  CATEGORY_SLUGS,
-  CATEGORY_TITLE_KEYS,
-} from '@/lib/catalog/catalogCategories';
+import type { CategorySlug } from '@/lib/catalog/catalogCategories';
+import { CATEGORY_TITLE_KEYS } from '@/lib/catalog/catalogCategories';
 import type { ProductItem, ProductSlug } from '@/lib/types';
 
 export type { ProductItem, ProductSlug } from '@/lib/types';
-
-export const PRODUCT_SLUGS: readonly ProductSlug[] = CATEGORY_SLUGS;
 
 type MetadataEntry = { title: string; description: string };
 
@@ -38,6 +35,11 @@ const metadataBySlug: Record<ProductSlug, MetadataEntry> = {
     description:
       'Sandały robocze w Wadowicach zgodne z EN ISO 20345 SB. Podnosek ochronny, przewiewne, antypoślizgowe. Drelix.',
   },
+  klapki: {
+    title: 'Klapki robocze',
+    description:
+      'Klapki robocze w Wadowicach. Przewiewne, antypoślizgowe, z podnoskiem ochronnym. Idealne na lato. Drelix.',
+  },
   kalosze: {
     title: 'Kalosze i gumowce',
     description:
@@ -63,10 +65,20 @@ const metadataBySlug: Record<ProductSlug, MetadataEntry> = {
     description:
       'Koszule robocze w Wadowicach. Flanelowe, bawełniane, z krótkim/długim rękawem. W kratę i jednolite. Drelix.',
   },
+  't-shirt': {
+    title: 'Podkoszulki i koszulki robocze',
+    description:
+      'Podkoszulki i koszulki robocze w Wadowicach. Bawełniane, oddychające, różne kolory. Pod bluzę lub na lato. Drelix.',
+  },
   jackets: {
     title: 'Kurtki robocze',
     description:
       'Kurtki robocze w Wadowicach. Zimowe, softshellowe, przeciwwiatrowe. Wodoodporne, z odblaskami, kapturem. Drelix.',
+  },
+  'kurtki-softshell': {
+    title: 'Kurtki softshell',
+    description:
+      'Kurtki softshell robocze w Wadowicach. Wiatroszczelne, oddychające, lekkie. Idealne na przejściowe pory roku. Drelix.',
   },
   polar: {
     title: 'Polary',
@@ -78,10 +90,35 @@ const metadataBySlug: Record<ProductSlug, MetadataEntry> = {
     description:
       'Spodnie robocze w Wadowicach. Ogrodniczki, bojówki, monterskie. Z kieszeniami, nakolannikami, wzmocnieniami. Drelix.',
   },
+  ogrodniczki: {
+    title: 'Ogrodniczki robocze',
+    description:
+      'Ogrodniczki robocze w Wadowicach. Z szelkami, kieszeniami, wzmocnieniami. Profesjonalne, wygodne. Drelix.',
+  },
+  'spodnie-krotkie': {
+    title: 'Spodnie krótkie robocze',
+    description:
+      'Spodnie krótkie robocze w Wadowicach. Letnie, przewiewne, z kieszeniami. Do pracy w ciepłe dni. Drelix.',
+  },
+  'spodnie-ocieplane': {
+    title: 'Spodnie ocieplane',
+    description:
+      'Spodnie ocieplane robocze w Wadowicach. Termoaktywne, na zimę. Ciepłe i wygodne. Drelix.',
+  },
   vests: {
     title: 'Kamizelki odblaskowe',
     description:
       'Kamizelki odblaskowe w Wadowicach zgodne z EN ISO 20471. Klasy 1-3. Żółte, pomarańczowe. Maksymalna widoczność. Drelix.',
+  },
+  'kamizelki-ocieplane': {
+    title: 'Kamizelki ocieplane',
+    description:
+      'Kamizelki ocieplane robocze w Wadowicach. Bezrękawniki z ociepleniem. Ciepłe, wygodne na zimę. Drelix.',
+  },
+  'odziez-gastronomiczna': {
+    title: 'Odzież gastronomiczna',
+    description:
+      'Odzież gastronomiczna w Wadowicach. Spodnie piekarskie, bluzy kuchenne, chusty, czepki, furażerki. Drelix.',
   },
   helmets: {
     title: 'Kaski i hełmy ochronne',
@@ -123,6 +160,11 @@ const metadataBySlug: Record<ProductSlug, MetadataEntry> = {
     description:
       'Znaki BHP w Wadowicach zgodne z EN ISO 7010. Ostrzegawcze, nakazy, zakazy, ewakuacyjne. PCV, aluminium. Drelix.',
   },
+  reczniki: {
+    title: 'Ręczniki robocze',
+    description:
+      'Ręczniki robocze i frotte w Wadowicach. Różne rozmiary, bawełniane, higieniczne. Do celów przemysłowych i gastronomicznych. Drelix.',
+  },
   other: {
     title: 'Inne produkty BHP',
     description:
@@ -134,15 +176,17 @@ export function getProductItems(): readonly ProductItem[] {
   return [];
 }
 
+const slugsWithMetadata = Object.keys(metadataBySlug) as ProductSlug[];
+
 export const productConfig: Record<
-  ProductSlug,
+  string,
   { titleKey: string; metadata: MetadataEntry }
 > = Object.fromEntries(
-  PRODUCT_SLUGS.map((slug) => [
+  slugsWithMetadata.map((slug) => [
     slug,
     {
-      titleKey: CATEGORY_TITLE_KEYS[slug],
+      titleKey: CATEGORY_TITLE_KEYS[slug as CategorySlug] ?? `products.${slug}`,
       metadata: metadataBySlug[slug],
     },
   ])
-) as Record<ProductSlug, { titleKey: string; metadata: MetadataEntry }>;
+);
