@@ -1,28 +1,11 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
-import { Facebook } from 'lucide-react';
-import { Logo } from '@/components';
-import { AnimateText } from '@/components/reusable/AnimateText';
+import { FooterBottomBar } from '@/components/hero/footer/FooterBottomBar';
+import { FooterBrand } from '@/components/hero/footer/FooterBrand';
+import { FooterQuickLinks } from '@/components/hero/footer/FooterQuickLinks';
+import { FooterSocialLinks } from '@/components/hero/footer/FooterSocialLinks';
 
-const socialLinks = [
-  {
-    icon: Facebook,
-    href: 'https://www.facebook.com/p/Drelix-Odzie%C5%BC-Robocza-100082156284599/',
-    label: 'Facebook',
-    className: 'text-[#1877F2] hover:bg-[#1877F2]/10 hover:text-[#1877F2]',
-  },
-];
-
-const quickLinkItems = [
-  { key: 'nav.about' as const, href: '/#about' },
-  { key: 'nav.products' as const, href: '/#products' },
-  { key: 'nav.whyUs' as const, href: '/#why-us' },
-  { key: 'nav.contact' as const, href: '/#contact' },
-];
-
-const Footer: React.FC = () => {
+export default function Footer() {
   return (
     <footer
       aria-label="Stopka"
@@ -30,93 +13,13 @@ const Footer: React.FC = () => {
     >
       <div className="container mx-auto px-4 py-12">
         <div className="grid sm:grid-cols-3 gap-8 mb-8">
-          {/* Logo & Description */}
-          <div className="text-center sm:text-left flex flex-col items-center sm:items-start">
-            <Link
-              href="/"
-              className="inline-block mb-4 cursor-pointer"
-              aria-label="Drelix - strona główna"
-            >
-              <Logo size="md" />
-            </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Odzież Robocza Drelix
-              <br />
-              Emila Zegadłowicza 43
-              <br />
-              34-100 Wadowice
-            </p>
-          </div>
-
-          {/* Quick Links - proper links for SEO, work from any page */}
-          <div className="text-center sm:text-left">
-            <h4 className="font-bold text-foreground mb-4">
-              <AnimateText k="footer.quickLinksTitle" />
-            </h4>
-            <ul className="space-y-2">
-              {quickLinkItems.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="cursor-pointer text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    <AnimateText k={link.key} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social Links */}
-          <div className="text-center sm:text-left">
-            <h4 className="font-bold text-foreground mb-4">
-              <AnimateText k="footer.followUs" />
-            </h4>
-            <div className="flex gap-4 justify-center sm:justify-start">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  aria-label={social.label}
-                  className={`w-10 h-10 rounded-lg bg-secondary flex items-center justify-center transition-colors cursor-pointer ${'className' in social && social.className ? social.className : 'text-muted-foreground hover:text-primary hover:bg-primary/10'}`}
-                >
-                  <social.icon size={20} />
-                </a>
-              ))}
-            </div>
-          </div>
+          <FooterBrand />
+          <FooterQuickLinks />
+          <FooterSocialLinks />
         </div>
 
-        {/* Bottom bar */}
-        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Drelix.{' '}
-            <AnimateText k="footer.rights" />.
-          </p>
-          <div className="flex gap-6">
-            <Link
-              href="/privacy"
-              className="text-sm cursor-pointer text-muted-foreground hover:text-primary transition-colors"
-            >
-              <AnimateText k="footer.privacy" />
-            </Link>
-            <Link
-              href="/terms"
-              className="text-sm cursor-pointer text-muted-foreground hover:text-primary transition-colors"
-            >
-              <AnimateText k="footer.terms" />
-            </Link>
-            <Link
-              href="/admin/login"
-              className="text-sm cursor-pointer text-muted-foreground hover:text-primary transition-colors"
-            >
-              Admin
-            </Link>
-          </div>
-        </div>
+        <FooterBottomBar />
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}
