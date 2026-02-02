@@ -8,4 +8,4 @@ export { default as Logo } from '@/components/reusable/Logo';
 export { default as Navbar } from '@/components/navbar/Navbar';
 export { default as NavLink } from '@/components/navbar/NavLink';
 export { default as ProductSection } from '@/components/products/ProductSection';
-export { default as WhyUsSection } from '@/components/hero/why-us/WhyUsSection';
+export { WhyUsSection } from '@/components/hero/why-us';
