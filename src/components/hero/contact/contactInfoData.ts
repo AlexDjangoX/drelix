@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Clock } from 'lucide-react';
 
 export type ContactInfoItem =
   | {
@@ -8,7 +8,7 @@ export type ContactInfoItem =
       labelKey:
         | 'contact.address'
         | 'contact.phone'
-        | 'contact.email'
+        | 'contact.emailCta'
         | 'contact.hours';
       value: string;
     }
@@ -18,9 +18,9 @@ export type ContactInfoItem =
       labelKey:
         | 'contact.address'
         | 'contact.phone'
-        | 'contact.email'
+        | 'contact.emailCta'
         | 'contact.hours';
-      valueKey: 'contact.hoursValue';
+      valueKey: 'contact.hoursValue' | 'contact.emailCtaValue';
     };
 
 export const CONTACT_INFO_ITEMS: readonly ContactInfoItem[] = [
@@ -37,10 +37,10 @@ export const CONTACT_INFO_ITEMS: readonly ContactInfoItem[] = [
     value: '+48 725 695 933',
   },
   {
-    id: 'email',
-    icon: Mail,
-    labelKey: 'contact.email',
-    value: 'annabadura7@gmail.com',
+    id: 'email-cta',
+    icon: MessageCircle,
+    labelKey: 'contact.emailCta',
+    valueKey: 'contact.emailCtaValue',
   },
   {
     id: 'hours',

@@ -12,7 +12,7 @@ export function ContactSubmitButton() {
     <Button
       type="submit"
       disabled={pending}
-      className="w-full bg-gradient-primary text-primary-foreground font-bold py-6 rounded-xl hover:scale-[1.02] transition-transform disabled:opacity-50"
+      className="w-full cursor-pointer bg-gradient-primary text-primary-foreground font-bold py-6 rounded-xl hover:scale-[1.02] transition-transform disabled:opacity-50"
     >
       {pending ? (
         <span className="flex items-center gap-2">

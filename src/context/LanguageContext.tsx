@@ -53,6 +53,8 @@ interface Translations {
     address: string;
     phone: string;
     email: string;
+    emailCta: string;
+    emailCtaValue: string;
     hours: string;
     hoursValue: string;
     form: {
@@ -172,6 +174,8 @@ const translations: Record<Language, Translations> = {
       address: 'Adres',
       phone: 'Telefon',
       email: 'Email',
+      emailCta: 'Wiadomość',
+      emailCtaValue: 'Wyślij wiadomość przez formularz obok',
       hours: 'Godziny otwarcia',
       hoursValue: 'Pn–Pt: 8:00–16:00\nSob: 9:00–12:00',
       form: {
@@ -180,8 +184,7 @@ const translations: Record<Language, Translations> = {
         message: 'Wiadomość',
         send: 'Wyślij wiadomość',
         success: 'Wiadomość została wysłana!',
-        error:
-          'Nie udało się wysłać. Spróbuj ponownie lub napisz na annabadura7@gmail.com.',
+        error: 'Nie udało się wysłać. Spróbuj ponownie.',
         placeholderMessage: 'Twoja wiadomość...',
         sending: 'Wysyłanie...',
       },
@@ -290,6 +293,8 @@ const translations: Record<Language, Translations> = {
       address: 'Address',
       phone: 'Phone',
       email: 'Email',
+      emailCta: 'Message',
+      emailCtaValue: 'Use the form to send us a message',
       hours: 'Opening Hours',
       hoursValue: 'Sun: closed\nMon–Fri: 8 am–4 pm\nSat: 9 am–12 pm',
       form: {
@@ -298,8 +303,7 @@ const translations: Record<Language, Translations> = {
         message: 'Message',
         send: 'Send Message',
         success: 'Message sent successfully!',
-        error:
-          'Something went wrong. Please try again or email annabadura7@gmail.com.',
+        error: 'Something went wrong. Please try again.',
         placeholderMessage: 'Your message...',
         sending: 'Sending...',
       },
