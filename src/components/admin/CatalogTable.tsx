@@ -1,8 +1,22 @@
 'use client';
 
+import { useState } from 'react';
+import { useMutation } from 'convex/react';
+import { api } from 'convex/_generated/api';
 import { Input } from '@/components/ui/input';
-import { Search, Loader2, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Search,
+  Loader2,
+  AlertCircle,
+  Trash2,
+  Ban,
+  CircleCheckBig,
+} from 'lucide-react';
+import { toast } from 'sonner';
 import { ProductRow } from '@/components/admin/ProductRow';
+import { AddProductRow } from '@/components/admin/AddProductRow';
+import { CategorySectionTitle } from '@/components/admin/CategorySectionTitle';
 import {
   DISPLAY_KEYS,
   type CatalogRow,
@@ -18,6 +32,74 @@ type Props = {
   error: string | null;
   isPreview: boolean;
 };
+
+function DeleteCategoryButton({
+  slug,
+  disabled,
+}: {
+  slug: string;
+  disabled: boolean;
+}) {
+  const [confirming, setConfirming] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const deleteCategory = useMutation(api.catalog.deleteCategory);
+
+  const handleConfirm = async () => {
+    setDeleting(true);
+    const toastId = toast.loading('Usuwanie kategorii...');
+    try {
+      await deleteCategory({ slug });
+      toast.success('Kategoria została usunięta', { id: toastId });
+      setConfirming(false);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Błąd usuwania';
+      toast.error(msg, { id: toastId });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  if (confirming) {
+    return (
+      <div className="flex items-center gap-1">
+        <Button
+          variant="destructive"
+          size="sm"
+          className="h-7 text-xs"
+          onClick={handleConfirm}
+          disabled={deleting}
+        >
+          <CircleCheckBig className="w-3.5 h-3.5 mr-1" />
+          Usuń
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-7 text-xs"
+          onClick={() => setConfirming(false)}
+          disabled={deleting}
+        >
+          <Ban className="w-3.5 h-3.5 mr-1" />
+          Anuluj
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="h-7 text-xs text-muted-foreground hover:text-destructive"
+      onClick={() => setConfirming(true)}
+      disabled={disabled}
+      title="Usuń kategorię"
+    >
+      <Trash2 className="w-3.5 h-3.5 mr-1" />
+      Usuń kategorię
+    </Button>
+  );
+}
 
 export function CatalogTable({
   sections,
@@ -80,10 +162,18 @@ export function CatalogTable({
               className="rounded-lg border border-border overflow-hidden"
             >
               <div className="bg-muted/50 px-4 py-2 font-medium text-sm flex justify-between items-center">
-                <span>{section.slug}</span>
-                <span className="text-xs text-muted-foreground">
-                  {section.items.length} products
-                </span>
+                <CategorySectionTitle section={section} />
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-muted-foreground">
+                    {section.items.length} products
+                  </span>
+                  {!isPreview && section.items.length === 0 && (
+                    <DeleteCategoryButton
+                      slug={section.slug}
+                      disabled={loading}
+                    />
+                  )}
+                </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
@@ -103,6 +193,9 @@ export function CatalogTable({
                           {label}
                         </th>
                       ))}
+                      <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-20">
+                        Delete
+                      </th>
                       <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-24 text-right">
                         Actions
                       </th>
@@ -115,6 +208,12 @@ export function CatalogTable({
                         row={row}
                       />
                     ))}
+                    {!isPreview && (
+                      <AddProductRow
+                        categorySlug={section.slug}
+                        disabled={loading}
+                      />
+                    )}
                   </tbody>
                 </table>
               </div>
