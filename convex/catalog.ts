@@ -106,6 +106,15 @@ export const listCategories = query({
   },
 });
 
+/** List category slugs only (for sitemap, static params). Single source of truth from Convex. */
+export const listCategorySlugs = query({
+  args: {},
+  handler: async (ctx) => {
+    const cats = await ctx.db.query('categories').collect();
+    return sortCategories(cats).map((c) => c.slug);
+  },
+});
+
 /** Get one category's products (for /products/[slug] when migrated from placeholder). */
 export const getCatalogSection = query({
   args: { slug: v.string() },
