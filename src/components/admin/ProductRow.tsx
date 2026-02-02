@@ -5,7 +5,15 @@ import { useMutation } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Pencil, Save, X, Loader2 } from 'lucide-react';
+import {
+  Pencil,
+  Save,
+  X,
+  Loader2,
+  Trash2,
+  Ban,
+  CircleCheckBig,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { ImageUploadCell } from '@/components/admin/ImageUploadCell';
 import { CategorySelect } from '@/components/admin/CategorySelect';
@@ -19,7 +27,10 @@ export function ProductRow({ row }: Props) {
   const [draft, setDraft] = useState<CatalogRow>(() => ({ ...row }));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const updateProduct = useMutation(api.catalog.updateProduct);
+  const deleteProduct = useMutation(api.catalog.deleteProduct);
 
   const kod = row['Kod'] ?? '';
 
@@ -62,6 +73,35 @@ export function ProductRow({ row }: Props) {
     setError(null);
   };
 
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setConfirmingDelete(true);
+  };
+
+  const handleDeleteCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setConfirmingDelete(false);
+  };
+
+  const handleDeleteConfirm = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDeleting(true);
+    const toastId = toast.loading('Usuwanie produktu...');
+    try {
+      await deleteProduct({ kod });
+      toast.success('Produkt został usunięty', { id: toastId });
+      setConfirmingDelete(false);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Błąd usuwania';
+      toast.error(msg, { id: toastId });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <tr className="border-b border-border hover:bg-muted/30">
       <td className="p-2 align-middle">
@@ -93,6 +133,46 @@ export function ProductRow({ row }: Props) {
           )}
         </td>
       ))}
+      <td className="p-2 align-middle">
+        <div className="flex items-center gap-1">
+          {confirmingDelete ? (
+            <>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="h-7 text-xs"
+                onClick={handleDeleteConfirm}
+                disabled={deleting}
+              >
+                <CircleCheckBig className="w-3.5 h-3.5 mr-1" />
+                Usuń
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs"
+                onClick={handleDeleteCancel}
+                disabled={deleting}
+              >
+                <Ban className="w-3.5 h-3.5 mr-1" />
+                Anuluj
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs text-muted-foreground hover:text-destructive"
+              onClick={handleDeleteClick}
+              disabled={editing || deleting}
+              title="Usuń produkt"
+            >
+              <Trash2 className="w-3.5 h-3.5 mr-1" />
+              Usuń produkt
+            </Button>
+          )}
+        </div>
+      </td>
       <td className="p-2 align-top text-right">
         {error && (
           <span className="text-xs text-destructive mr-2" role="alert">
