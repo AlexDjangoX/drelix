@@ -52,7 +52,11 @@ export default function ProductsCatalogContent({
                 id={`section-${section.slug}`}
                 className="text-2xl md:text-4xl font-bold mb-2"
               >
-                <AnimateText k={section.titleKey} />
+                {section.displayName ? (
+                  section.displayName
+                ) : (
+                  <AnimateText k={section.titleKey} />
+                )}
               </TwoToneHeading>
               <p className="text-sm text-muted-foreground mb-6">
                 {section.items.length} <AnimateText k="products.catalogCount" />
