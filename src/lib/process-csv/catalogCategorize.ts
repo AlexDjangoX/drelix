@@ -17,8 +17,15 @@ function calculateMatchScore(row: CatalogRow, config: CategoryRule): number {
   if (config.slug === 'other') return 0.1; // Baseline for 'other'
 
   const nazwaUpper = (row[NAZWA] ?? '').toUpperCase();
-  const kodUpper = (row[KOD] ?? '').toUpperCase();
+  const kodUpper = (row[KOD] ?? '').trim().toUpperCase();
   let score = 0;
+
+  // 0. Exact Kod match (highest priority – overrides keyword/prefix)
+  if (config.exactKods?.length) {
+    if (config.exactKods.some((k) => k.trim().toUpperCase() === kodUpper)) {
+      return 1000;
+    }
+  }
 
   // 1. KOD Prefix Match (High priority)
   if (config.kodPrefixes?.length) {
@@ -75,11 +82,18 @@ function getCategoryForRow(row: CatalogRow, rules: CategoryRule[]): string {
 /** Group rows into sections by category using the given rules. */
 export function categorizeCatalog(
   rows: CatalogRow[],
-  rules: CategoryRule[]
+  rules: CategoryRule[],
+  excludeKods: string[] = []
 ): CatalogSection[] {
   if (!Array.isArray(rules) || rules.length === 0) {
     throw new Error('Invalid category rules');
   }
+
+  const excludeSet = new Set(excludeKods.map((k) => k.trim().toUpperCase()));
+  const filteredRows = rows.filter((row) => {
+    const kod = (row[KOD] ?? '').trim().toUpperCase();
+    return !excludeSet.has(kod);
+  });
 
   const bySlug = new Map<string, CatalogRow[]>();
   for (const config of rules) {
@@ -87,7 +101,7 @@ export function categorizeCatalog(
   }
   if (!bySlug.has('other')) bySlug.set('other', []);
 
-  for (const row of rows) {
+  for (const row of filteredRows) {
     const slug = getCategoryForRow(row, rules);
     if (!bySlug.has(slug)) bySlug.set(slug, []);
     // Attach the categorySlug to the row so it's visible in previews
