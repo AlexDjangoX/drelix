@@ -36,6 +36,7 @@ interface Translations {
     catalogSubtitle: string;
     catalogCount: string;
     catalogOther: string;
+    catalogCustomCategory: string;
     viewFullCatalog: string;
   };
   whyUs: {
@@ -102,6 +103,15 @@ interface Translations {
     accessories: string;
     wkladki: string;
     polar: string;
+    reczniki: string;
+    klapki: string;
+    kurtkiSoftshell: string;
+    spodnieKrotkie: string;
+    spodnieOcieplane: string;
+    kamizelkiOcieplane: string;
+    odziezGastronomiczna: string;
+    tShirt: string;
+    ogrodniczki: string;
   };
 }
 
@@ -140,6 +150,7 @@ const translations: Record<Language, Translations> = {
       catalogSubtitle: 'Pełna oferta sklepu – odzież robocza i ochronna, BHP.',
       catalogCount: 'produktów',
       catalogOther: 'Inne',
+      catalogCustomCategory: 'Kategoria',
       viewFullCatalog: 'Zobacz pełny katalog',
     },
     whyUs: {
@@ -223,6 +234,15 @@ const translations: Record<Language, Translations> = {
       signage: 'Znaki bezpieczeństwa',
       accessories: 'Akcesoria BHP',
       wkladki: 'Wkładki do butów',
+      reczniki: 'Ręczniki',
+      klapki: 'Klapki',
+      kurtkiSoftshell: 'Kurtki softshell',
+      spodnieKrotkie: 'Spodnie krótkie',
+      spodnieOcieplane: 'Spodnie ocieplane',
+      kamizelkiOcieplane: 'Kamizelki ocieplane',
+      odziezGastronomiczna: 'Odzież gastronomiczna',
+      tShirt: 'T-shirt',
+      ogrodniczki: 'Ogrodniczki',
     },
   },
   en: {
@@ -260,6 +280,7 @@ const translations: Record<Language, Translations> = {
       catalogSubtitle: 'Full store offer – work and protective clothing, PPE.',
       catalogCount: 'products',
       catalogOther: 'Other',
+      catalogCustomCategory: 'Category',
       viewFullCatalog: 'View full catalog',
     },
     whyUs: {
@@ -342,6 +363,15 @@ const translations: Record<Language, Translations> = {
       signage: 'Safety Signs',
       accessories: 'Safety Accessories',
       wkladki: 'Shoe Insoles',
+      reczniki: 'Towels',
+      klapki: 'Flip-flops',
+      kurtkiSoftshell: 'Softshell jackets',
+      spodnieKrotkie: 'Short trousers',
+      spodnieOcieplane: 'Thermal trousers',
+      kamizelkiOcieplane: 'Thermal vests',
+      odziezGastronomiczna: 'Catering wear',
+      tShirt: 'T-shirt',
+      ogrodniczki: 'Overalls',
     },
   },
 };
