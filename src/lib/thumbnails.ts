@@ -10,6 +10,6 @@ const THUMBNAIL_PATHS: Partial<Record<CategorySlug, string>> = {
   spodnie: '/thumbnails/spodnie.jpeg',
 };
 
-export function getThumbnailPath(slug: CategorySlug): string | null {
-  return THUMBNAIL_PATHS[slug] ?? null;
+export function getThumbnailPath(slug: string): string | null {
+  return THUMBNAIL_PATHS[slug as CategorySlug] ?? null;
 }
