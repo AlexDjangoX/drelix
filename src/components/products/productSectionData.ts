@@ -14,14 +14,6 @@ import {
   CircleDot,
   Package,
 } from 'lucide-react';
-import {
-  CATEGORY_SLUGS,
-  CATEGORY_TITLE_KEYS,
-} from '@/lib/catalog/catalogCategories';
-import type { CategorySlug } from '@/lib/types';
-
-export { CATEGORY_SLUGS, CATEGORY_TITLE_KEYS };
-
 export const CATEGORY_COLORS = [
   'from-orange-500/20 to-yellow-500/20',
   'from-yellow-500/20 to-lime-500/20',
@@ -74,16 +66,3 @@ export const CATEGORY_ICONS: LucideIcon[] = [
   CircleDot,
   Package,
 ];
-
-export type ProductSectionCategory = {
-  slug: CategorySlug;
-  titleKey: string;
-  index: number;
-};
-
-export const PRODUCT_SECTION_CATEGORIES: ProductSectionCategory[] =
-  CATEGORY_SLUGS.map((slug, index) => ({
-    slug,
-    titleKey: CATEGORY_TITLE_KEYS[slug],
-    index,
-  }));
