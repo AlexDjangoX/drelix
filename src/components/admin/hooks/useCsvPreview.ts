@@ -3,18 +3,18 @@
 import { useState, useCallback } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from 'convex/_generated/api';
-import { categorizeCatalog } from '@/lib/catalogCategorize';
-import type { CategoryRule, CatalogSection } from '@/lib/types';
-import { csvToRows } from '@/lib/csvParseClient';
+import { categorizeCatalog } from '@/lib/process-csv/catalogCategorize';
+import type { CategoryRule, CatalogSection } from '@/lib/types/types';
+import { csvToRows } from '@/lib/process-csv/csvParseClient';
 import { toast } from 'sonner';
 
 export function useCsvPreview() {
   const [file, setFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [previewSections, setPreviewSections] = useState<CatalogSection[] | null>(
-    null
-  );
+  const [previewSections, setPreviewSections] = useState<
+    CatalogSection[] | null
+  >(null);
   const replaceCatalog = useMutation(api.catalog.replaceCatalogFromSections);
 
   const handleFileSelect = useCallback(async (f: File) => {

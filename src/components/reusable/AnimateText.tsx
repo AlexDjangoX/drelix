@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 
 type SupportedHTMLTag =
   | 'span'
@@ -17,10 +17,15 @@ type SupportedHTMLTag =
   | 'label';
 
 function getTextByPath(t: Record<string, unknown>, path: string): string {
-  const value = path.split('.').reduce<unknown>(
-    (obj, key) => (obj != null && typeof obj === 'object' ? (obj as Record<string, unknown>)[key] : undefined),
-    t
-  );
+  const value = path
+    .split('.')
+    .reduce<unknown>(
+      (obj, key) =>
+        obj != null && typeof obj === 'object'
+          ? (obj as Record<string, unknown>)[key]
+          : undefined,
+      t
+    );
   return typeof value === 'string' ? value : String(value ?? '');
 }
 
@@ -40,7 +45,9 @@ export const AnimateText = ({
 }: AnimateTextProps) => {
   const { t, language } = useLanguage();
   const text = getTextByPath(t as unknown as Record<string, unknown>, k);
-  const baseClass = animate ? cn('inline-block animate-text-pop', className) : className;
+  const baseClass = animate
+    ? cn('inline-block animate-text-pop', className)
+    : className;
   const key = `${language}-${k}`;
 
   return React.createElement(tag, { key, className: baseClass, ...rest }, text);

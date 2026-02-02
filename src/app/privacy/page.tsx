@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import { getCanonicalBaseUrl } from '@/lib/SEO/seo';
 
 const siteUrl = getCanonicalBaseUrl();
 

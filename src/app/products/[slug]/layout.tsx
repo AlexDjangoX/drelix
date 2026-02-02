@@ -4,7 +4,7 @@ import {
   productConfig,
 } from '@/components/products/productConfig';
 import { BreadcrumbJsonLd } from '@/components/products/BreadcrumbJsonLd';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import { getCanonicalBaseUrl } from '@/lib/SEO/seo';
 
 const siteUrl = getCanonicalBaseUrl();
 

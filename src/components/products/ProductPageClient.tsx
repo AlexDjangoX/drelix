@@ -14,8 +14,8 @@ import { Navbar, Footer } from '@/components';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText, TwoToneHeading } from '@/components';
 import { productConfig } from '@/components/products/productConfig';
-import type { ProductItem, ProductSlug } from '@/lib/types';
-import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
+import type { ProductItem, ProductSlug } from '@/lib/types/types';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '@/utils/utils';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { PRODUCT_SLUGS } from '@/components/products/productConfig';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import { getCanonicalBaseUrl } from '@/lib/SEO/seo';
 
 /**
  * Next.js serves this at /sitemap.xml (no public/sitemap.xml needed).

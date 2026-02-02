@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 import LanguageSelector from '@/components/reusable/LanguageSelector';
 import DarkToggle from '@/components/reusable/DarkToggle';
 import {

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { AnimateText } from '@/components';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 import type { NavItem } from '@/components/navbar';
 
 type NavbarDesktopLinksProps = {

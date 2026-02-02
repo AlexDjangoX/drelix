@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -39,7 +39,8 @@ export function TwoToneHeading({
       id={id}
       className={cn(
         twoToneBase,
-        topColor === 'foreground' && '[--two-tone-heading-top:hsl(var(--foreground))]',
+        topColor === 'foreground' &&
+          '[--two-tone-heading-top:hsl(var(--foreground))]',
         topColor === 'white' && '[--two-tone-heading-top:hsl(0_0%_100%)]',
         className
       )}

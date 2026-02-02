@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { JsonLd } from '@/components/JsonLd';
 import { ConvexClientProvider } from '@/context/ConvexClientProvider';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import { getCanonicalBaseUrl } from '@/lib/SEO/seo';
 import '@/app/globals.css';
 
 const geistSans = Geist({

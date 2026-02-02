@@ -5,10 +5,10 @@ import {
   LARGE_MAX,
   LARGE_QUALITY,
 } from '@/lib/image/constants';
-import { sanitizeFilename, slugifyForFilename } from '@/lib/utils';
-import type { ImageVariants } from '@/lib/types';
+import { sanitizeFilename, slugifyForFilename } from '@/utils/utils';
+import type { ImageVariants } from '@/lib/types/types';
 
-export type { ImageVariants } from '@/lib/types';
+export type { ImageVariants } from '@/lib/types/types';
 
 /**
  * Process a raw image buffer into thumbnail + large WebP variants.
@@ -19,8 +19,13 @@ export async function processImageToVariants(
   options: { kod?: string; nazwa?: string; originalFilename?: string }
 ): Promise<ImageVariants> {
   const { kod: kodRaw, nazwa: nazwaRaw, originalFilename = '' } = options;
-  const kod = typeof kodRaw === 'string' && kodRaw.trim() ? sanitizeFilename(kodRaw.trim()) : '';
-  const nazwaSlug = slugifyForFilename(typeof nazwaRaw === 'string' ? nazwaRaw : '');
+  const kod =
+    typeof kodRaw === 'string' && kodRaw.trim()
+      ? sanitizeFilename(kodRaw.trim())
+      : '';
+  const nazwaSlug = slugifyForFilename(
+    typeof nazwaRaw === 'string' ? nazwaRaw : ''
+  );
   const baseName =
     kod && nazwaSlug
       ? `${kod}-${nazwaSlug}`
@@ -28,7 +33,8 @@ export async function processImageToVariants(
         ? kod
         : nazwaSlug
           ? nazwaSlug
-          : sanitizeFilename(originalFilename).replace(/\.[^/.]+$/, '') || `upload-${Date.now()}`;
+          : sanitizeFilename(originalFilename).replace(/\.[^/.]+$/, '') ||
+            `upload-${Date.now()}`;
   const thumbnailFilename = `${baseName}-thumb.webp`;
   const largeFilename = `${baseName}.webp`;
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import { getCanonicalBaseUrl } from '@/lib/SEO/seo';
 
 const siteUrl = getCanonicalBaseUrl();
 
@@ -64,8 +64,8 @@ export default function TermsPage() {
               <p>
                 Sprzedawcą / usługodawcą jest <strong>Drelix</strong>, Emila
                 Zegadłowicza 43, 34-100 Wadowice, Polska. Kontakt: e-mail{' '}
-                <a href="mailto:annabadura7@gmail.com">annabadura7@gmail.com</a>,
-                telefon +48 725 695 933.
+                <a href="mailto:annabadura7@gmail.com">annabadura7@gmail.com</a>
+                , telefon +48 725 695 933.
               </p>
               <p>
                 W sprawach zamówień, reklamacji i praw konsumenta prosimy o

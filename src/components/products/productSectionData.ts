@@ -14,8 +14,11 @@ import {
   CircleDot,
   Package,
 } from 'lucide-react';
-import { CATEGORY_SLUGS, CATEGORY_TITLE_KEYS } from '@/data/catalogCategories';
-import type { CategorySlug } from '@/lib/types';
+import {
+  CATEGORY_SLUGS,
+  CATEGORY_TITLE_KEYS,
+} from '@/components/products/catalogCategories';
+import type { CategorySlug } from '@/lib/types/types';
 
 export { CATEGORY_SLUGS, CATEGORY_TITLE_KEYS };
 

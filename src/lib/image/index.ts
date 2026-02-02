@@ -7,7 +7,7 @@ export {
   THUMBNAIL_MAX,
   THUMBNAIL_QUALITY,
 } from '@/lib/image/constants';
-export type { ImageVariants } from '@/lib/types';
+export type { ImageVariants } from '@/lib/types/types';
 export { processImageToVariants } from '@/lib/image/process';
 export {
   createFileValidationError,

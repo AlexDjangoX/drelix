@@ -1,9 +1,12 @@
 // Product category config for /products/[slug]. Aligned with catalogCategoryRules (23 categories).
 // SEO: aim for title ≤ TITLE_IDEAL_MAX (60), description ≤ DESC_IDEAL_MAX (160) — see @/lib/seo.
-import { CATEGORY_SLUGS, CATEGORY_TITLE_KEYS } from '@/data/catalogCategories';
-import type { ProductItem, ProductSlug } from '@/lib/types';
+import {
+  CATEGORY_SLUGS,
+  CATEGORY_TITLE_KEYS,
+} from '@/components/products/catalogCategories';
+import type { ProductItem, ProductSlug } from '@/lib/types/types';
 
-export type { ProductItem, ProductSlug } from '@/lib/types';
+export type { ProductItem, ProductSlug } from '@/lib/types/types';
 
 export const PRODUCT_SLUGS: readonly ProductSlug[] = CATEGORY_SLUGS;
 

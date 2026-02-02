@@ -7,7 +7,7 @@ import {
   DISPLAY_KEYS,
   type CatalogRow,
   type CatalogSection,
-} from '@/lib/types';
+} from '@/lib/types/types';
 
 type Props = {
   sections: CatalogSection[] | null;

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import type { CatalogRow } from '@/lib/types';
-import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
+import type { CatalogRow } from '@/lib/types/types';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '@/utils/utils';
 
 type Props = { row: CatalogRow; index: number };
 
