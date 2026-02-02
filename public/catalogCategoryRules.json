@@ -1,25 +1,305 @@
-[
-  {"slug":"gloves","titleKey":"productNames.gloves","keywords":["RĘKAWICE","REKAWICE","WAMPIRKI","DRAGON"],"kodPrefixes":["R-","REK"]},
-  {"slug":"wkladki","titleKey":"productNames.wkladki","keywords":["WKŁADKI","WKŁ FILC","WKŁADKA","WKŁ","WKWAD","WKLADKI","WKLADKA"],"kodPrefixes":["WKŁ","WKL"]},
-  {"slug":"polbuty","titleKey":"productNames.polbuty","keywords":["PÓŁBUT","PÓŁBUTY","PÓŁBUTY ROBOCZE"],"kodPrefixes":["BPÓŁ","PÓŁ"]},
-  {"slug":"trzewiki","titleKey":"productNames.trzewiki","keywords":["TRZEWIK","TRZEWIKI","TRZEWIKI ROBOCZE","SPAWALNICZE","TRZSPAW","BUTY BEZPIECZNE","OBUWIE BEZPIECZNE","BRYES","301S1","301OB","310S1"],"kodPrefixes":["TRZU","TRZUOć","TRZ","TRAZ","TRZSPAW","BCA","BS310","BS","301","310"]},
-  {"slug":"sandaly","titleKey":"productNames.sandaly","keywords":["SANDAŁ","SANDAŁY","SANDAL","SANDAŁY ROBOCZE","KLAPKI"],"kodPrefixes":["SAN","BSU303","BMK"]},
-  {"slug":"kalosze","titleKey":"productNames.kalosze","keywords":["KALOSZE","KALOSZ","GUMOFILCE","GUMOWCE","BUTY GUMOWE","OBUWIE GUMOWE","TROP","WORKER","YOUNG","RAINNY","GRAND 0152"],"kodPrefixes":["KAL"]},
-  {"slug":"caps","titleKey":"productNames.caps","keywords":["CZAPKA","CZAPKOL","CZAPKI","BEJSBOLÓWKA"],"kodPrefixes":["CZA"]},
-  {"slug":"aprons","titleKey":"productNames.aprons","keywords":["FARTUCH","ZAPASKA","FARTUCHY"],"kodPrefixes":["FAR"]},
-  {"slug":"sweatshirts","titleKey":"productNames.sweatshirts","keywords":["BLUZA","BLK","BLUZY"],"kodPrefixes":["BLU","BLK"]},
-  {"slug":"koszula","titleKey":"productNames.koszula","keywords":["KOSZULA","KOSZULE","FLANELOWA"],"kodPrefixes":["KOS"]},
-  {"slug":"jackets","titleKey":"productNames.jackets","keywords":["KURTKA","KRTKA","KURTKI","WIATRÓWKA"],"kodPrefixes":["KUR","KRT"]},
-  {"slug":"polar","titleKey":"productNames.polar","keywords":["POLAR","POLARY"],"kodPrefixes":["POL"]},
-  {"slug":"spodnie","titleKey":"productNames.clothing","keywords":["SPODNIE","OGRODNICZKI","BOJÓWKI","UBRANIE MASTER"],"kodPrefixes":["SPO","UBR"]},
-  {"slug":"vests","titleKey":"productNames.vests","keywords":["ODBLASKOWA","ODBLASKOWY","KAMIZELKA","BEZRĘKAWNIK"],"kodPrefixes":["KAM"]},
-  {"slug":"helmets","titleKey":"productNames.helmets","keywords":["KASK","HEŁM","HELM"],"kodPrefixes":["KAS"]},
-  {"slug":"eyewear","titleKey":"productNames.eyewear","keywords":["OKULARY","GOGLE","PRZYŁBICA"],"kodPrefixes":["OKU"]},
-  {"slug":"earProtection","titleKey":"productNames.earProtection","keywords":["NAUSZNIKI","ZATYCZKI","SŁUCH","przeciw hałasowe"],"kodPrefixes":["NAU"]},
-  {"slug":"masks","titleKey":"productNames.masks","keywords":["MASKA","PÓŁMASK","WKŁADY DO MASEK","PRZECIWGAZOWYCH","WŁADY POCHŁANIAJĄCE"],"kodPrefixes":["MAS"]},
-  {"slug":"kneeProtection","titleKey":"productNames.kneeProtection","keywords":["NAKOLANNIKI","NAKOLANNIK"],"kodPrefixes":["NAK"]},
-  {"slug":"rainwear","titleKey":"productNames.rainwear","keywords":["PRZECIWDESZCZOWY","PRZECIWDESZCZOWA","KOMPLET PCV","PCV PRZECIWDESZCZOWY","KPLPU","P/DESZCZOWY","PŁASZCZ","PPR-PU"],"kodPrefixes":["DESZCZ","KOMP/D3","KPLPU"]},
-  {"slug":"firstAid","titleKey":"productNames.firstAid","keywords":["APTECZKA"],"kodPrefixes":["APT"]},
-  {"slug":"signage","titleKey":"productNames.signage","keywords":["ZNAK BEZPIECZEŃSTWA"],"kodPrefixes":["ZNAK"]},
-  {"slug":"other","titleKey":"products.catalogOther","keywords":[]}
-]
+{
+  "excludeKods": [
+    "ZNAK BEZP 1",
+    "ZNAK BEZP 2",
+    "BCA",
+    "CHODAK",
+    "OGRODBLASK",
+    "SPKRMONT",
+    "SPZAKOLANO",
+    "SPPROCOTTON",
+    "OPASKA",
+    "PIERŚCIEŃ",
+    "KAPCIE"
+  ],
+  "rules": [
+    {
+      "slug": "gloves",
+      "titleKey": "productNames.gloves",
+      "keywords": ["RĘKAWICE", "OCHRONNE", "REKAWICE", "ROBOCZE"],
+      "kodPrefixes": ["R-"]
+    },
+    {
+      "slug": "wkladki",
+      "titleKey": "productNames.wkladki",
+      "keywords": ["WKŁADKI", "BUTÓW"],
+      "kodPrefixes": ["WKŁ"]
+    },
+    {
+      "slug": "polbuty",
+      "titleKey": "productNames.polbuty",
+      "keywords": ["OBUWIE", "PÓŁBUTY", "ZAWODOWE", "BEZPIECZNE", "BPÓŁ241"],
+      "kodPrefixes": ["BPOŁ", "BPÓŁ"],
+      "exactKods": ["BPÓŁAIRVENT", "BPÓŁBP", "BPÓŁFLUO", "BPÓŁ9010", "BPÓŁ241"]
+    },
+    {
+      "slug": "trzewiki",
+      "titleKey": "productNames.trzewiki",
+      "keywords": ["TRZU120OB", "TRZEWIKI", "TRZEWIK", "OBUWIE", "BEZPIECZNE"],
+      "kodPrefixes": ["TRZ", "TRZU120OB"]
+    },
+    {
+      "slug": "sandaly",
+      "titleKey": "productNames.sandaly",
+      "keywords": ["OBUWIE", "BEZPIECZNE", "KLAPKI", "SANDAŁY"],
+      "kodPrefixes": ["BS"]
+    },
+    {
+      "slug": "klapki",
+      "titleKey": "productNames.klapki",
+      "keywords": ["KLAPKI", "CHODAKI"],
+      "kodPrefixes": ["BKLAP", "BKLAP338", "BKLAPK"]
+    },
+    {
+      "slug": "kalosze",
+      "titleKey": "productNames.kalosze",
+      "keywords": ["BUTY", "GUMOWE", "KALOSZE", "KALOSZ"],
+      "kodPrefixes": [
+        "BGD",
+        "BGFARMER",
+        "BGM",
+        "BGNIT",
+        "BGPREDIATOR",
+        "BGUMOFILCE",
+        "BTROP"
+      ]
+    },
+    {
+      "slug": "caps",
+      "titleKey": "productNames.caps",
+      "keywords": ["CZAPKA", "DRELICHOWA", "OCIEPLANA"],
+      "kodPrefixes": [
+        "CZAPBAW",
+        "CZAPDOĆ",
+        "CZAPDZIANA",
+        "CZAPKOM",
+        "CZAPPROF",
+        "CZPKOL"
+      ],
+      "exactKods": ["CZAPPROF"]
+    },
+    {
+      "slug": "aprons",
+      "titleKey": "productNames.aprons",
+      "keywords": ["FARTUCH", "ZAPASKA", "OCHRONNY"],
+      "kodPrefixes": [
+        "F023",
+        "F129",
+        "F146",
+        "F444",
+        "FARBREZ",
+        "FARTUCH",
+        "FCWO",
+        "FDR",
+        "FGAR",
+        "FPCV",
+        "FPRZEDNI",
+        "FPŁB",
+        "ZAPASKA",
+        "ZAPKOL"
+      ]
+    },
+    {
+      "slug": "sweatshirts",
+      "titleKey": "productNames.sweatshirts",
+      "keywords": ["BLUZA", "KURTKA"],
+      "kodPrefixes": [
+        "BLARDON",
+        "BLBR",
+        "BLCLAS",
+        "BLEUROCL",
+        "BLFOREST",
+        "BLPROF",
+        "BMW"
+      ]
+    },
+    {
+      "slug": "koszula",
+      "titleKey": "productNames.koszula",
+      "keywords": ["KOSZULA", "KOSZULE", "FLANELOWE", "ROBOCZE"],
+      "kodPrefixes": ["KOSZLUX"]
+    },
+    {
+      "slug": "t-shirt",
+      "titleKey": "productNames.tShirt",
+      "keywords": ["PODKOSZULEK", "SHIRT", "KOSZULKA"],
+      "kodPrefixes": ["T-SHIRT"]
+    },
+    {
+      "slug": "jackets",
+      "titleKey": "productNames.jackets",
+      "keywords": ["KURTKA", "OCIEPLANA", "CLASSIC"],
+      "kodPrefixes": [
+        "KURCLASSHORT",
+        "KURCLASSIC-ONE",
+        "KUREXPERT",
+        "KURFLASH",
+        "KURHYBRID",
+        "KURLEADER",
+        "KURSYBERIA",
+        "KURTOPJACK",
+        "KURY"
+      ]
+    },
+    {
+      "slug": "kurtki-softshell",
+      "titleKey": "productNames.kurtkiSoftshell",
+      "keywords": ["KURTKA", "SOFTSHELL"],
+      "kodPrefixes": ["KURSOFT"],
+      "exactKods": ["KURSOFT"]
+    },
+    {
+      "slug": "polar",
+      "titleKey": "productNames.polar",
+      "keywords": ["POLAR"],
+      "kodPrefixes": ["POLAR"]
+    },
+    {
+      "slug": "spodnie",
+      "titleKey": "productNames.clothing",
+      "keywords": ["SPODNIE", "OCHRONNE", "CLASSIC", "PROFESSIONAL", "PASA"],
+      "kodPrefixes": ["SP"]
+    },
+    {
+      "slug": "ogrodniczki",
+      "titleKey": "productNames.ogrodniczki",
+      "keywords": ["OGRODNICZKI", "OCHRONNE"],
+      "kodPrefixes": [
+        "OGRARDON",
+        "OGRBISTER",
+        "OGRCLASSIC",
+        "OGRFOREST",
+        "OGRMASTER",
+        "OGRMMS",
+        "OGRPROF",
+        "OGRPROF4DYN",
+        "OGRVIS",
+        "UBRCOMFODBL",
+        "UBRMASTER"
+      ],
+      "exactKods": ["OGRPROF"]
+    },
+    {
+      "slug": "spodnie-krotkie",
+      "titleKey": "productNames.spodnieKrotkie",
+      "keywords": ["SPODNIE", "KRÓTKIE"],
+      "kodPrefixes": ["SPKRÓTKIE", "SPKREURO", "SPKRSLIM", "SPKRODBLASK"]
+    },
+    {
+      "slug": "spodnie-ocieplane",
+      "titleKey": "productNames.spodnieOcieplane",
+      "keywords": ["SPODNIE", "TERMOAKTYWNE", "UNIWERSAL"],
+      "kodPrefixes": ["SPUNIVERSAL", "SPTERMOAKTYW"]
+    },
+    {
+      "slug": "vests",
+      "titleKey": "productNames.vests",
+      "keywords": ["KAMIZELKA", "ODBLASKOWA", "BEZRĘKAWNIK"],
+      "kodPrefixes": ["KAMCLASSIC", "KAMODBLASK"]
+    },
+    {
+      "slug": "kamizelki-ocieplane",
+      "titleKey": "productNames.kamizelkiOcieplane",
+      "keywords": ["KAMIZELKA", "OCIEPLANA", "BEZRĘKAWNIK"],
+      "kodPrefixes": ["KAMKORMORAN", "KAMLEŚNIK", "KAMURG", "KAMCLASSTOP"]
+    },
+    {
+      "slug": "odziez-gastronomiczna",
+      "titleKey": "productNames.odziezGastronomiczna",
+      "keywords": [
+        "SPODNIE",
+        "PIEKARSKIE",
+        "BLUZA",
+        "KUCHARSKA",
+        "CHUSTA",
+        "FURAŻERKA",
+        "CZEPEK"
+      ],
+      "kodPrefixes": [
+        "SPPBLACK",
+        "SPP",
+        "BLK",
+        "BLKBLACK",
+        "CHUSTA",
+        "FURAŻERKA",
+        "CZEPEK1",
+        "CZEPEK",
+        "CZEPEKSIAT"
+      ]
+    },
+    {
+      "slug": "helmets",
+      "titleKey": "productNames.helmets",
+      "keywords": ["KASK", "HEŁM", "OCHRONNY"],
+      "kodPrefixes": ["KASK"]
+    },
+    {
+      "slug": "eyewear",
+      "titleKey": "productNames.eyewear",
+      "keywords": ["OKULARY", "GOGLE", "OCHRONNE"],
+      "kodPrefixes": ["OK"]
+    },
+    {
+      "slug": "earProtection",
+      "titleKey": "productNames.earProtection",
+      "keywords": ["NAUSZNIKI", "ZATYCZKI", "SŁUCHU"],
+      "kodPrefixes": ["N1", "N3", "ZATYCZKI"]
+    },
+    {
+      "slug": "masks",
+      "titleKey": "productNames.masks",
+      "keywords": ["PÓŁMASKA", "MASKA", "WKŁADY"],
+      "kodPrefixes": ["MASMIDI", "MP/G", "MPZAWÓR", "WKŁADY"]
+    },
+    {
+      "slug": "kneeProtection",
+      "titleKey": "productNames.kneeProtection",
+      "keywords": ["NAKOLANNIKI", "WKŁADY", "ŻELOWE"],
+      "kodPrefixes": ["NAKONYB", "NAKWKŁADKI", "NAKŻEL"]
+    },
+    {
+      "slug": "rainwear",
+      "titleKey": "productNames.rainwear",
+      "keywords": ["PRZECIWDESZCZOWE", "KOMPLET", "PŁASZCZ"],
+      "kodPrefixes": ["KOMP/D", "KUR", "PŁASZCZ", "SPP/D", "SPRP"]
+    },
+    {
+      "slug": "firstAid",
+      "titleKey": "productNames.firstAid",
+      "keywords": ["APTECZKA"],
+      "kodPrefixes": ["APT"]
+    },
+    {
+      "slug": "reczniki",
+      "titleKey": "productNames.reczniki",
+      "keywords": ["RĘCZNIK"],
+      "kodPrefixes": ["RĘCZ"],
+      "exactKods": ["RĘCZ50/90", "RĘCZ70/140 1"]
+    },
+    {
+      "slug": "other",
+      "titleKey": "products.catalogOther",
+      "keywords": [],
+      "kodPrefixes": [
+        "AMORTYZ",
+        "KIESZEŃ",
+        "KOMMAL",
+        "KOMMICRO",
+        "LINKA",
+        "MIARA",
+        "NOZYK",
+        "OCIEPLACZ",
+        "OSŁONA",
+        "PAS",
+        "SKARPETY",
+        "SZELKI",
+        "SZNURÓWKI",
+        "TASMA",
+        "TAŚMA",
+        "TORNAN",
+        "TRAMPKI",
+        "ZACZEP"
+      ]
+    }
+  ]
+}
