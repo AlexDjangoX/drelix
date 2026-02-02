@@ -1,37 +1,34 @@
 import type { Metadata } from 'next';
-import {
-  PRODUCT_SLUGS,
-  productConfig,
-} from '@/components/products/productConfig';
+import { fetchQuery } from 'convex/nextjs';
+import { api } from 'convex/_generated/api';
+import { productConfig } from '@/components/products/productConfig';
 import { BreadcrumbJsonLd } from '@/components/products/BreadcrumbJsonLd';
 import { getCanonicalBaseUrl } from '@/lib/seo';
 
 const siteUrl = getCanonicalBaseUrl();
 
-/** Static until redeploy; no revalidation. */
-export const dynamic = 'force-static';
-export const revalidate = false;
-
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return PRODUCT_SLUGS.map((slug: string) => ({ slug }));
+  const slugs = await fetchQuery(api.catalog.listCategorySlugs);
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const config = PRODUCT_SLUGS.includes(slug as (typeof PRODUCT_SLUGS)[number])
-    ? productConfig[slug as keyof typeof productConfig]
-    : null;
-  if (!config) return { title: 'Produkty | Drelix' };
+  const section = await fetchQuery(api.catalog.getCatalogSection, { slug });
+  if (!section) return { title: 'Produkty | Drelix' };
+
+  const config = productConfig[slug as keyof typeof productConfig];
+  const title = config?.metadata.title ?? section.displayName ?? slug;
+  const description = config?.metadata.description ?? '';
 
   const path = `/products/${slug}`;
   const canonical = `${siteUrl}${path}`;
-  const { title, description } = config.metadata;
 
   return {
-    title: config.metadata.title,
-    description: config.metadata.description,
+    title,
+    description,
     alternates: { canonical },
     openGraph: {
       type: 'website',
@@ -65,13 +62,13 @@ export default async function ProductLayout({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const config = PRODUCT_SLUGS.includes(slug as (typeof PRODUCT_SLUGS)[number])
-    ? productConfig[slug as keyof typeof productConfig]
-    : null;
+  const section = await fetchQuery(api.catalog.getCatalogSection, { slug });
+  const config = productConfig[slug as keyof typeof productConfig];
+  const name = config?.metadata.title ?? section?.displayName ?? slug;
 
   return (
     <>
-      {config && <BreadcrumbJsonLd slug={slug} name={config.metadata.title} />}
+      {section && <BreadcrumbJsonLd slug={slug} name={name} />}
       {children}
     </>
   );
