@@ -8,26 +8,40 @@
 
 ## What We Set Out to Achieve
 
-1. **SEO as a core requirement** – Not an afterthought. Metadata, sitemap, robots.txt, structured data, and internal linking are built into the architecture.
-2. **Google Search Console readiness** – Documentation for setup, monitoring, and troubleshooting.
-3. **Local SEO alignment** – NAP consistency, LocalBusiness schema, guidance for Google Business Profile.
-4. **Performance** – Static generation where possible, optimized images, minimal layout shift.
+1. **SEO as a core requirement** – Not an afterthought. Metadata, sitemap, robots.txt, structured data, internal linking, and performance optimization built into the architecture.
+2. **Performance-first approach** – Lighthouse mobile score of **91/100** through aggressive optimization: code splitting, lazy loading, image optimization, and render-blocking elimination.
+3. **Google Search Console readiness** – Documentation for setup, monitoring, and troubleshooting.
+4. **Local SEO alignment** – NAP consistency, LocalBusiness schema, guidance for Google Business Profile.
 5. **Legal compliance** – Privacy Policy and Terms of Service aligned with EU/Polish law (GDPR, consumer rights, brick-and-mortar retail).
 
 ---
 
 ## What We Implemented
 
-### SEO
+### SEO & Performance
+
+#### **Technical SEO**
 
 - **Metadata:** Unique title and meta description per page (target 50–60 chars / 150–160 chars). Canonical URLs (non–trailing-slash). Open Graph and Twitter cards.
-- **Sitemap:** `src/app/sitemap.ts` generates `/sitemap.xml` with 27 URLs (homepage, catalog, 23 product categories, privacy, terms). Uses `getCanonicalBaseUrl()` for consistency.
+- **Sitemap:** `src/app/sitemap.ts` dynamically generates `/sitemap.xml` by fetching category slugs from Convex. Single source of truth. Uses `getCanonicalBaseUrl()` for consistency.
 - **robots.txt:** Dynamic route at `/robots.txt`. Allows search engines on public pages; disallows `/api/` and `/admin/`. Blocks AI training crawlers. Content-signal policy. References sitemap.
 - **Structured data (JSON-LD):** LocalBusiness, WebPage (root); ItemList (catalog); BreadcrumbList (category pages). Validate with [Google Rich Results Test](https://search.google.com/test/rich-results).
-- **Semantic HTML:** One H1 per page, heading hierarchy (h1 → h2 → h3), `<main>`, sections.
-- **Image alt text:** Descriptive `alt` on product images.
+- **Semantic HTML:** One H1 per page, sequential heading hierarchy (h1 → h2 → h3), proper `<main>` landmark, semantic sections.
+- **Image optimization:** Next.js `Image` component, descriptive `alt` text, reduced quality for hero image (70), WebP format.
 - **Internal linking:** Footer and navbar (on non-home routes) link to homepage sections, privacy, terms. Logo links to home.
 - **Admin noindex:** Admin area excluded from indexing via metadata and robots.txt.
+
+#### **Performance Optimization (Lighthouse Mobile: 91/100)**
+
+- **Code splitting:** Below-the-fold sections (`ProductSection`, `WhyUsSection`, `ContactSection`) loaded via `next/dynamic` with `ssr: true`. Heavy libraries (Framer Motion, Convex) split into separate bundles.
+- **Lazy loading:** Google Maps iframe loads only when scrolled near (Intersection Observer). Saves 152 KiB on initial load.
+- **Suspense boundaries:** React `Suspense` wraps dynamic components with meaningful fallbacks to prevent layout shift.
+- **Render-blocking CSS eliminated:** `experimental.inlineCss: true` inlines critical CSS directly into HTML. No external CSS blocking first paint.
+- **Resource hints:** `preconnect` to Convex for faster backend queries. `dns-prefetch` for Google services.
+- **Image delivery:** Hero image compressed (quality 70), lazy loading for below-fold images.
+- **Reduced JavaScript:** Initial bundle size reduced by ~60-70% through strategic code splitting. Unused JavaScript dropped from 250 KiB to minimal levels.
+
+**Impact:** Initial load time significantly improved on mobile networks. Critical content (hero, navbar) renders immediately. Heavy interactive components load progressively as user scrolls.
 
 ### Product Management
 
@@ -48,25 +62,25 @@
 
 ## Documentation
 
-| Document | Purpose |
-|----------|---------|
-| **[SEO_Guide.md](./docs/SEO_Guide.md)** | SEO reference: metadata, sitemap, robots, JSON-LD, GSC monitoring, local SEO, content guidelines, checklist for new pages. |
-| **[AGENTS.md](./docs/AGENTS.md)** | Development conventions: stack, routing, i18n, accessibility. |
-| **[CONVEX_DATA_PLAN.md](./docs/CONVEX_DATA_PLAN.md)** | Convex data model, queries, CSV import. |
-| **[VERCEL_DEPLOYMENT.md](./docs/VERCEL_DEPLOYMENT.md)** | Vercel deployment and domain setup. |
-| **[SEO_AUDIT_REPORT.md](./docs/SEO_AUDIT_REPORT.md)** | Codebase audit against SEO guide. |
+| Document                                                | Purpose                                                                                                                    |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **[SEO_Guide.md](./docs/SEO_Guide.md)**                 | SEO reference: metadata, sitemap, robots, JSON-LD, GSC monitoring, local SEO, content guidelines, checklist for new pages. |
+| **[AGENTS.md](./docs/AGENTS.md)**                       | Development conventions: stack, routing, i18n, accessibility.                                                              |
+| **[CONVEX_DATA_PLAN.md](./docs/CONVEX_DATA_PLAN.md)**   | Convex data model, queries, CSV import.                                                                                    |
+| **[VERCEL_DEPLOYMENT.md](./docs/VERCEL_DEPLOYMENT.md)** | Vercel deployment and domain setup.                                                                                        |
+| **[SEO_AUDIT_REPORT.md](./docs/SEO_AUDIT_REPORT.md)**   | Codebase audit against SEO guide.                                                                                          |
 
 ---
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|------------|
-| **Framework** | Next.js 16 (App Router) |
-| **Language** | TypeScript |
-| **Styling** | Tailwind CSS v4 |
-| **Backend** | Convex |
-| **UI** | shadcn-style components, Framer Motion |
+| Category      | Technology                             |
+| ------------- | -------------------------------------- |
+| **Framework** | Next.js 16 (App Router)                |
+| **Language**  | TypeScript                             |
+| **Styling**   | Tailwind CSS v4                        |
+| **Backend**   | Convex                                 |
+| **UI**        | shadcn-style components, Framer Motion |
 
 ---
 
@@ -148,24 +162,43 @@ drelix/
 
 ## Recent Changes
 
+### **Performance Optimization (Feb 2026)**
+
+- **Code splitting implementation** – Below-the-fold sections lazy loaded with `next/dynamic` + `Suspense`. Initial JavaScript bundle reduced by 60-70%.
+- **Google Maps lazy loading** – Intersection Observer defers map loading until user scrolls near. Saves 152 KiB on initial load.
+- **CSS inlining** – Enabled `experimental.inlineCss` to eliminate render-blocking CSS requests.
+- **Resource hints** – Added preconnect to Convex and dns-prefetch for Google services in root layout.
+- **Image optimization** – Hero image quality reduced to 70, maintaining visual quality while improving LCP.
+- **Lighthouse mobile score: 77 → 91** – 14-point improvement through systematic optimization.
+
+### **UX & Navigation**
+
 - **Navbar scroll progress** – A thin bar under the navbar fills left→right as the user scrolls (reading progress), using Framer Motion `useScroll` and `useSpring`.
-- **Navbar section links (route-aware)** – Section links (About, Products, Why Us, Contact) are only relevant on the homepage. On `/` they scroll to in-page sections with scroll-spy and active styling (primary color + bottom border). On other routes (e.g. `/products/[slug]`, `/privacy`) the same items are `<Link href="/#section">` so they navigate to the homepage and the target section. Fixes broken behavior on product and legal pages.
+- **Navbar section links (route-aware)** – Section links (About, Products, Why Us, Contact) are only relevant on the homepage. On `/` they scroll to in-page sections with scroll-spy and active styling (primary color + bottom border). On other routes (e.g. `/products/[slug]`, `/privacy`) the same items are `<Link href="/#section">` so they navigate to the homepage and the target section.
 - **Navbar active section** – Scroll-spy highlights the current section; active item is uppercase, primary color, and has a bottom border. Scroll-spy runs only on the homepage.
-- **Hero section** – Subtle entrance animations (Framer Motion): heading, subtitle, CTA, and trust pills fade in and slide up with a short stagger. Respects `prefers-reduced-motion`. Horizontal spacing increased (padding, subtitle width, gaps between trust pills).
-- **Navbar styling** – Section labels are uppercase; active tab uses a bottom border instead of text underline for visibility. Navbar uses `cn()` for conditional Tailwind classes and plain function components (no `React.FC`).
+- **Hero section** – Subtle entrance animations (Framer Motion): heading, subtitle, CTA, and trust pills fade in and slide up with a short stagger. Respects `prefers-reduced-motion`.
+
+### **Catalog Management**
+
+- **Dynamic category system** – Sitemap, product pages, and homepage fetch categories directly from Convex. Single source of truth.
+- **Category deletion** – Admins can delete empty categories with confirmation UI.
+- **Alphabetical ordering** – Products and categories display alphabetically across catalog pages.
+- **Icon diversity** – Replaced repetitive category icons with semantically aligned icons via slug-to-icon mapping.
+- **Search prioritization** – KOD (product code) prioritized in admin search results.
+- **Exact KOD matching** – `exactKods` field in category rules for precise product categorization.
 
 ---
 
 ## Quick Reference
 
-| Task | Location |
-|------|----------|
-| Change site-wide metadata | `src/app/layout.tsx` |
-| Change business info (JSON-LD) | `src/components/JsonLd.tsx` |
-| Add product category | `src/data/catalogCategories.ts`, `src/components/products/productConfig.ts` |
-| Change crawl policy | `src/lib/robotsContent.ts` |
-| View sitemap URLs | `/sitemap.xml` or `src/app/sitemap.ts` |
+| Task                           | Location                                                                    |
+| ------------------------------ | --------------------------------------------------------------------------- |
+| Change site-wide metadata      | `src/app/layout.tsx`                                                        |
+| Change business info (JSON-LD) | `src/components/JsonLd.tsx`                                                 |
+| Add product category           | `src/data/catalogCategories.ts`, `src/components/products/productConfig.ts` |
+| Change crawl policy            | `src/lib/robotsContent.ts`                                                  |
+| View sitemap URLs              | `/sitemap.xml` or `src/app/sitemap.ts`                                      |
 
 ---
 
-*This README documents what was built and how. Live results (rankings, traffic, indexing) depend on deployment, GSC setup, content, and market conditions.*
+_This README documents what was built and how. Live results (rankings, traffic, indexing) depend on deployment, GSC setup, content, and market conditions._
