@@ -1,24 +1,51 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useLanguage } from '@/context/LanguageContext';
+import { useQuery } from 'convex/react';
+import { api } from 'convex/_generated/api';
 import {
   ProductSectionCategoryCard,
   gridDominoVariants,
   CATEGORY_COLORS,
   CATEGORY_ICONS,
-  PRODUCT_SECTION_CATEGORIES,
 } from '@/components/products';
 
-type ProductSectionCategoryGridProps = {
-  reducedMotion: boolean;
-};
+function getLabel(
+  t: Record<string, unknown>,
+  section: { slug: string; titleKey: string; displayName?: string }
+): string {
+  if (section.displayName) return section.displayName;
+  const keys = section.titleKey.split('.');
+  let current: unknown = t;
+  for (const key of keys) {
+    current = (current as Record<string, unknown>)?.[key];
+  }
+  return typeof current === 'string' ? current : section.slug;
+}
 
 export function ProductSectionCategoryGrid({
   reducedMotion,
-}: ProductSectionCategoryGridProps) {
+}: {
+  reducedMotion: boolean;
+}) {
   const gridRef = useRef<HTMLDivElement>(null);
   const isGridInView = useInView(gridRef, { once: true, amount: 0.08 });
+  const sectionsFromConvex = useQuery(api.catalog.listCatalogSections);
+  const { t } = useLanguage();
+
+  const sorted = useMemo(() => {
+    if (!sectionsFromConvex) return [];
+    const withItems = sectionsFromConvex.filter((s) => s.items.length > 0);
+    return [...withItems].sort((a, b) =>
+      getLabel(t as unknown as Record<string, unknown>, a).localeCompare(
+        getLabel(t as unknown as Record<string, unknown>, b),
+        undefined,
+        { sensitivity: 'base' }
+      )
+    );
+  }, [sectionsFromConvex, t]);
 
   return (
     <motion.div
@@ -28,13 +55,14 @@ export function ProductSectionCategoryGrid({
       initial="hidden"
       animate={isGridInView ? 'visible' : 'hidden'}
     >
-      {PRODUCT_SECTION_CATEGORIES.map(({ slug, titleKey, index }) => (
+      {sorted.map((section, i) => (
         <ProductSectionCategoryCard
-          key={slug}
-          slug={slug}
-          titleKey={titleKey}
-          icon={CATEGORY_ICONS[index]}
-          color={CATEGORY_COLORS[index]}
+          key={section.slug}
+          slug={section.slug}
+          titleKey={section.titleKey}
+          displayName={section.displayName}
+          icon={CATEGORY_ICONS[i % CATEGORY_ICONS.length]}
+          color={CATEGORY_COLORS[i % CATEGORY_COLORS.length]}
           reducedMotion={reducedMotion}
         />
       ))}
