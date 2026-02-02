@@ -1,14 +1,17 @@
 import type { MetadataRoute } from 'next';
-import { PRODUCT_SLUGS } from '@/components/products/productConfig';
+import { fetchQuery } from 'convex/nextjs';
+import { api } from 'convex/_generated/api';
 import { getCanonicalBaseUrl } from '@/lib/seo';
 
 /**
  * Next.js serves this at /sitemap.xml (no public/sitemap.xml needed).
  * Base URL: single source from getCanonicalBaseUrl() (no trailing slash).
+ * Category slugs from Convex (single source of truth).
  */
 const baseUrl = getCanonicalBaseUrl();
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const slugs = await fetchQuery(api.catalog.listCategorySlugs);
   const now = new Date();
   return [
     {
@@ -35,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     },
-    ...PRODUCT_SLUGS.map((slug) => ({
+    ...slugs.map((slug) => ({
       url: `${baseUrl}/products/${slug}`,
       lastModified: now,
       changeFrequency: 'weekly' as const,
