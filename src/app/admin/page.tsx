@@ -4,7 +4,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
-import { CsvUploadSection, CatalogTable } from '@/components/admin';
+import {
+  CsvUploadSection,
+  CatalogTable,
+  CreateCategorySection,
+} from '@/components/admin';
 import { useCsvPreview, useCatalogFilter } from '@/components/admin/hooks';
 
 export default function AdminPage() {
@@ -52,6 +56,8 @@ export default function AdminPage() {
           Log out
         </Button>
       </div>
+
+      {!previewSections && <CreateCategorySection />}
 
       <CsvUploadSection
         file={file}
