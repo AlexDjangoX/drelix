@@ -5,3 +5,4 @@ export { CsvUploadSection } from '@/components/admin/CsvUploadSection';
 export { ImageUploadCell } from '@/components/admin/ImageUploadCell';
 export { LoginSubmitButton } from '@/components/admin/LoginSubmitButton';
 export { ProductRow } from '@/components/admin/ProductRow';
+export { AdminLoginSection } from '@/components/admin/login';

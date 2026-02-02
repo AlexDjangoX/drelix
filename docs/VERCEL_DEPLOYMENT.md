@@ -26,16 +26,16 @@ Step-by-step guide to deploy the Drelix site to Vercel and connect your domain v
 
 ### Step 1.2 – Configure the project
 
-1. **Project Name**  
+1. **Project Name**
    - Default is fine (e.g. `drelix`) or set something like `drelix-org`
 
-2. **Framework Preset**  
+2. **Framework Preset**
    - Should auto-detect **Next.js**. Leave as is.
 
-3. **Root Directory**  
+3. **Root Directory**
    - Leave as **`.`** (repo root)
 
-4. **Build and Output Settings**  
+4. **Build and Output Settings**
    - Leave defaults:
      - Build Command: `next build` (or empty to use default)
      - Output Directory: (Next.js default)
@@ -45,18 +45,25 @@ Step-by-step guide to deploy the Drelix site to Vercel and connect your domain v
 
    Click **“Environment Variables”** and add:
 
-   | Name | Value | Environment |
-   |------|--------|-------------|
-   | `NEXT_PUBLIC_SITE_URL` | `https://drelix.org` | Production, Preview |
-   | `NEXT_PUBLIC_CONVEX_URL` | Your Convex deployment URL | Production, Preview |
-
-   - **NEXT_PUBLIC_SITE_URL**  
-     - Must be `https://drelix.org` (no trailing slash).  
+   | Name                     | Value                                                                      | Environment         |
+   | ------------------------ | -------------------------------------------------------------------------- | ------------------- |
+   | `NEXT_PUBLIC_SITE_URL`   | `https://drelix.org`                                                       | Production, Preview |
+   | `NEXT_PUBLIC_CONVEX_URL` | Your Convex deployment URL                                                 | Production, Preview |
+   | `ADMIN_PASSWORD`         | Strong password for admin login                                            | Production, Preview |
+   | `JWT_SECRET`             | Random secret for session signing (optional; falls back to ADMIN_PASSWORD) | Production, Preview |
+   - **NEXT_PUBLIC_SITE_URL**
+     - Must be `https://drelix.org` (no trailing slash).
      - Used for canonicals, sitemap, Open Graph, JSON-LD.
 
-   - **NEXT_PUBLIC_CONVEX_URL**  
-     - From [dashboard.convex.dev](https://dashboard.convex.dev) → your app → Settings → Deployment URL.  
+   - **NEXT_PUBLIC_CONVEX_URL**
+     - From [dashboard.convex.dev](https://dashboard.convex.dev) → your app → Settings → Deployment URL.
      - Only needed if you use the catalog/admin.
+
+   - **ADMIN_PASSWORD**
+     - Required for admin login. Use a strong, unique password.
+
+   - **JWT_SECRET**
+     - Optional. If set, used to sign admin session JWTs (more secure than using ADMIN_PASSWORD). If unset, ADMIN_PASSWORD is used for backwards compatibility.
 
    Leave **Environment** as **Production** (and **Preview** if you want preview deployments to work the same).
 
@@ -93,15 +100,15 @@ Step-by-step guide to deploy the Drelix site to Vercel and connect your domain v
 
 You’ll see one of these:
 
-- **Option A – Recommended: CNAME (Vercel as subdomain)**  
+- **Option A – Recommended: CNAME (Vercel as subdomain)**
   - For **`www.drelix.org`** Vercel typically asks for:
     - **Name:** `www`
     - **Target / Value:** `cname.vercel-dns.com` (or the exact value Vercel shows)
   - For **root domain `drelix.org`** Vercel usually recommends either:
-    - An **A record** to Vercel’s IP, or  
+    - An **A record** to Vercel’s IP, or
     - **CNAME flattening** (e.g. at Cloudflare: CNAME `drelix.org` → `cname.vercel-dns.com`).
 
-- **Option B – A record**  
+- **Option B – A record**
   - Vercel may give you an IP (e.g. `76.76.21.21`) for an A record on `drelix.org`.
 
 **Write down exactly what Vercel shows** (record type, name, value) so you can match it in Cloudflare.
@@ -117,33 +124,33 @@ You’ll see one of these:
 **A) Root domain – `drelix.org`**
 
 - If Vercel says to use an **A record**:
-  - **Type:** A  
-  - **Name:** `@`  
-  - **IPv4 address:** (the IP Vercel gave you, e.g. `76.76.21.21`)  
-  - **Proxy status:** **Proxied** (orange cloud) is fine with Cloudflare.  
+  - **Type:** A
+  - **Name:** `@`
+  - **IPv4 address:** (the IP Vercel gave you, e.g. `76.76.21.21`)
+  - **Proxy status:** **Proxied** (orange cloud) is fine with Cloudflare.
   - **TTL:** Auto.
 
 - If Vercel says to use **CNAME for root** (CNAME flattening):
-  - **Type:** CNAME  
-  - **Name:** `@`  
-  - **Target:** `cname.vercel-dns.com` (or the exact value from Vercel).  
-  - **Proxy status:** Proxied (orange) is OK.  
+  - **Type:** CNAME
+  - **Name:** `@`
+  - **Target:** `cname.vercel-dns.com` (or the exact value from Vercel).
+  - **Proxy status:** Proxied (orange) is OK.
   - Save.
 
 **B) www – `www.drelix.org`**
 
-- **Type:** CNAME  
-- **Name:** `www`  
-- **Target:** `cname.vercel-dns.com` (or the value Vercel shows for `www`)  
-- **Proxy status:** Proxied (orange).  
+- **Type:** CNAME
+- **Name:** `www`
+- **Target:** `cname.vercel-dns.com` (or the value Vercel shows for `www`)
+- **Proxy status:** Proxied (orange).
 - Save.
 
 **Summary:**
 
-| Type | Name | Content / Target | Proxy |
-|------|------|------------------|-------|
-| A (or CNAME) | `@` | Vercel IP or `cname.vercel-dns.com` | Proxied ✅ |
-| CNAME | `www` | `cname.vercel-dns.com` | Proxied ✅ |
+| Type         | Name  | Content / Target                    | Proxy      |
+| ------------ | ----- | ----------------------------------- | ---------- |
+| A (or CNAME) | `@`   | Vercel IP or `cname.vercel-dns.com` | Proxied ✅ |
+| CNAME        | `www` | `cname.vercel-dns.com`              | Proxied ✅ |
 
 ### Step 2.3 – Point both root and www to Vercel (in Vercel)
 
@@ -155,17 +162,17 @@ You’ll see one of these:
 
 ### Step 2.4 – Wait for DNS and SSL
 
-1. **DNS propagation**  
-   - Usually 5–30 minutes with Cloudflare.  
+1. **DNS propagation**
+   - Usually 5–30 minutes with Cloudflare.
    - In Vercel **Domains**, each domain will show **Valid Configuration** when DNS is correct.
 
-2. **SSL**  
-   - Vercel will issue a certificate for `drelix.org` (and `www` if added).  
+2. **SSL**
+   - Vercel will issue a certificate for `drelix.org` (and `www` if added).
    - Status in Vercel will change to something like **Certificate Ready** when done.
 
-3. **If it stays “Invalid”**  
-   - Double-check the record type, name, and target in Cloudflare.  
-   - Ensure no typo in `drelix.org` in Vercel.  
+3. **If it stays “Invalid”**
+   - Double-check the record type, name, and target in Cloudflare.
+   - Ensure no typo in `drelix.org` in Vercel.
    - Turn Cloudflare proxy **off** temporarily (grey cloud) to rule out proxy issues, then turn it back on.
 
 ---
@@ -206,52 +213,56 @@ No extra steps required for a basic “domain works + SSL” setup.
 
 ## Part 5: After go-live checklist
 
-1. **Google Search Console**  
-   - Add property **`https://drelix.org`**.  
+1. **Google Search Console**
+   - Add property **`https://drelix.org`**.
    - Submit sitemap: **`https://drelix.org/sitemap.xml`**.
 
-2. **Cloudflare**  
-   - **Block AI Bots:** ON (if you want to block AI crawlers).  
-   - **Robots.txt:** Content Signals Policy.  
+2. **Cloudflare**
+   - **Block AI Bots:** ON (if you want to block AI crawlers).
+   - **Robots.txt:** Content Signals Policy.
    - **Bot Fight Mode:** ON; monitor GSC crawl stats.
 
-3. **Convex** (if used)  
+3. **Convex** (if used)
    - Ensure production Convex URL is in `NEXT_PUBLIC_CONVEX_URL` and that Convex allows your Vercel domain if you use auth/origins.
 
 ---
 
 ## Quick reference
 
-| Step | Where | What |
-|------|--------|------|
-| 1 | Vercel → New Project | Import repo, set env vars, Deploy |
-| 2 | Vercel → Settings → Domains | Add `drelix.org` and `www.drelix.org` |
-| 3 | Cloudflare → DNS | A (or CNAME) for `@`, CNAME for `www` → Vercel |
-| 4 | Vercel → Domains | Set primary, optional redirect www → root |
-| 5 | Browser | Check https://drelix.org, sitemap, robots.txt, canonicals |
-| 6 | GSC | Add property, submit sitemap |
+| Step | Where                       | What                                                      |
+| ---- | --------------------------- | --------------------------------------------------------- |
+| 1    | Vercel → New Project        | Import repo, set env vars, Deploy                         |
+| 2    | Vercel → Settings → Domains | Add `drelix.org` and `www.drelix.org`                     |
+| 3    | Cloudflare → DNS            | A (or CNAME) for `@`, CNAME for `www` → Vercel            |
+| 4    | Vercel → Domains            | Set primary, optional redirect www → root                 |
+| 5    | Browser                     | Check https://drelix.org, sitemap, robots.txt, canonicals |
+| 6    | GSC                         | Add property, submit sitemap                              |
 
 ---
 
 ## Troubleshooting
 
-**“Invalid configuration” on domain**  
-- Re-check DNS in Cloudflare (type, name, value).  
-- Wait up to 1 hour.  
+**“Invalid configuration” on domain**
+
+- Re-check DNS in Cloudflare (type, name, value).
+- Wait up to 1 hour.
 - Try with Cloudflare proxy **off** to confirm it’s not a proxy issue.
 
-**Site works on .vercel.app but not on drelix.org**  
-- DNS not propagated yet, or wrong record.  
+**Site works on .vercel.app but not on drelix.org**
+
+- DNS not propagated yet, or wrong record.
 - Confirm in Vercel Domains that it says **Valid Configuration**.
 
-**Canonicals or sitemap still show .vercel.app**  
-- `NEXT_PUBLIC_SITE_URL` must be `https://drelix.org` for **Production**.  
+**Canonicals or sitemap still show .vercel.app**
+
+- `NEXT_PUBLIC_SITE_URL` must be `https://drelix.org` for **Production**.
 - Redeploy after changing env vars.
 
-**SSL certificate pending**  
-- Wait 5–15 minutes after DNS is valid.  
+**SSL certificate pending**
+
+- Wait 5–15 minutes after DNS is valid.
 - Ensure no firewall or DNS rule is blocking Vercel’s validation.
 
 ---
 
-*Last updated for domain **drelix.org** and Vercel + Cloudflare setup.*
+_Last updated for domain **drelix.org** and Vercel + Cloudflare setup._

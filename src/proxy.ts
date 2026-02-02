@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
-
-const COOKIE_NAME = 'drelix-admin-session';
+import { COOKIE_NAME, verifyAdminSession } from '@/lib/auth';
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only protect /admin routes, but allow /admin/login
+  // Protect /admin routes (except /admin/login)
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
     const sessionCookie = request.cookies.get(COOKIE_NAME);
 
@@ -15,26 +13,34 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
 
-    try {
-      // Verify JWT
-      const secret = new TextEncoder().encode(process.env.ADMIN_PASSWORD ?? '');
-      await jwtVerify(sessionCookie.value, secret);
-      return NextResponse.next();
-    } catch (error) {
-      console.error('Admin session verification failed:', error);
-      // Invalid or expired session
+    const session = await verifyAdminSession(sessionCookie.value);
+    if (!session) {
       const response = NextResponse.redirect(
         new URL('/admin/login', request.url)
       );
       response.cookies.delete(COOKIE_NAME);
       return response;
     }
+
+    return NextResponse.next();
+  }
+
+  // Protect /api/image (admin-only upload)
+  if (pathname === '/api/image') {
+    const sessionCookie = request.cookies.get(COOKIE_NAME);
+    if (!sessionCookie) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const session = await verifyAdminSession(sessionCookie.value);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return NextResponse.next();
   }
 
   return NextResponse.next();
 }
 
-// Match all admin routes
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/api/image'],
 };

@@ -1,5 +1,5 @@
-import { defineSchema, defineTable } from "convex/server";
-import { v } from "convex/values";
+import { defineSchema, defineTable } from 'convex/server';
+import { v } from 'convex/values';
 
 /** Product row from Kartoteki (CSV) plus assigned category. */
 const productFields = {
@@ -18,13 +18,24 @@ const productFields = {
   thumbnailStorageId: v.optional(v.string()), // Small image (grids, lists)
 };
 
+/** Rate limiting for admin login. Key = hashed IP, cleaned periodically. */
+const loginAttemptsTable = defineTable({
+  key: v.string(),
+  attempts: v.number(),
+  lastAttemptAt: v.number(),
+})
+  .index('by_key', ['key'])
+  .index('by_lastAttemptAt', ['lastAttemptAt']);
+
 export default defineSchema({
+  loginAttempts: loginAttemptsTable,
+
   products: defineTable(productFields)
-    .index("by_category", ["categorySlug"])
-    .index("by_kod", ["Kod"]),
+    .index('by_category', ['categorySlug'])
+    .index('by_kod', ['Kod']),
 
   categories: defineTable({
     slug: v.string(),
     titleKey: v.string(),
-  }).index("by_slug", ["slug"]),
+  }).index('by_slug', ['slug']),
 });
