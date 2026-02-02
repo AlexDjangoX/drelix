@@ -17,8 +17,8 @@ import {
 import {
   CATEGORY_SLUGS,
   CATEGORY_TITLE_KEYS,
-} from '@/components/products/catalogCategories';
-import type { CategorySlug } from '@/lib/types/types';
+} from '@/lib/catalog/catalogCategories';
+import type { CategorySlug } from '@/lib/types';
 
 export { CATEGORY_SLUGS, CATEGORY_TITLE_KEYS };
 

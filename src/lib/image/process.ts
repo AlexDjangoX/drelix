@@ -5,10 +5,10 @@ import {
   LARGE_MAX,
   LARGE_QUALITY,
 } from '@/lib/image/constants';
-import { sanitizeFilename, slugifyForFilename } from '@/utils/utils';
-import type { ImageVariants } from '@/lib/types/types';
+import { sanitizeFilename, slugifyForFilename } from '@/lib/utils';
+import type { ImageVariants } from '@/lib/types';
 
-export type { ImageVariants } from '@/lib/types/types';
+export type { ImageVariants } from '@/lib/types';
 
 /**
  * Process a raw image buffer into thumbnail + large WebP variants.

@@ -12,8 +12,8 @@ import { api } from 'convex/_generated/api';
 import Image from 'next/image';
 import { Ban, CircleCheckBig, Loader2, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { base64ToBlob, PLACEHOLDER_PRODUCT_IMAGE } from '@/utils/utils';
-import type { CatalogRow } from '@/lib/types/types';
+import { base64ToBlob, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
+import type { CatalogRow } from '@/lib/types';
 
 type ImageDisplayState = { thumbnailUrl: string; imageUrl: string };
 

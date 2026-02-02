@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 import { ImageUploadCell } from '@/components/admin/ImageUploadCell';
 import { CategorySelect } from '@/components/admin/CategorySelect';
 import { CategoryLabel } from '@/components/admin/CategoryLabel';
-import { DISPLAY_KEYS, type CatalogRow } from '@/lib/types/types';
+import { DISPLAY_KEYS, type CatalogRow } from '@/lib/types';
 
 type Props = { row: CatalogRow };
 

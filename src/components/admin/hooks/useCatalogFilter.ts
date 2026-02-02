@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
-import type { CatalogRow, CatalogSection } from '@/lib/types/types';
+import type { CatalogRow, CatalogSection } from '@/lib/types';
 
 export function useCatalogFilter(
   previewSections: CatalogSection[] | null,

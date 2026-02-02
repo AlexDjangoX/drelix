@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
-import { cn } from '@/utils/utils';
+import { cn } from '@/lib/utils';
 
 type SupportedHTMLTag =
   | 'span'

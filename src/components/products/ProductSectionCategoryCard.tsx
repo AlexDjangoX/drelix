@@ -6,8 +6,8 @@ import { motion } from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AnimateText } from '@/components';
-import { getThumbnailPath } from '@/utils/utils';
-import type { CategorySlug } from '@/lib/types/types';
+import { getThumbnailPath } from '@/lib/thumbnails';
+import type { CategorySlug } from '@/lib/types';
 import { cardFromLeftVariants } from '@/components/products';
 
 type ProductSectionCategoryCardProps = {

@@ -7,9 +7,9 @@ export const revalidate = false;
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/sonner';
 import { LanguageProvider } from '@/context/LanguageContext';
-import { JsonLd } from '@/components/JsonLd';
+import { JsonLd } from '@/components/seo';
 import { ConvexClientProvider } from '@/context/ConvexClientProvider';
-import { getCanonicalBaseUrl } from '@/lib/SEO/seo';
+import { getCanonicalBaseUrl } from '@/lib/seo/seo';
 import '@/app/globals.css';
 
 const geistSans = Geist({

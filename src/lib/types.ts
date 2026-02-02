@@ -1,7 +1,7 @@
 /**
  * Shared app types. Re-exports data-driven slug type; defines catalog, image, and product types.
  */
-import type { CategorySlug } from '@/components/products/catalogCategories';
+import type { CategorySlug } from '@/lib/catalog/catalogCategories';
 
 export type { CategorySlug };
 

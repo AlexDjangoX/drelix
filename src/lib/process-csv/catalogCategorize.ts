@@ -2,17 +2,9 @@
  * Shared catalog categorization (browser + server).
  * Takes CSV rows and category rules, returns sections grouped by category.
  */
-import type {
-  CatalogRow,
-  CatalogSection,
-  CategoryRule,
-} from '@/lib/types/types';
+import type { CatalogRow, CatalogSection, CategoryRule } from '@/lib/types';
 
-export type {
-  CatalogRow,
-  CatalogSection,
-  CategoryRule,
-} from '@/lib/types/types';
+export type { CatalogRow, CatalogSection, CategoryRule } from '@/lib/types';
 
 const NAZWA = 'Nazwa';
 const KOD = 'Kod';

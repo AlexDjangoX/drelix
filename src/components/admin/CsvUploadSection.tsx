@@ -3,7 +3,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Upload, CheckCircle, Save, X, Loader2 } from 'lucide-react';
-import type { CatalogSection } from '@/lib/types/types';
+import type { CatalogSection } from '@/lib/types';
 
 type Props = {
   file: File | null;

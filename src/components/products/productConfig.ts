@@ -3,10 +3,10 @@
 import {
   CATEGORY_SLUGS,
   CATEGORY_TITLE_KEYS,
-} from '@/components/products/catalogCategories';
-import type { ProductItem, ProductSlug } from '@/lib/types/types';
+} from '@/lib/catalog/catalogCategories';
+import type { ProductItem, ProductSlug } from '@/lib/types';
 
-export type { ProductItem, ProductSlug } from '@/lib/types/types';
+export type { ProductItem, ProductSlug } from '@/lib/types';
 
 export const PRODUCT_SLUGS: readonly ProductSlug[] = CATEGORY_SLUGS;
 

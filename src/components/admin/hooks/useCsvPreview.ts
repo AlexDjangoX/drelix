@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import { categorizeCatalog } from '@/lib/process-csv/catalogCategorize';
-import type { CategoryRule, CatalogSection } from '@/lib/types/types';
+import type { CategoryRule, CatalogSection } from '@/lib/types';
 import { csvToRows } from '@/lib/process-csv/csvParseClient';
 import { toast } from 'sonner';
 

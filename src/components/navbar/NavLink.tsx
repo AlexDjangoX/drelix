@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { cn } from '@/utils/utils';
+import { cn } from '@/lib/utils';
 
 type NavLinkProps = {
   href: string;
