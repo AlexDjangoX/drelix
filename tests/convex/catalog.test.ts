@@ -1,0 +1,369 @@
+/**
+ * Convex catalog function tests.
+ * Uses convex-test (mock backend) - required for Convex ctx/db.
+ */
+import { convexTest } from 'convex-test';
+import { describe, it, expect } from 'vitest';
+import { api } from '../../convex/_generated/api';
+import schema from '../../convex/schema';
+
+const modules = import.meta.glob('../../convex/**/*.ts');
+
+describe('catalog queries', () => {
+  it('listCatalogSections returns empty array when no data', async () => {
+    const t = convexTest(schema, modules);
+    const sections = await t.query(api.catalog.listCatalogSections);
+    expect(sections).toEqual([]);
+  });
+
+  it('listCategories returns empty array when no categories', async () => {
+    const t = convexTest(schema, modules);
+    const cats = await t.query(api.catalog.listCategories);
+    expect(cats).toEqual([]);
+  });
+
+  it('listCategorySlugs returns empty array when no categories', async () => {
+    const t = convexTest(schema, modules);
+    const slugs = await t.query(api.catalog.listCategorySlugs);
+    expect(slugs).toEqual([]);
+  });
+
+  it('getCatalogSection returns null for non-existent slug', async () => {
+    const t = convexTest(schema, modules);
+    const section = await t.query(api.catalog.getCatalogSection, {
+      slug: 'nonexistent',
+    });
+    expect(section).toBeNull();
+  });
+});
+
+describe('catalog mutations with seeded data', () => {
+  it('createCategory then listCategories returns the category', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'test-category',
+      displayName: 'Test Category',
+    });
+    const cats = await t.query(api.catalog.listCategories);
+    expect(cats).toHaveLength(1);
+    expect(cats[0].slug).toBe('test-category');
+    expect(cats[0].displayName).toBe('Test Category');
+  });
+
+  it('createProduct then listCatalogSections includes the product', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'gloves',
+      displayName: 'Gloves',
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: 'gloves',
+      row: {
+        Rodzaj: 'T',
+        JednostkaMiary: 'szt',
+        StawkaVAT: '23',
+        Kod: 'TEST-001',
+        Nazwa: 'Test Gloves',
+        Opis: 'Test description',
+        CenaNetto: '10.00',
+        KodKlasyfikacji: 'X',
+        Uwagi: '',
+        OstatniaCenaZakupu: '9',
+        OstatniaDataZakupu: '2024-01-01',
+      },
+    });
+    const sections = await t.query(api.catalog.listCatalogSections);
+    expect(sections).toHaveLength(1);
+    expect(sections[0].slug).toBe('gloves');
+    expect(sections[0].items).toHaveLength(1);
+    expect(sections[0].items[0].Kod).toBe('TEST-001');
+    expect(sections[0].items[0].Nazwa).toBe('Test Gloves');
+  });
+
+  it('updateProduct modifies product', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'gloves',
+      displayName: 'Gloves',
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: 'gloves',
+      row: {
+        Rodzaj: 'T',
+        JednostkaMiary: 'szt',
+        StawkaVAT: '23',
+        Kod: 'UPD-001',
+        Nazwa: 'Original Name',
+        Opis: 'Original description',
+        CenaNetto: '10.00',
+        KodKlasyfikacji: 'X',
+        Uwagi: '',
+        OstatniaCenaZakupu: '9',
+        OstatniaDataZakupu: '2024-01-01',
+      },
+    });
+    const updated = await t.mutation(api.catalog.updateProduct, {
+      kod: 'UPD-001',
+      updates: { Nazwa: 'Updated Name', Opis: 'Updated description' },
+    });
+    expect(updated.Nazwa).toBe('Updated Name');
+    expect(updated.Opis).toBe('Updated description');
+  });
+
+  it('deleteProduct removes product', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'gloves',
+      displayName: 'Gloves',
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: 'gloves',
+      row: {
+        Rodzaj: 'T',
+        JednostkaMiary: 'szt',
+        StawkaVAT: '23',
+        Kod: 'DEL-001',
+        Nazwa: 'To Delete',
+        Opis: 'Will be deleted',
+        CenaNetto: '10.00',
+        KodKlasyfikacji: 'X',
+        Uwagi: '',
+        OstatniaCenaZakupu: '9',
+        OstatniaDataZakupu: '2024-01-01',
+      },
+    });
+    await t.mutation(api.catalog.deleteProduct, { kod: 'DEL-001' });
+    const sections = await t.query(api.catalog.listCatalogSections);
+    expect(sections[0].items).toHaveLength(0);
+  });
+
+  it('createProduct throws error when category does not exist', async () => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(api.catalog.createProduct, {
+        categorySlug: 'nonexistent',
+        row: {
+          Rodzaj: 'T',
+          JednostkaMiary: 'szt',
+          StawkaVAT: '23',
+          Kod: 'ERR-001',
+          Nazwa: 'Error Product',
+          Opis: '',
+          CenaNetto: '10.00',
+          KodKlasyfikacji: 'X',
+          Uwagi: '',
+          OstatniaCenaZakupu: '9',
+          OstatniaDataZakupu: '2024-01-01',
+        },
+      })
+    ).rejects.toThrow('Category not found');
+  });
+
+  it('createProduct throws error when product code already exists', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'gloves',
+      displayName: 'Gloves',
+    });
+    const productData = {
+      categorySlug: 'gloves',
+      row: {
+        Rodzaj: 'T',
+        JednostkaMiary: 'szt',
+        StawkaVAT: '23',
+        Kod: 'DUP-001',
+        Nazwa: 'Duplicate Product',
+        Opis: '',
+        CenaNetto: '10.00',
+        KodKlasyfikacji: 'X',
+        Uwagi: '',
+        OstatniaCenaZakupu: '9',
+        OstatniaDataZakupu: '2024-01-01',
+      },
+    };
+    await t.mutation(api.catalog.createProduct, productData);
+    await expect(
+      t.mutation(api.catalog.createProduct, productData)
+    ).rejects.toThrow('already exists');
+  });
+
+  it('createCategory throws error when slug already exists', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'test-slug',
+      displayName: 'Test',
+    });
+    await expect(
+      t.mutation(api.catalog.createCategory, {
+        slug: 'test-slug',
+        displayName: 'Another Test',
+      })
+    ).rejects.toThrow('already exists');
+  });
+
+  it('deleteCategory throws error when category has products', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'protected',
+      displayName: 'Protected Category',
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: 'protected',
+      row: {
+        Rodzaj: 'T',
+        JednostkaMiary: 'szt',
+        StawkaVAT: '23',
+        Kod: 'PROT-001',
+        Nazwa: 'Protected Product',
+        Opis: '',
+        CenaNetto: '10.00',
+        KodKlasyfikacji: 'X',
+        Uwagi: '',
+        OstatniaCenaZakupu: '9',
+        OstatniaDataZakupu: '2024-01-01',
+      },
+    });
+    await expect(
+      t.mutation(api.catalog.deleteCategory, { slug: 'protected' })
+    ).rejects.toThrow('contains');
+  });
+
+  it('deleteCategory succeeds when category is empty', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'empty',
+      displayName: 'Empty Category',
+    });
+    await t.mutation(api.catalog.deleteCategory, { slug: 'empty' });
+    const cats = await t.query(api.catalog.listCategories);
+    expect(cats).toHaveLength(0);
+  });
+
+  it('updateProduct throws error when product not found', async () => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(api.catalog.updateProduct, {
+        kod: 'NONEXISTENT-001',
+        updates: { Nazwa: 'New Name' },
+      })
+    ).rejects.toThrow('Product not found');
+  });
+
+  it('deleteProduct throws error when product not found', async () => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(api.catalog.deleteProduct, {
+        kod: 'NONEXISTENT-002',
+      })
+    ).rejects.toThrow('Product not found');
+  });
+
+  it('createCategory normalizes slug with spaces', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'Test Category With Spaces',
+      displayName: 'Test',
+    });
+    const cats = await t.query(api.catalog.listCategories);
+    expect(cats[0].slug).toBe('test-category-with-spaces');
+  });
+
+  it('createCategory throws error for invalid slug characters', async () => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(api.catalog.createCategory, {
+        slug: 'invalid@slug!',
+        displayName: 'Test',
+      })
+    ).rejects.toThrow('Slug can only contain');
+  });
+
+  it('createProduct throws error when Kod is empty', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'test',
+      displayName: 'Test',
+    });
+    await expect(
+      t.mutation(api.catalog.createProduct, {
+        categorySlug: 'test',
+        row: {
+          Rodzaj: 'T',
+          JednostkaMiary: 'szt',
+          StawkaVAT: '23',
+          Kod: '   ', // Empty after trim
+          Nazwa: 'Test',
+          Opis: '',
+          CenaNetto: '10.00',
+          KodKlasyfikacji: 'X',
+          Uwagi: '',
+          OstatniaCenaZakupu: '9',
+          OstatniaDataZakupu: '2024-01-01',
+        },
+      })
+    ).rejects.toThrow('cannot be empty');
+  });
+
+  it('updateProduct with empty updates returns unchanged product', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'test',
+      displayName: 'Test',
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: 'test',
+      row: {
+        Rodzaj: 'T',
+        JednostkaMiary: 'szt',
+        StawkaVAT: '23',
+        Kod: 'NOUPDATE-001',
+        Nazwa: 'Original',
+        Opis: 'Original description',
+        CenaNetto: '10.00',
+        KodKlasyfikacji: 'X',
+        Uwagi: '',
+        OstatniaCenaZakupu: '9',
+        OstatniaDataZakupu: '2024-01-01',
+      },
+    });
+    const result = await t.mutation(api.catalog.updateProduct, {
+      kod: 'NOUPDATE-001',
+      updates: {},
+    });
+    expect(result.Nazwa).toBe('Original');
+  });
+
+  it('setCategories requires confirmDestruction flag', async () => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(api.catalog.setCategories, {
+        categories: [{ slug: 'test', titleKey: 'test.key' }],
+      })
+    ).rejects.toThrow('confirmation');
+  });
+
+  it('setCategories with confirmDestruction replaces all categories', async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: 'old-category',
+      displayName: 'Old',
+    });
+    await t.mutation(api.catalog.setCategories, {
+      categories: [{ slug: 'new-category', titleKey: 'new.key' }],
+      confirmDestruction: true,
+    });
+    const cats = await t.query(api.catalog.listCategories);
+    expect(cats).toHaveLength(1);
+    expect(cats[0].slug).toBe('new-category');
+  });
+
+  it('setCategories throws on empty array', async () => {
+    const t = convexTest(schema, modules);
+    await expect(
+      t.mutation(api.catalog.setCategories, {
+        categories: [],
+        confirmDestruction: true,
+      })
+    ).rejects.toThrow('cannot be empty');
+  });
+});
