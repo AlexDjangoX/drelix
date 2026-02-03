@@ -43,6 +43,7 @@ export type ProductItem = {
 export const DISPLAY_KEYS = [
   { label: 'Kod', key: 'Kod' },
   { label: 'Nazwa', key: 'Nazwa' },
+  { label: 'Opis', key: 'Opis' },
   { label: 'Cena netto', key: 'CenaNetto' },
   { label: 'Jednostka miary', key: 'JednostkaMiary' },
   { label: 'Stawka VAT', key: 'StawkaVAT' },

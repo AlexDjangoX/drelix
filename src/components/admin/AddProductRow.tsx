@@ -15,6 +15,7 @@ const EMPTY_ROW = {
   StawkaVAT: '23',
   Kod: '',
   Nazwa: '',
+  Opis: '',
   CenaNetto: '',
   KodKlasyfikacji: '',
   Uwagi: '',

@@ -1,33 +1,28 @@
 import { internalMutation, mutation, query } from './_generated/server';
 import { v } from 'convex/values';
-
-const MAX_ATTEMPTS = 5;
-const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
-const LOCKOUT_MS = 15 * 60 * 1000; // 15 min lockout after max attempts
+import {
+  MAX_LOGIN_ATTEMPTS,
+  LOGIN_LOCKOUT_MS,
+  LOGIN_ATTEMPTS_CLEANUP_AGE_MS,
+} from './lib/constants';
+import { getLoginAttemptState } from './lib/authHelpers';
+import { validateRateLimitKey } from './lib/convexAuth';
 
 /** Read-only check: is login allowed for this key? */
 export const checkLoginAllowed = query({
   args: { key: v.string() },
   handler: async (ctx, { key }) => {
-    const now = Date.now();
-    const cutoff = now - WINDOW_MS;
+    // Validate rate limit key to prevent abuse
+    const validatedKey = validateRateLimitKey(key);
 
+    const now = Date.now();
     const existing = await ctx.db
       .query('loginAttempts')
-      .withIndex('by_key', (q) => q.eq('key', key))
+      .withIndex('by_key', (q) => q.eq('key', validatedKey))
       .unique();
 
-    if (!existing) return { allowed: true };
-
-    const inWindow = existing.lastAttemptAt > cutoff;
-    const attempts = inWindow ? existing.attempts : 0;
-
-    if (attempts >= MAX_ATTEMPTS) {
-      const lockoutUntil = existing.lastAttemptAt + LOCKOUT_MS;
-      if (now < lockoutUntil) {
-        return { allowed: false, lockoutUntil };
-      }
-    }
+    const { isLockedOut, lockoutUntil } = getLoginAttemptState(existing, now);
+    if (isLockedOut) return { allowed: false, lockoutUntil: lockoutUntil! };
     return { allowed: true };
   },
 });
@@ -39,23 +34,23 @@ export const checkLoginAllowed = query({
 export const recordFailedLoginAttempt = mutation({
   args: { key: v.string() },
   handler: async (ctx, { key }) => {
-    const now = Date.now();
-    const cutoff = now - WINDOW_MS;
+    // Validate rate limit key to prevent abuse
+    const validatedKey = validateRateLimitKey(key);
 
+    const now = Date.now();
     const existing = await ctx.db
       .query('loginAttempts')
-      .withIndex('by_key', (q) => q.eq('key', key))
+      .withIndex('by_key', (q) => q.eq('key', validatedKey))
       .unique();
 
-    if (existing) {
-      const inWindow = existing.lastAttemptAt > cutoff;
-      const attempts = inWindow ? existing.attempts : 0;
+    const { attempts, isLockedOut, lockoutUntil } = getLoginAttemptState(
+      existing,
+      now
+    );
 
-      if (attempts >= MAX_ATTEMPTS) {
-        const lockoutUntil = existing.lastAttemptAt + LOCKOUT_MS;
-        if (now < lockoutUntil) {
-          return { allowed: false, lockoutUntil };
-        }
+    if (existing) {
+      if (isLockedOut) return { allowed: false, lockoutUntil: lockoutUntil! };
+      if (attempts >= MAX_LOGIN_ATTEMPTS) {
         // Lockout expired, reset to 1 attempt
         await ctx.db.patch(existing._id, {
           attempts: 1,
@@ -69,14 +64,14 @@ export const recordFailedLoginAttempt = mutation({
         attempts: newAttempts,
         lastAttemptAt: now,
       });
-      if (newAttempts >= MAX_ATTEMPTS) {
-        return { allowed: false, lockoutUntil: now + LOCKOUT_MS };
+      if (newAttempts >= MAX_LOGIN_ATTEMPTS) {
+        return { allowed: false, lockoutUntil: now + LOGIN_LOCKOUT_MS };
       }
       return { allowed: true };
     }
 
     await ctx.db.insert('loginAttempts', {
-      key,
+      key: validatedKey,
       attempts: 1,
       lastAttemptAt: now,
     });
@@ -88,9 +83,12 @@ export const recordFailedLoginAttempt = mutation({
 export const clearLoginAttempts = mutation({
   args: { key: v.string() },
   handler: async (ctx, { key }) => {
+    // Validate rate limit key to prevent abuse
+    const validatedKey = validateRateLimitKey(key);
+
     const existing = await ctx.db
       .query('loginAttempts')
-      .withIndex('by_key', (q) => q.eq('key', key))
+      .withIndex('by_key', (q) => q.eq('key', validatedKey))
       .unique();
     if (existing) {
       await ctx.db.delete(existing._id);
@@ -103,7 +101,7 @@ export const clearLoginAttempts = mutation({
 export const cleanupStaleLoginAttempts = internalMutation({
   args: {},
   handler: async (ctx) => {
-    const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+    const cutoff = Date.now() - LOGIN_ATTEMPTS_CLEANUP_AGE_MS;
     const stale = await ctx.db
       .query('loginAttempts')
       .withIndex('by_lastAttemptAt', (q) => q.lt('lastAttemptAt', cutoff))

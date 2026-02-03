@@ -1,18 +1,10 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
+import { productFieldValidators } from './lib/validators';
 
 /** Product row from Kartoteki (CSV) plus assigned category. */
 const productFields = {
-  Rodzaj: v.string(),
-  JednostkaMiary: v.string(),
-  StawkaVAT: v.string(),
-  Kod: v.string(),
-  Nazwa: v.string(),
-  CenaNetto: v.string(),
-  KodKlasyfikacji: v.string(),
-  Uwagi: v.string(),
-  OstatniaCenaZakupu: v.string(),
-  OstatniaDataZakupu: v.string(),
+  ...productFieldValidators,
   categorySlug: v.string(),
   imageStorageId: v.optional(v.string()), // Large image (lightbox, hero)
   thumbnailStorageId: v.optional(v.string()), // Small image (grids, lists)
