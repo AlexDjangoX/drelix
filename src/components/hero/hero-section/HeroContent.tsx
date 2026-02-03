@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { AnimateText, TwoToneHeading } from '@/components';
+import { AnimateText } from '@/components';
 import {
   HeroTrustBadges,
   containerVariants,
@@ -19,7 +19,7 @@ export function HeroContent({
 }: HeroContentProps) {
   return (
     <motion.div
-      className="w-full max-w-4xl mx-auto text-center"
+      className="@container w-full max-w-6xl mx-auto text-center"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -29,12 +29,9 @@ export function HeroContent({
         variants={fromLeftVariants(reducedMotion)}
         className="mb-8 sm:mb-10 md:mb-12 lg:mb-16"
       >
-        <TwoToneHeading
-          as="h1"
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-balance leading-[1.5] sm:leading-[1.6] tracking-wide"
-        >
+        <h1 className="text-[clamp(1.25rem,5.5cqw,4.5rem)] font-black sx:whitespace-nowrap leading-normal sm:leading-[1.6] tracking-wide bg-clip-text text-transparent bg-[linear-gradient(to_bottom,var(--two-tone-heading-top)_50%,hsl(var(--primary))_50%)]">
           <AnimateText k="hero.title" />
-        </TwoToneHeading>
+        </h1>
       </motion.div>
 
       <motion.p
