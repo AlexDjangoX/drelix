@@ -20,11 +20,13 @@ export default function ProductSection() {
       className="py-20 md:py-32 overflow-x-hidden"
     >
       <div ref={sectionRef} className="container mx-auto px-4">
-        <ProductSectionHeader
-          reducedMotion={reducedMotion}
-          isInView={isInView}
-        />
-        <ProductSectionCategoryGrid reducedMotion={reducedMotion} />
+        <div className="max-w-6xl mx-auto">
+          <ProductSectionHeader
+            reducedMotion={reducedMotion}
+            isInView={isInView}
+          />
+          <ProductSectionCategoryGrid reducedMotion={reducedMotion} />
+        </div>
       </div>
     </section>
   );

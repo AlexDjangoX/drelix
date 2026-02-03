@@ -16,8 +16,10 @@ export default function WhyUsSection() {
       className="py-20 md:py-32 bg-secondary/30 overflow-x-hidden"
     >
       <div ref={sectionRef} className="container mx-auto px-4">
-        <WhyUsHeader reducedMotion={reducedMotion} isInView={isInView} />
-        <WhyUsFeatureGrid reducedMotion={reducedMotion} />
+        <div className="max-w-6xl mx-auto">
+          <WhyUsHeader reducedMotion={reducedMotion} isInView={isInView} />
+          <WhyUsFeatureGrid reducedMotion={reducedMotion} />
+        </div>
       </div>
     </section>
   );

@@ -3,17 +3,19 @@ import { Shield } from 'lucide-react';
 
 interface LogoProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
   const sizeClasses = {
+    xs: 'text-sm',
     sm: 'text-xl',
     md: 'text-2xl',
     lg: 'text-4xl',
   };
 
   const iconSizes = {
+    xs: 16,
     sm: 20,
     md: 28,
     lg: 40,

@@ -22,9 +22,9 @@ export function WhyUsFeatureCard({
   return (
     <motion.div
       variants={fadeUpVariants(reducedMotion)}
-      className="relative group"
+      className="relative group min-w-0"
     >
-      <div className="bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all duration-300 h-full shadow-card hover:shadow-glow">
+      <div className="bg-card rounded-2xl p-8 border border-border hover:border-primary/50 transition-all duration-300 h-full min-w-0 shadow-card hover:shadow-glow">
         <div className="w-16 h-16 rounded-xl bg-gradient-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
           <Icon size={32} className="text-primary-foreground" aria-hidden />
         </div>

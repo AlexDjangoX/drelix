@@ -44,7 +44,7 @@ export default function Navbar() {
         )}
       >
         <div className="container mx-auto px-4">
-          <div className="flex items-center h-14 sm:h-16 lg:h-20 w-full gap-1 sm:gap-2">
+          <div className="max-w-6xl mx-auto flex items-center h-14 sm:h-16 lg:h-20 w-full gap-1 sm:gap-2">
             <div className="flex items-center shrink-0 min-w-0">
               <LanguageSelector />
             </div>

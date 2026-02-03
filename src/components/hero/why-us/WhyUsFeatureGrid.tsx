@@ -17,7 +17,7 @@ export function WhyUsFeatureGrid({ reducedMotion }: WhyUsFeatureGridProps) {
   return (
     <motion.div
       ref={gridRef}
-      className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto"
+      className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,260px),1fr))] gap-8 w-full"
       variants={gridStaggerVariants(reducedMotion)}
       initial="hidden"
       animate={isGridInView ? 'visible' : 'hidden'}
