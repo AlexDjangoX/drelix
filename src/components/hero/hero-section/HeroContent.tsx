@@ -29,7 +29,7 @@ export function HeroContent({
         variants={fromLeftVariants(reducedMotion)}
         className="mb-8 sm:mb-10 md:mb-12 lg:mb-16"
       >
-        <h1 className="text-[clamp(1.25rem,5.5cqw,4.5rem)] font-black sx:whitespace-nowrap leading-normal sm:leading-[1.6] tracking-wide bg-clip-text text-transparent bg-[linear-gradient(to_bottom,var(--two-tone-heading-top)_50%,hsl(var(--primary))_50%)]">
+        <h1 className="text-[clamp(1.25rem,5.8cqw,4.5rem)] font-black sx:whitespace-nowrap leading-normal sm:leading-[1.6] tracking-wide bg-clip-text text-transparent bg-[linear-gradient(to_bottom,var(--two-tone-heading-top)_50%,hsl(var(--primary))_50%)]">
           <AnimateText k="hero.title" />
         </h1>
       </motion.div>
