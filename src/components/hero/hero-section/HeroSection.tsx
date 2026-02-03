@@ -23,14 +23,19 @@ export default function HeroSection() {
         <HeroDecorations />
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-8 lg:px-12 xl:px-16 py-10 sm:py-12 lg:py-16">
-        <HeroContent
-          reducedMotion={reducedMotion}
-          onScrollToProducts={() => scrollToSection('#products')}
-        />
+      <div className="relative z-10 flex-1 flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pt-20 sm:pt-24 md:pt-28 lg:pt-32">
+        <div className="flex-1 flex flex-col justify-center">
+          <HeroContent
+            reducedMotion={reducedMotion}
+            onScrollToProducts={() => scrollToSection('#products')}
+          />
+        </div>
+        <div className="shrink-0 pb-8 flex justify-center">
+          <HeroScrollIndicator
+            onScrollToMap={() => scrollToSection('#contact')}
+          />
+        </div>
       </div>
-
-      <HeroScrollIndicator onScrollToMap={() => scrollToSection('#contact')} />
     </section>
   );
 }

@@ -25,10 +25,13 @@ export function HeroContent({
       animate="visible"
       custom={reducedMotion}
     >
-      <motion.div variants={fromLeftVariants(reducedMotion)}>
+      <motion.div
+        variants={fromLeftVariants(reducedMotion)}
+        className="mb-8 sm:mb-10 md:mb-12 lg:mb-16"
+      >
         <TwoToneHeading
           as="h1"
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-5 sm:mb-6 lg:mb-8 text-balance leading-[1.35] tracking-wide"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-balance leading-[1.5] sm:leading-[1.6] tracking-wide"
         >
           <AnimateText k="hero.title" />
         </TwoToneHeading>
@@ -36,14 +39,14 @@ export function HeroContent({
 
       <motion.p
         variants={fromRightVariants(reducedMotion)}
-        className="text-base sm:text-lg lg:text-xl text-muted-foreground/95 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-10 text-pretty leading-relaxed"
+        className="text-base sm:text-lg lg:text-xl text-muted-foreground/95 max-w-3xl mx-auto text-pretty leading-relaxed mb-10 sm:mb-12 md:mb-14 lg:mb-16"
       >
         <AnimateText k="hero.subtitle" />
       </motion.p>
 
       <motion.div
         variants={fromLeftVariants(reducedMotion)}
-        className="mb-8 sm:mb-10 lg:mb-12"
+        className="mb-12 sm:mb-14 md:mb-16 lg:mb-20"
       >
         <Button
           size="lg"

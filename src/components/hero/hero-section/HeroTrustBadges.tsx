@@ -13,7 +13,7 @@ export function HeroTrustBadges({ reducedMotion }: HeroTrustBadgesProps) {
   return (
     <motion.div
       variants={fromRightVariants(reducedMotion)}
-      className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8"
+      className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10 mt-10 sm:mt-12 md:mt-14 lg:mt-16"
     >
       {HERO_TRUST_ITEMS.map((item) => (
         <HeroTrustBadge key={item.id} icon={item.icon} textKey={item.textKey} />
