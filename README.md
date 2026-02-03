@@ -66,11 +66,15 @@
 
 ## What We Implemented
 
-### SEO Reference
+_Click any section below to expand and read the details._
 
-This section documents concrete SEO implementations with file locations and technical specifications.
+<details>
+<summary><strong>📋 SEO Reference</strong> — Technical SEO implementations with file locations and specifications</summary>
 
-#### **1. On-Page SEO**
+This section documents concrete SEO implementations. Expand each subsection below for details.
+
+<details>
+<summary><strong>1. On-Page SEO</strong></summary>
 
 **Title Tags & Meta Descriptions** (`src/app/layout.tsx`, `src/app/products/[slug]/layout.tsx`)
 
@@ -101,7 +105,10 @@ This section documents concrete SEO implementations with file locations and tech
 - Lazy loading: `loading="lazy"` on below-the-fold images (automatic via Next.js)
 - Remote patterns configured for Convex product images in `next.config.ts`
 
-#### **2. Technical SEO**
+</details>
+
+<details>
+<summary><strong>2. Technical SEO</strong></summary>
 
 **XML Sitemap** (`src/app/sitemap.ts`)
 
@@ -137,7 +144,10 @@ This section documents concrete SEO implementations with file locations and tech
 - Disallowed in `robots.txt`
 - No internal links from public pages
 
-#### **3. Structured Data (JSON-LD)**
+</details>
+
+<details>
+<summary><strong>3. Structured Data (JSON-LD)</strong></summary>
 
 **LocalBusiness Schema** (`src/components/JsonLd.tsx`)
 
@@ -172,7 +182,10 @@ This section documents concrete SEO implementations with file locations and tech
 
 **Validation:** Test at [Google Rich Results Test](https://search.google.com/test/rich-results). Homepage validated Feb 2026: 2 valid items (LocalBusiness, Organization), eligible for rich results.
 
-#### **4. Performance (Core Web Vitals Impact on SEO)**
+</details>
+
+<details>
+<summary><strong>4. Performance (Core Web Vitals Impact on SEO)</strong></summary>
 
 **Lighthouse Mobile Score: 91/100** (improved from 77)
 
@@ -203,7 +216,10 @@ Core Web Vitals are ranking factors. Optimizations implemented:
 
 **Measurement:** Run Lighthouse on production URL, mobile emulation
 
-#### **5. Local SEO**
+</details>
+
+<details>
+<summary><strong>5. Local SEO</strong></summary>
 
 **NAP Consistency** (Name, Address, Phone)
 
@@ -224,7 +240,10 @@ Core Web Vitals are ranking factors. Optimizations implemented:
 - Lazy loaded via Intersection Observer
 - Address matches NAP exactly
 
-#### **6. Internal Linking**
+</details>
+
+<details>
+<summary><strong>6. Internal Linking</strong></summary>
 
 **Navigation** (`src/components/navbar`)
 
@@ -244,7 +263,10 @@ Core Web Vitals are ranking factors. Optimizations implemented:
 - Catalog → `/products/[slug]` (individual categories)
 - All category pages include breadcrumbs (visual and structured data)
 
-#### **7. Accessibility (SEO Impact)**
+</details>
+
+<details>
+<summary><strong>7. Accessibility (SEO Impact)</strong></summary>
 
 Search engines favor accessible sites. Implementations:
 
@@ -255,7 +277,10 @@ Search engines favor accessible sites. Implementations:
 - **Heading hierarchy:** Sequential, no skipped levels
 - **Motion preferences:** `prefers-reduced-motion` respected in animations (`src/components/hero/hero-section`)
 
-#### **8. Verification & Monitoring**
+</details>
+
+<details>
+<summary><strong>8. Verification & Monitoring</strong></summary>
 
 **Google Search Console Setup**
 
@@ -282,7 +307,12 @@ Search engines favor accessible sites. Implementations:
 - LCP: Hero image loads in ~1.5s on 4G mobile
 - CLS: Effectively zero in Lighthouse testing (sized placeholders, Suspense boundaries with fixed heights)
 
-### Product Management & Convex Backend
+</details>
+
+</details>
+
+<details>
+<summary><strong>📦 Product Management & Convex Backend</strong> — Real-time catalog, CSV import, admin controls, security architecture</summary>
 
 **Enterprise-Grade Data Architecture**
 
@@ -356,7 +386,10 @@ loginAttempts (table)
 
 The Convex backend is production-ready with enterprise security standards, comprehensive error handling, and audit-grade logging. See `convex/README.md` for technical details and API reference.
 
-### Testing
+</details>
+
+<details>
+<summary><strong>🧪 Testing</strong> — 137 tests (unit, integration, E2E), coverage metrics, how to run</summary>
 
 **Test Suite Status: 137/137 Passing (100%)**
 
@@ -447,12 +480,18 @@ Comprehensive test coverage provides:
 
 See `tests/README.md` for detailed test documentation, coverage reports, and troubleshooting guides. See `stress/README.md` for stress and load testing (baseline: 660 requests, 0 failures, p95 257 ms).
 
-### Legal Pages
+</details>
+
+<details>
+<summary><strong>⚖️ Legal Pages</strong> — Privacy Policy & Terms of Service (GDPR, Polish consumer law)</summary>
 
 - **Privacy Policy** (`/privacy`): GDPR-aligned, Polish law, contact form and in-store data, cookies, data subject rights, PUODO.
 - **Terms of Service** (`/terms`): Brick-and-mortar retail, no distance sales, consumer rights (rękojmia, reklamacja), no 14-day withdrawal for in-store purchases.
 
-### Bilingual UI
+</details>
+
+<details>
+<summary><strong>🌐 Bilingual UI</strong> — Polish default, English toggle, SEO rationale</summary>
 
 - Polish default. English toggle (client-side, `LanguageContext`). Same URL for both languages.
 - Search engines are served Polish content by default (no hreflang tags).
@@ -460,6 +499,8 @@ See `tests/README.md` for detailed test documentation, coverage reports, and tro
 **Rationale:** This approach avoids duplicate content issues and indexing complexity for a business targeting the Polish market exclusively. English is provided for occasional international visitors but is not optimized for search engines.
 
 **If English SEO becomes a goal:** Implement URL-based locale routing (`/en/products`) and add hreflang tags. This would require duplicate content strategy and separate metadata per locale.
+
+</details>
 
 ---
 
