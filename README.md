@@ -1,8 +1,12 @@
 # Drelix – Business Website
 
+![Homepage](public/images/homepage.png)
+
 **Drelix** is a business website for a workwear and safety clothing supplier in Wadowice, Poland. The site is informational: it presents the business, explains why to choose Drelix, and showcases the product catalog. Purchases are made in-store; the website does not process transactions.
 
 **Built for:** Local brick-and-mortar businesses that need an online presence to be found, inform visitors, and manage product data.
+
+**At a glance (for clients):** SEO-optimized, Lighthouse 91/100, GDPR-compliant legal pages, admin product management, 137 tests passing, production-ready security.
 
 ---
 
@@ -75,7 +79,7 @@ This section documents concrete SEO implementations with file locations and tech
 - Meta descriptions: 150-160 characters per page
 - Implementation: `export const metadata: Metadata = { title, description }`
 
-**Canonical URLs** (`src/lib/seo.ts`)
+**Canonical URLs** (`src/lib/seo/seo.ts`)
 
 - Non-trailing-slash format enforced site-wide
 - `getCanonicalBaseUrl()` function normalizes URLs from `NEXT_PUBLIC_SITE_URL`
@@ -107,7 +111,7 @@ This section documents concrete SEO implementations with file locations and tech
 - Includes: homepage, `/products`, dynamic `/products/[slug]`, `/privacy`, `/terms`
 - Accessible at: `https://drelix.org/sitemap.xml`
 
-**robots.txt** (`src/app/robots.txt/route.ts`, `src/lib/robotsContent.ts`)
+**robots.txt** (`src/app/robots.txt/route.ts`, `src/lib/seo/robotsContent.ts`)
 
 - Dynamic route handler returning `text/plain`
 - Crawl policy:
@@ -115,7 +119,7 @@ This section documents concrete SEO implementations with file locations and tech
   - Disallow: `/api/`, `/admin/`, `/_next/`
   - Blocks AI training crawlers: `User-agent: GPTBot`, `CCBot`, `ChatGPT-User`, `Google-Extended`
 
-**Rationale:** Business decision to restrict content use in AI training datasets while remaining discoverable in traditional search. Policy is reversible by modifying `src/lib/robotsContent.ts`. No expected downside for human-initiated AI discovery (users can still paste URLs into ChatGPT).
+**Rationale:** Business decision to restrict content use in AI training datasets while remaining discoverable in traditional search. Policy is reversible by modifying `src/lib/seo/robotsContent.ts`. No expected downside for human-initiated AI discovery (users can still paste URLs into ChatGPT).
 
 - References sitemap: `Sitemap: https://drelix.org/sitemap.xml`
 - Accessible at: `https://drelix.org/robots.txt`
@@ -333,7 +337,7 @@ loginAttempts (table)
 - Automatic cleanup of stale rate limit records (daily cron)
 - Error recovery: Storage deletion failures don't block transactions
 - Memory warnings for large catalog operations (>1000 products)
-- Comprehensive documentation: `convex/SECURITY.md`, `convex/PRODUCTION_CHECKLIST.md`
+- Comprehensive documentation: `convex/SECURITY.md`, `convex/README.md`
 
 **Development Workflow:**
 
@@ -518,9 +522,9 @@ drelix/
 │   │   ├── JsonLd.tsx          # Structured data
 │   │   └── ui/
 │   ├── lib/
-│   │   ├── seo.ts              # Canonical URL utilities
-│   │   └── robotsContent.ts    # robots.txt policy
-│   └── data/
+│   │   ├── seo/                # Canonical URLs, robots.txt
+│   │   ├── catalog/            # Category config
+│   │   └── process-csv/        # CSV import
 ├── .github/workflows/     # CI (lint, unit, e2e)
 ├── convex/
 ├── e2e/                   # Playwright E2E tests
@@ -542,7 +546,7 @@ Complete security audit and hardening of Convex backend:
 - **Error handling** – Centralized error message system (public vs admin). Storage deletion error recovery. Race condition handling in category creation.
 - **Type safety** – Removed all `as` type assertions. Created explicit return types (`ProductUpdateResult`, `MutationSuccess`). Full TypeScript compliance.
 - **Destructive operation safeguards** – `setCategories` requires `confirmDestruction: true`. Category deletion checks for products. Warnings for operations >1000 records.
-- **Documentation** – Added `convex/SECURITY.md` (security architecture), `convex/PRODUCTION_CHECKLIST.md` (deployment guide), `convex/AUDIT_SUMMARY.md` (audit report).
+- **Documentation** – Added `convex/SECURITY.md` (security architecture), `convex/README.md` (deployment and API reference).
 
 **Result:** Enterprise-grade backend with 100% authentication coverage, comprehensive input validation, and audit-ready logging. Zero linter errors, full production compliance.
 
@@ -616,13 +620,13 @@ Complete security audit and hardening of Convex backend:
 
 ## Quick Reference
 
-| Task                           | Location                                                                    |
-| ------------------------------ | --------------------------------------------------------------------------- |
-| Change site-wide metadata      | `src/app/layout.tsx`                                                        |
-| Change business info (JSON-LD) | `src/components/JsonLd.tsx`                                                 |
-| Add product category           | `src/data/catalogCategories.ts`, `src/components/products/productConfig.ts` |
-| Change crawl policy            | `src/lib/robotsContent.ts`                                                  |
-| View sitemap URLs              | `/sitemap.xml` or `src/app/sitemap.ts`                                      |
+| Task                           | Location                                                                           |
+| ------------------------------ | ---------------------------------------------------------------------------------- |
+| Change site-wide metadata      | `src/app/layout.tsx`                                                               |
+| Change business info (JSON-LD) | `src/components/JsonLd.tsx`                                                        |
+| Add product category           | `src/lib/catalog/catalogCategories.ts`, `src/components/products/productConfig.ts` |
+| Change crawl policy            | `src/lib/seo/robotsContent.ts`                                                     |
+| View sitemap URLs              | `/sitemap.xml` or `src/app/sitemap.ts`                                             |
 
 ---
 
