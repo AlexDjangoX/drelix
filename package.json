@@ -18,7 +18,11 @@
     "test:coverage": "vitest run --coverage",
     "test:convex": "vitest run --config vitest.config.ts tests/convex/",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:stress": "playwright test --workers=4 --repeat-each=5",
+    "test:load": "artillery run stress/load.yml",
+    "test:load:prod": "artillery run stress/load.yml -e prod",
+    "test:load:report": "artillery run stress/load.yml --output stress/report.json"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
@@ -48,6 +52,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^3.2.4",
+    "artillery": "^2.0.29",
     "convex-test": "^0.0.41",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",

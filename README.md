@@ -390,9 +390,15 @@ npm run test:e2e          # All browsers (requires: npx playwright install)
 npm run test:e2e:ui       # Interactive mode
 npm run test:e2e -- --project=chromium   # Chromium only
 npm run test:e2e -- --project=firefox    # Firefox only
+
+# Stress & Load Tests
+npm run test:e2e:stress   # E2E with 4 workers × 5 repeats (190 runs)
+npm run test:load         # HTTP load test (localhost) - app must be running
+npm run test:load:prod    # HTTP load test (production)
+npm run test:load:report  # Load test + JSON report (stress/report.json)
 ```
 
-**Note:** E2E tests use `next build && next start` (not dev server), so they run predictably without lock conflicts. No need to stop a running dev server.
+**Note:** E2E tests use `next build && next start` (not dev server), so they run predictably without lock conflicts. Load tests target `http://localhost:3000`—run `npm run build && npm run start` first. See `stress/README.md` for details.
 
 **Test Categories:**
 
@@ -435,7 +441,7 @@ Comprehensive test coverage provides:
 - **Security assurance** – Authentication, validation, and error handling verified
 - **Audit readiness** – Test results demonstrate quality standards
 
-See `tests/README.md` for detailed test documentation, coverage reports, and troubleshooting guides.
+See `tests/README.md` for detailed test documentation, coverage reports, and troubleshooting guides. See `stress/README.md` for stress and load testing (baseline: 660 requests, 0 failures, p95 257 ms).
 
 ### Legal Pages
 
@@ -535,6 +541,9 @@ drelix/
 │   │   └── robotsContent.ts    # robots.txt policy
 │   └── data/
 ├── convex/
+├── e2e/                   # Playwright E2E tests
+├── stress/                 # Load tests (Artillery, k6)
+├── tests/                 # Unit & Convex integration tests
 └── public/
 ```
 
@@ -649,7 +658,7 @@ Complete security audit and hardening of Convex backend:
 
 **Version History:**
 
-- Feb 2026: Security hardening (authentication, input validation, error handling), performance optimization (Lighthouse 77→91), code splitting, product description field added, comprehensive test suite (137 tests: 99 unit/convex + 38 e2e Chromium+Firefox, 96% coverage)
+- Feb 2026: Security hardening (authentication, input validation, error handling), performance optimization (Lighthouse 77→91), code splitting, product description field added, comprehensive test suite (137 tests: 99 unit/convex + 38 e2e Chromium+Firefox, 96% coverage), stress & load testing (Artillery, Playwright repeat)
 - Initial: SEO architecture, structured data, local business setup
 
 ---
