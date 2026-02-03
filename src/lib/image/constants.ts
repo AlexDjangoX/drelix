@@ -21,10 +21,10 @@ export const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
 /** Max dimension (width/height) for validation. */
 export const MAX_DIMENSION = 10_000;
 
-/** Thumbnail: grids, lists, admin table. Max 640px on longest side, WebP 82. */
+/** Thumbnail: grids, lists, admin table. Max 640px on longest side, WebP 70. */
 export const THUMBNAIL_MAX = 640;
-export const THUMBNAIL_QUALITY = 82;
+export const THUMBNAIL_QUALITY = 70;
 
-/** Large: lightbox, hero. Max 1920px on longest side, WebP 88 for crisp 2x. */
+/** Large: lightbox, hero. Max 1920px on longest side, WebP 75. */
 export const LARGE_MAX = 1920;
-export const LARGE_QUALITY = 88;
+export const LARGE_QUALITY = 75;

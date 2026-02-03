@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { LARGE_QUALITY } from '@/lib/image/constants';
 
 const HERO_IMAGE_SRC = '/images/hero.jpg';
 const HERO_IMAGE_ALT = 'Hero image for the homepage';
@@ -14,7 +15,7 @@ export function HeroBackground() {
           className="object-cover object-center"
           priority
           sizes="100vw"
-          quality={70}
+          quality={LARGE_QUALITY}
         />
       </div>
       <div
