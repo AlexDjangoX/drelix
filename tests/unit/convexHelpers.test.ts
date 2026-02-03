@@ -9,6 +9,7 @@ import {
   toProductInsert,
   filterAllowedUpdates,
 } from '../../convex/lib/helpers';
+import type { Id } from '../../convex/_generated/dataModel';
 
 describe('sortCategories', () => {
   it('sorts admin-created (with createdAt) first by newest', () => {
@@ -144,7 +145,7 @@ describe('productToUpdateResult', () => {
   it('strips system fields from product document', async () => {
     const { productToUpdateResult } = await import('../../convex/lib/helpers');
     const doc = {
-      _id: 'id123' as any,
+      _id: 'id123' as Id<'products'>,
       _creationTime: 1234567890,
       Kod: 'TEST-001',
       Nazwa: 'Test Product',
@@ -161,8 +162,8 @@ describe('productToUpdateResult', () => {
     };
 
     const result = productToUpdateResult(doc);
-    expect(result._id).toBeUndefined();
-    expect(result._creationTime).toBeUndefined();
+    expect(result).not.toHaveProperty('_id');
+    expect(result).not.toHaveProperty('_creationTime');
     expect(result.Kod).toBe('TEST-001');
     expect(result.Nazwa).toBe('Test Product');
   });
@@ -170,7 +171,7 @@ describe('productToUpdateResult', () => {
   it('preserves optional fields', async () => {
     const { productToUpdateResult } = await import('../../convex/lib/helpers');
     const doc = {
-      _id: 'id123' as any,
+      _id: 'id123' as Id<'products'>,
       _creationTime: 1234567890,
       Kod: 'TEST-001',
       Nazwa: 'Test',
