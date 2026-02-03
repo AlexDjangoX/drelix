@@ -483,7 +483,7 @@ GitHub Actions runs on every push and PR to `main`/`master`:
 - **Unit tests** – Vitest (99 tests)
 - **E2E tests** – Playwright Chromium (19 tests)
 
-For E2E to pass in CI, add repository secrets: `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_PASSWORD`, `JWT_SECRET`. See `.github/README.md` for details.
+For E2E to pass in CI, add repository secrets: `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_PASSWORD`, `JWT_SECRET` (Settings → Secrets and variables → Actions).
 
 ---
 
