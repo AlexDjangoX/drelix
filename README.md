@@ -504,7 +504,10 @@ See `tests/README.md` for detailed test documentation, coverage reports, and tro
 
 ---
 
-## Tech Stack
+_Click any section below to expand and read the details._
+
+<details>
+<summary><strong>🛠️ Tech Stack</strong> — Framework, language, styling, backend, UI</summary>
 
 | Category      | Technology                             |
 | ------------- | -------------------------------------- |
@@ -514,9 +517,10 @@ See `tests/README.md` for detailed test documentation, coverage reports, and tro
 | **Backend**   | Convex                                 |
 | **UI**        | shadcn-style components, Framer Motion |
 
----
+</details>
 
-## CI/CD
+<details>
+<summary><strong>🔄 CI/CD</strong> — GitHub Actions, lint, tests, required secrets</summary>
 
 GitHub Actions runs on every push and PR to `main`/`master`:
 
@@ -526,9 +530,10 @@ GitHub Actions runs on every push and PR to `main`/`master`:
 
 For E2E to pass in CI, add repository secrets: `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_PASSWORD`, `JWT_SECRET` (Settings → Secrets and variables → Actions).
 
----
+</details>
 
-## Sitemap Contents
+<details>
+<summary><strong>🗺️ Sitemap Contents</strong> — Dynamic URLs from Convex</summary>
 
 The sitemap dynamically generates URLs from Convex:
 
@@ -540,9 +545,10 @@ The sitemap dynamically generates URLs from Convex:
 
 Indexing depends on deployment, Google Search Console setup, and search engine behavior.
 
----
+</details>
 
-## Project Structure
+<details>
+<summary><strong>📁 Project Structure</strong> — Directory layout and key files</summary>
 
 ```
 drelix/
@@ -574,11 +580,13 @@ drelix/
 └── public/
 ```
 
----
+</details>
 
-## Recent Changes
+<details>
+<summary><strong>📝 Recent Changes</strong> — Security, performance, UX, catalog updates</summary>
 
-### **Security Hardening & Production Readiness (Feb 2026)**
+<details>
+<summary><strong>Security Hardening & Production Readiness (Feb 2026)</strong></summary>
 
 Complete security audit and hardening of Convex backend:
 
@@ -591,7 +599,10 @@ Complete security audit and hardening of Convex backend:
 
 **Result:** Enterprise-grade backend with 100% authentication coverage, comprehensive input validation, and audit-ready logging. Zero linter errors, full production compliance.
 
-### **Performance Optimization (Feb 2026)**
+</details>
+
+<details>
+<summary><strong>Performance Optimization (Feb 2026)</strong></summary>
 
 - **Code splitting implementation** – Below-the-fold sections lazy loaded with `next/dynamic` + `Suspense`. Initial JavaScript bundle reduced by 60-70%.
 - **Google Maps lazy loading** – Intersection Observer defers map loading until user scrolls near. Saves 152 KiB on initial load.
@@ -600,14 +611,20 @@ Complete security audit and hardening of Convex backend:
 - **Image optimization** – Hero image quality reduced to 70, maintaining visual quality while improving LCP.
 - **Lighthouse mobile score: 77 → 91** – 14-point improvement through systematic optimization.
 
-### **UX & Navigation**
+</details>
+
+<details>
+<summary><strong>UX & Navigation</strong></summary>
 
 - **Navbar scroll progress** – A thin bar under the navbar fills left→right as the user scrolls (reading progress), using Framer Motion `useScroll` and `useSpring`.
 - **Navbar section links (route-aware)** – Section links (About, Products, Why Us, Contact) are only relevant on the homepage. On `/` they scroll to in-page sections with scroll-spy and active styling (primary color + bottom border). On other routes (e.g. `/products/[slug]`, `/privacy`) the same items are `<Link href="/#section">` so they navigate to the homepage and the target section.
 - **Navbar active section** – Scroll-spy highlights the current section; active item is uppercase, primary color, and has a bottom border. Scroll-spy runs only on the homepage.
 - **Hero section** – Subtle entrance animations (Framer Motion): heading, subtitle, CTA, and trust pills fade in and slide up with a short stagger. Respects `prefers-reduced-motion`.
 
-### **Catalog Management**
+</details>
+
+<details>
+<summary><strong>Catalog Management</strong></summary>
 
 - **Dynamic category system** – Sitemap, product pages, and homepage fetch categories directly from Convex. Single source of truth.
 - **Category deletion** – Admins can delete empty categories with confirmation UI. Cascade protection prevents accidental data loss.
@@ -617,49 +634,71 @@ Complete security audit and hardening of Convex backend:
 - **Search prioritization** – KOD (product code) prioritized in admin search results.
 - **Exact KOD matching** – `exactKods` field in category rules for precise product categorization.
 
----
+</details>
 
-## Operational Risks
+</details>
 
-**Convex Dependency**
+<details>
+<summary><strong>⚠️ Operational Risks</strong> — Convex, sitemap, Next.js, images, SEO, admin</summary>
+
+<details>
+<summary><strong>Convex Dependency</strong></summary>
 
 - **Risk:** Convex service availability = site content availability
 - **Impact:** Product catalog, admin area, sitemap generation all depend on Convex
 - **Mitigation:** Convex has >99.9% uptime SLA. Static pages (homepage, legal) remain functional during outages. Consider implementing static fallback for critical catalog pages if availability becomes a concern.
 
-**Dynamic Sitemap Generation**
+</details>
+
+<details>
+<summary><strong>Dynamic Sitemap Generation</strong></summary>
 
 - **Risk:** Build-time failure if Convex is unreachable
 - **Impact:** Deployment fails, sitemap becomes stale
 - **Mitigation:** Next.js ISR could be added for sitemap route. Monitor build logs. Convex availability during builds is high.
 
-**Experimental Next.js Features**
+</details>
+
+<details>
+<summary><strong>Experimental Next.js Features</strong></summary>
 
 - **Risk:** `experimental.inlineCss: true` may break or change behavior in Next.js updates
 - **Impact:** Render-blocking CSS returns, performance regression
 - **Mitigation:** Test Lighthouse scores after each Next.js upgrade. Feature flag can be disabled in `next.config.ts` without code changes.
 
-**Image Hosting**
+</details>
+
+<details>
+<summary><strong>Image Hosting</strong></summary>
 
 - **Risk:** Product images stored in Convex Cloud, remote URL changes
 - **Impact:** Broken images on category pages
 - **Mitigation:** `next.config.ts` remote patterns configured for `*.convex.cloud`. If Convex URL changes, update environment variable and redeploy.
 
-**Search Engine Algorithm Changes**
+</details>
+
+<details>
+<summary><strong>Search Engine Algorithm Changes</strong></summary>
 
 - **Risk:** Google updates may affect ranking factors (e.g., Core Web Vitals weighting)
 - **Impact:** Rankings drop despite code not changing
 - **Mitigation:** Monitor Google Search Console weekly. Performance metrics logged. Document baseline scores (Lighthouse 91/100 as of Feb 2026).
 
-**Admin Access**
+</details>
+
+<details>
+<summary><strong>Admin Access</strong></summary>
 
 - **Risk:** Single admin login point (`/admin/login`), no 2FA
 - **Impact:** Unauthorized catalog modifications if credentials compromised
 - **Mitigation:** Rate limiting (5 attempts/15min), JWT sessions (24h expiry), timing-safe password comparison, hashed IP tracking. All admin mutations require authentication. Strong password policy enforced. Consider adding 2FA if team grows beyond single admin.
 
----
+</details>
 
-## Quick Reference
+</details>
+
+<details>
+<summary><strong>📌 Quick Reference</strong> — Common tasks and file locations</summary>
 
 | Task                           | Location                                                                           |
 | ------------------------------ | ---------------------------------------------------------------------------------- |
@@ -669,9 +708,10 @@ Complete security audit and hardening of Convex backend:
 | Change crawl policy            | `src/lib/seo/robotsContent.ts`                                                     |
 | View sitemap URLs              | `/sitemap.xml` or `src/app/sitemap.ts`                                             |
 
----
+</details>
 
-## Document Maintenance
+<details>
+<summary><strong>📅 Document Maintenance</strong> — Review cadence, update triggers, version history</summary>
 
 **Last Reviewed:** February 2026  
 **Owner:** Development Team  
@@ -687,6 +727,8 @@ Complete security audit and hardening of Convex backend:
 
 - Feb 2026: Security hardening (authentication, input validation, error handling), performance optimization (Lighthouse 77→91), code splitting, product description field added, comprehensive test suite (137 tests: 99 unit/convex + 38 e2e Chromium+Firefox, 96% coverage), stress & load testing (Artillery, Playwright repeat)
 - Initial: SEO architecture, structured data, local business setup
+
+</details>
 
 ---
 
