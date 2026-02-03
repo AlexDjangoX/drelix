@@ -69,7 +69,7 @@
 _Click any section below to expand and read the details._
 
 <details>
-<summary><strong>📋 SEO Reference</strong> — Technical SEO implementations with file locations and specifications</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.34-4.34"/></svg>SEO Reference</strong> — Technical SEO implementations with file locations and specifications</summary>
 
 This section documents concrete SEO implementations. Expand each subsection below for details.
 
@@ -312,7 +312,7 @@ Search engines favor accessible sites. Implementations:
 </details>
 
 <details>
-<summary><strong>📦 Product Management & Convex Backend</strong> — Real-time catalog, CSV import, admin controls, security architecture</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><polyline points="3.29 7 12 12 20.71 7"/><path d="m7.5 4.27 9 5.15"/></svg>Product Management & Convex Backend</strong> — Real-time catalog, CSV import, admin controls, security architecture</summary>
 
 **Enterprise-Grade Data Architecture**
 
@@ -389,7 +389,7 @@ The Convex backend is production-ready with enterprise security standards, compr
 </details>
 
 <details>
-<summary><strong>🧪 Testing</strong> — 137 tests (unit, integration, E2E), coverage metrics, how to run</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>Testing</strong> — 137 tests (unit, integration, E2E), coverage metrics, how to run</summary>
 
 **Test Suite Status: 137/137 Passing (100%)**
 
@@ -483,7 +483,7 @@ See `tests/README.md` for detailed test documentation, coverage reports, and tro
 </details>
 
 <details>
-<summary><strong>⚖️ Legal Pages</strong> — Privacy Policy & Terms of Service (GDPR, Polish consumer law)</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M12 3v18"/><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"/><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"/><path d="M7 21h10"/></svg>Legal Pages</strong> — Privacy Policy & Terms of Service (GDPR, Polish consumer law)</summary>
 
 - **Privacy Policy** (`/privacy`): GDPR-aligned, Polish law, contact form and in-store data, cookies, data subject rights, PUODO.
 - **Terms of Service** (`/terms`): Brick-and-mortar retail, no distance sales, consumer rights (rękojmia, reklamacja), no 14-day withdrawal for in-store purchases.
@@ -491,7 +491,7 @@ See `tests/README.md` for detailed test documentation, coverage reports, and tro
 </details>
 
 <details>
-<summary><strong>🌐 Bilingual UI</strong> — Polish default, English toggle, SEO rationale</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Bilingual UI</strong> — Polish default, English toggle, SEO rationale</summary>
 
 - Polish default. English toggle (client-side, `LanguageContext`). Same URL for both languages.
 - Search engines are served Polish content by default (no hreflang tags).
@@ -507,7 +507,7 @@ See `tests/README.md` for detailed test documentation, coverage reports, and tro
 _Click any section below to expand and read the details._
 
 <details>
-<summary><strong>🛠️ Tech Stack</strong> — Framework, language, styling, backend, UI</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>Tech Stack</strong> — Framework, language, styling, backend, UI</summary>
 
 | Category      | Technology                             |
 | ------------- | -------------------------------------- |
@@ -520,7 +520,7 @@ _Click any section below to expand and read the details._
 </details>
 
 <details>
-<summary><strong>🔄 CI/CD</strong> — GitHub Actions, lint, tests, required secrets</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>CI/CD</strong> — GitHub Actions, lint, tests, required secrets</summary>
 
 GitHub Actions runs on every push and PR to `main`/`master`:
 
@@ -533,7 +533,7 @@ For E2E to pass in CI, add repository secrets: `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_
 </details>
 
 <details>
-<summary><strong>🗺️ Sitemap Contents</strong> — Dynamic URLs from Convex</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg>Sitemap Contents</strong> — Dynamic URLs from Convex</summary>
 
 The sitemap dynamically generates URLs from Convex:
 
@@ -548,7 +548,7 @@ Indexing depends on deployment, Google Search Console setup, and search engine b
 </details>
 
 <details>
-<summary><strong>📁 Project Structure</strong> — Directory layout and key files</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M20 10a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2.5a1 1 0 0 1-.8-.4l-.9-1.2A1 1 0 0 0 15 3h-2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1Z"/><path d="M20 21a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-2.9a1 1 0 0 1-.88-.55l-.42-.85a1 1 0 0 0-.92-.6H13a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1Z"/><path d="M3 5a2 2 0 0 0 2 2h3"/><path d="M3 3v13a2 2 0 0 0 2 2h3"/></svg>Project Structure</strong> — Directory layout and key files</summary>
 
 ```
 drelix/
@@ -583,7 +583,7 @@ drelix/
 </details>
 
 <details>
-<summary><strong>📝 Recent Changes</strong> — Security, performance, UX, catalog updates</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>Recent Changes</strong> — Security, performance, UX, catalog updates</summary>
 
 <details>
 <summary><strong>Security Hardening & Production Readiness (Feb 2026)</strong></summary>
@@ -639,7 +639,7 @@ Complete security audit and hardening of Convex backend:
 </details>
 
 <details>
-<summary><strong>⚠️ Operational Risks</strong> — Convex, sitemap, Next.js, images, SEO, admin</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Operational Risks</strong> — Convex, sitemap, Next.js, images, SEO, admin</summary>
 
 <details>
 <summary><strong>Convex Dependency</strong></summary>
@@ -698,7 +698,7 @@ Complete security audit and hardening of Convex backend:
 </details>
 
 <details>
-<summary><strong>📌 Quick Reference</strong> — Common tasks and file locations</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"/></svg>Quick Reference</strong> — Common tasks and file locations</summary>
 
 | Task                           | Location                                                                           |
 | ------------------------------ | ---------------------------------------------------------------------------------- |
@@ -711,7 +711,7 @@ Complete security audit and hardening of Convex backend:
 </details>
 
 <details>
-<summary><strong>📅 Document Maintenance</strong> — Review cadence, update triggers, version history</summary>
+<summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>Document Maintenance</strong> — Review cadence, update triggers, version history</summary>
 
 **Last Reviewed:** February 2026  
 **Owner:** Development Team  
