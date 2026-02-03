@@ -19,6 +19,7 @@ export type AuthenticatedCtx = QueryCtx | MutationCtx;
  * @throws Error if not authenticated or not admin
  */
 export async function requireAdmin(ctx: AuthenticatedCtx): Promise<void> {
+  void ctx; // Placeholder: auth check deferred to Next.js middleware
   // TODO: Implement Convex Auth integration when available
   // For now, this serves as a marker for admin-only mutations
   // In production, integrate with Convex's authentication system

@@ -70,11 +70,11 @@ describe('sanitizeErrorForPublic', () => {
 
 describe('logError', () => {
   const originalConsoleError = console.error;
-  let consoleOutput: any[] = [];
+  let consoleOutput: unknown[][] = [];
 
   beforeEach(() => {
     consoleOutput = [];
-    console.error = (...args: any[]) => {
+    console.error = (...args: unknown[]) => {
       consoleOutput.push(args);
     };
   });
@@ -99,7 +99,7 @@ describe('logError', () => {
     logError('TestContext', error);
 
     const hasStackLog = consoleOutput.some((log) =>
-      log.some((arg: any) => arg && arg.toString().includes('Stack trace'))
+      log.some((arg: unknown) => arg && String(arg).includes('Stack trace'))
     );
     expect(hasStackLog).toBe(true);
   });

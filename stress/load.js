@@ -14,19 +14,19 @@ const BASE_URL = __ENV.BASE_URL || 'http://localhost:3000';
 
 export const options = {
   stages: [
-    { duration: '30s', target: 10 },  // Ramp up to 10 VUs
-    { duration: '1m', target: 10 },   // Stay at 10 VUs
-    { duration: '30s', target: 25 },  // Ramp up to 25 VUs
-    { duration: '1m', target: 25 },   // Stay at 25 VUs
-    { duration: '30s', target: 0 },   // Ramp down
+    { duration: '30s', target: 10 }, // Ramp up to 10 VUs
+    { duration: '1m', target: 10 }, // Stay at 10 VUs
+    { duration: '30s', target: 25 }, // Ramp up to 25 VUs
+    { duration: '1m', target: 25 }, // Stay at 25 VUs
+    { duration: '30s', target: 0 }, // Ramp down
   ],
   thresholds: {
     http_req_duration: ['p(95)<3000'], // 95% of requests under 3s
-    http_req_failed: ['rate<0.05'],    // <5% failure rate
+    http_req_failed: ['rate<0.05'], // <5% failure rate
   },
 };
 
-export default function () {
+function runLoadTest() {
   // Homepage
   const homeRes = http.get(`${BASE_URL}/`);
   check(homeRes, { 'homepage status 200': (r) => r.status === 200 });
@@ -42,3 +42,5 @@ export default function () {
   check(loginRes, { 'admin login status 200': (r) => r.status === 200 });
   sleep(1);
 }
+
+export default runLoadTest;

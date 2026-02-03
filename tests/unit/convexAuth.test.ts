@@ -2,7 +2,7 @@
  * Unit tests for convex/lib/convexAuth.
  * Pure functions - no mocks required.
  */
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   sanitizeString,
   validateSlug,
@@ -10,6 +10,7 @@ import {
   requireAdmin,
   isAdmin,
 } from '../../convex/lib/convexAuth';
+import type { AuthenticatedCtx } from '../../convex/lib/convexAuth';
 
 describe('sanitizeString', () => {
   it('returns trimmed string', () => {
@@ -130,27 +131,28 @@ describe('validateRateLimitKey', () => {
   });
 });
 
+function mockAuthCtx(): AuthenticatedCtx {
+  return {} as unknown as AuthenticatedCtx;
+}
+
 describe('requireAdmin', () => {
   it('resolves without error for placeholder implementation', async () => {
-    const mockCtx = {} as any;
-    await expect(requireAdmin(mockCtx)).resolves.toBeUndefined();
+    await expect(requireAdmin(mockAuthCtx())).resolves.toBeUndefined();
   });
 
   it('does not throw in current MVP implementation', async () => {
-    const mockCtx = {} as any;
-    await expect(requireAdmin(mockCtx)).resolves.not.toThrow();
+    await expect(requireAdmin(mockAuthCtx())).resolves.not.toThrow();
   });
 });
 
 describe('isAdmin', () => {
   it('returns true for placeholder implementation', async () => {
-    const mockCtx = {} as any;
-    const result = await isAdmin(mockCtx);
+    const result = await isAdmin(mockAuthCtx());
     expect(result).toBe(true);
   });
 
   it('calls requireAdmin internally', async () => {
-    const mockCtx = {} as any;
+    const mockCtx = mockAuthCtx();
     // In MVP, isAdmin always succeeds since requireAdmin doesn't throw
     const result = await isAdmin(mockCtx);
     expect(typeof result).toBe('boolean');
