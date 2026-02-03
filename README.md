@@ -471,34 +471,15 @@ See `tests/README.md` for detailed test documentation, coverage reports, and tro
 
 ---
 
-## Deploy
+## CI/CD
 
-Deploy to Vercel (or any Next.js host):
+GitHub Actions runs on every push and PR to `main`/`master`:
 
-1. **Deploy Convex Backend First:**
+- **Lint** – ESLint
+- **Unit tests** – Vitest (99 tests)
+- **E2E tests** – Playwright Chromium (19 tests)
 
-   ```bash
-   npx convex deploy --prod
-   ```
-
-2. **Set Environment Variables** in Vercel:
-   - `NEXT_PUBLIC_SITE_URL` – Production URL (e.g. `https://drelix.org`)
-   - `NEXT_PUBLIC_CONVEX_URL` – From Convex dashboard (e.g. `https://your-deployment.convex.cloud`)
-   - `JWT_SECRET` – Cryptographically random string (min 32 chars) for admin sessions
-   - `ADMIN_PASSWORD` – Strong admin password (min 16 chars, complex)
-   - `RESEND_API_KEY` – From Resend dashboard for contact form
-   - `RESEND_FROM_EMAIL` – Verified sending domain in Resend
-   - `CONTACT_TO_EMAIL` – Recipient email for contact form submissions
-
-3. **Connect Repository & Deploy** to Vercel
-
-4. **Verify Deployment:**
-   - Admin login works (`/admin/login`)
-   - Product catalog loads (`/products`)
-   - Sitemap generates (`/sitemap.xml`)
-   - Contact form sends email
-
-See `convex/PRODUCTION_CHECKLIST.md` for complete deployment verification steps.
+For E2E to pass in CI, add repository secrets: `NEXT_PUBLIC_CONVEX_URL`, `ADMIN_PASSWORD`, `JWT_SECRET`. See `.github/README.md` for details.
 
 ---
 
@@ -540,6 +521,7 @@ drelix/
 │   │   ├── seo.ts              # Canonical URL utilities
 │   │   └── robotsContent.ts    # robots.txt policy
 │   └── data/
+├── .github/workflows/     # CI (lint, unit, e2e)
 ├── convex/
 ├── e2e/                   # Playwright E2E tests
 ├── stress/                 # Load tests (Artillery, k6)
