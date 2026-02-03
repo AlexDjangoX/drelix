@@ -13,7 +13,11 @@ type LoginFormProps = {
 export function LoginForm({ formAction }: LoginFormProps) {
   return (
     <CardContent>
-      <form action={formAction} className="space-y-4">
+      <form
+        action={formAction}
+        className="space-y-4"
+        data-testid="admin-login-form"
+      >
         <div className="space-y-2">
           <Input
             type="password"
@@ -21,6 +25,7 @@ export function LoginForm({ formAction }: LoginFormProps) {
             placeholder={LOGIN_STRINGS.placeholder}
             required
             autoFocus
+            data-testid="admin-login-password"
           />
         </div>
         <LoginSubmitButton />

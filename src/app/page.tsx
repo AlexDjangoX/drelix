@@ -27,9 +27,17 @@ function SectionFallback() {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <div
+      className="min-h-screen bg-background overflow-x-hidden"
+      data-testid="home-page"
+    >
       <Navbar />
-      <main id="main-content" role="main" aria-label="Treść główna">
+      <main
+        id="main-content"
+        data-testid="main-content"
+        role="main"
+        aria-label="Treść główna"
+      >
         <HeroSection />
         <AboutSection />
         <Suspense fallback={<SectionFallback />}>

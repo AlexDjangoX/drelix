@@ -29,8 +29,11 @@ export function AdminLoginSection() {
   }, [state]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
+    <div
+      className="min-h-screen flex items-center justify-center bg-background p-4"
+      data-testid="admin-login-page"
+    >
+      <Card className="w-full max-w-md" data-testid="admin-login-card">
         <LoginHeader />
         <LoginForm formAction={formAction} />
       </Card>

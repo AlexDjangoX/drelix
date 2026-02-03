@@ -14,7 +14,11 @@ export default function ProductSection() {
   const reducedMotion = !!prefersReducedMotion;
 
   return (
-    <section id="products" className="py-20 md:py-32 overflow-x-hidden">
+    <section
+      id="products"
+      data-testid="products-section"
+      className="py-20 md:py-32 overflow-x-hidden"
+    >
       <div ref={sectionRef} className="container mx-auto px-4">
         <ProductSectionHeader
           reducedMotion={reducedMotion}

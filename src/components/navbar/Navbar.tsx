@@ -35,6 +35,7 @@ export default function Navbar() {
     <>
       <NavbarScrollProgress scaleX={scaleX} />
       <nav
+        data-testid="main-navbar"
         className={cn(
           'fixed inset-x-0 top-0 z-40 min-w-[320px] transition-all duration-300',
           isScrolled

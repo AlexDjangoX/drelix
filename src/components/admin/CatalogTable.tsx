@@ -111,7 +111,7 @@ export function CatalogTable({
   isPreview,
 }: Props) {
   return (
-    <section>
+    <section data-testid="catalog-table">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-lg font-semibold">
@@ -130,6 +130,7 @@ export function CatalogTable({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-9"
+            data-testid="catalog-search"
           />
           {searchQuery && (
             <p className="absolute -bottom-5 right-0 text-[10px] text-muted-foreground">
