@@ -5,6 +5,14 @@
 import { describe, it, expect } from 'vitest';
 import { deleteProductImages } from '../../convex/lib/helpers';
 import type { ProductDoc } from '../../convex/lib/types';
+import type { MutationCtx } from '../../convex/_generated/server';
+
+/** Minimal ctx mock for deleteProductImages (only uses storage.delete) */
+function createMockCtx(storage: {
+  delete: (id: string) => Promise<void>;
+}): MutationCtx {
+  return { storage } as unknown as MutationCtx;
+}
 
 describe('deleteProductImages error handling', () => {
   it('handles successful deletion of both images', async () => {
@@ -14,16 +22,11 @@ describe('deleteProductImages error handling', () => {
       thumbnailStorageId: 'thumb-456',
     } as ProductDoc;
 
-    const mockCtx = {
-      storage: {
-        delete: async (id: string) => {
-          // Simulate successful deletion
-          return Promise.resolve();
-        },
-      },
-    } as any;
+    const ctx = createMockCtx({
+      delete: async () => Promise.resolve(),
+    });
 
-    const result = await deleteProductImages(mockCtx, mockProduct);
+    const result = await deleteProductImages(ctx, mockProduct);
     expect(result.deleted).toBe(2);
     expect(result.failed).toBe(0);
   });
@@ -33,13 +36,11 @@ describe('deleteProductImages error handling', () => {
       Kod: 'TEST-002',
     } as ProductDoc;
 
-    const mockCtx = {
-      storage: {
-        delete: async () => Promise.resolve(),
-      },
-    } as any;
+    const ctx = createMockCtx({
+      delete: async () => Promise.resolve(),
+    });
 
-    const result = await deleteProductImages(mockCtx, mockProduct);
+    const result = await deleteProductImages(ctx, mockProduct);
     expect(result.deleted).toBe(0);
     expect(result.failed).toBe(0);
   });
@@ -58,18 +59,16 @@ describe('deleteProductImages error handling', () => {
       thumbnailStorageId: 'thumb-success',
     } as ProductDoc;
 
-    const mockCtx = {
-      storage: {
-        delete: async (id: string) => {
-          if (id === 'img-fail') {
-            throw new Error('Storage deletion failed');
-          }
-          return Promise.resolve();
-        },
+    const ctx = createMockCtx({
+      delete: async (id: string) => {
+        if (id === 'img-fail') {
+          throw new Error('Storage deletion failed');
+        }
+        return Promise.resolve();
       },
-    } as any;
+    });
 
-    const result = await deleteProductImages(mockCtx, mockProduct);
+    const result = await deleteProductImages(ctx, mockProduct);
 
     // Should have 1 successful deletion, 1 failed
     expect(result.deleted).toBe(1);
@@ -95,15 +94,13 @@ describe('deleteProductImages error handling', () => {
       thumbnailStorageId: 'thumb-fail',
     } as ProductDoc;
 
-    const mockCtx = {
-      storage: {
-        delete: async () => {
-          throw new Error('Storage service unavailable');
-        },
+    const ctx = createMockCtx({
+      delete: async () => {
+        throw new Error('Storage service unavailable');
       },
-    } as any;
+    });
 
-    const result = await deleteProductImages(mockCtx, mockProduct);
+    const result = await deleteProductImages(ctx, mockProduct);
 
     expect(result.deleted).toBe(0);
     expect(result.failed).toBe(2);
@@ -118,13 +115,11 @@ describe('deleteProductImages error handling', () => {
       imageStorageId: 'img-only',
     } as ProductDoc;
 
-    const mockCtx = {
-      storage: {
-        delete: async () => Promise.resolve(),
-      },
-    } as any;
+    const ctx = createMockCtx({
+      delete: async () => Promise.resolve(),
+    });
 
-    const result = await deleteProductImages(mockCtx, mockProduct);
+    const result = await deleteProductImages(ctx, mockProduct);
     expect(result.deleted).toBe(1);
     expect(result.failed).toBe(0);
   });
