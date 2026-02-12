@@ -4,9 +4,8 @@ import { api } from "convex/_generated/api";
 import { getCanonicalBaseUrl } from "@/lib/seo";
 
 /**
- * Next.js serves this at /sitemap.xml (no public/sitemap.xml needed).
- * Base URL: single source from getCanonicalBaseUrl() (no trailing slash).
- * Category slugs from Convex (single source of truth).
+ * Next.js 16 sitemap convention – served at /sitemap.xml, cached by default.
+ * Base URL from getCanonicalBaseUrl() (no trailing slash). Category slugs from Convex.
  */
 const baseUrl = getCanonicalBaseUrl();
 

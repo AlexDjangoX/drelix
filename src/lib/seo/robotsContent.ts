@@ -1,6 +1,8 @@
 /**
- * Builds robots.txt body. Call with getCanonicalBaseUrl() from @/lib/seo so the
- * Sitemap URL in robots.txt aligns with the sitemap (no trailing slash).
+ * Single source of truth for robots.txt (Next.js 16).
+ * We use a Route Handler (app/robots.txt/route.ts) instead of app/robots.ts so we can
+ * output custom content (content-signal policy + AI crawler block list). Always pass
+ * getCanonicalBaseUrl() from @/lib/seo so the Sitemap URL matches the sitemap.
  */
 
 const AI_CRAWLERS = [

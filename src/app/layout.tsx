@@ -32,6 +32,7 @@ const montserrat = Montserrat({
 
 const siteUrl = getCanonicalBaseUrl();
 
+/** Next.js 16 / React 19 metadata API; canonicals and SEO from @/lib/seo. */
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {

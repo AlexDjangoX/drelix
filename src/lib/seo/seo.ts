@@ -1,6 +1,7 @@
 /**
- * Single source for SEO-related values. Used by metadata, sitemap, robots, and JSON-LD.
- * See docs/SEO_Guide.md.
+ * SEO config – optimized for React 19 + Next.js 16.
+ * Single source for metadata, sitemap, robots.txt, and JSON-LD.
+ * Set NEXT_PUBLIC_SITE_URL in .env (no trailing slash) so canonicals and sitemap match.
  */
 
 const raw = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drelix.org";

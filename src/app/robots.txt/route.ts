@@ -1,12 +1,14 @@
-import { getRobotsTxt, getCanonicalBaseUrl } from "@/lib/seo";
+import { getCanonicalBaseUrl, getRobotsTxt } from "@/lib/seo";
 
 /**
- * Serves /robots.txt with the same baseUrl as sitemap (getCanonicalBaseUrl).
- * Policy (in lib/robotsContent.ts): Content-signal, search engines allowed, /api/ and /admin/ disallowed, AI crawlers blocked.
+ * Next.js 16: serves /robots.txt (Route Handler for full control; app/robots.ts would not allow custom comments/AI block list).
+ * Content: @/lib/seo/robotsContent.ts. Base URL: getCanonicalBaseUrl() (same as sitemap).
+ * Policy: search engines allowed; /api/ and /admin/ disallowed; AI/training crawlers blocked.
  */
-const baseUrl = getCanonicalBaseUrl();
+export const dynamic = "force-static";
 
 export function GET() {
+  const baseUrl = getCanonicalBaseUrl();
   const body = getRobotsTxt(baseUrl);
   return new Response(body, {
     headers: {
