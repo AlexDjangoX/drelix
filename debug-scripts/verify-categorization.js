@@ -7,8 +7,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Read the CSV file
-const csvPath = path.join(__dirname, 'data', 'Kartoteki2.csv');
-const rulesPath = path.join(__dirname, 'public', 'catalogCategoryRules.json');
+const csvPath = path.join(__dirname, '..', 'data', 'Kartoteki2.csv');
+const rulesPath = path.join(__dirname, '..', 'public', 'catalogCategoryRules.json');
 
 // Simple CSV parser for semicolon-separated values
 function parseCSV(buffer) {
