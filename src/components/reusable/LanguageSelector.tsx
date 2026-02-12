@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/language";
 import { motion } from "framer-motion";
 import { Languages } from "lucide-react";
 

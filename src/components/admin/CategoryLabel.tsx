@@ -2,7 +2,7 @@
 
 import { useQuery } from "convex/react";
 import { api } from "convex/_generated/api";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/language";
 
 type Props = { slug: string };
 

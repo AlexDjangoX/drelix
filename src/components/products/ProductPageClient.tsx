@@ -13,7 +13,7 @@ import { ChevronLeft, ChevronRight, X, Loader2 } from "lucide-react";
 import { Navbar, Footer } from "@/components";
 import { Card, CardContent } from "@/components/ui/card";
 import { AnimateText, TwoToneHeading } from "@/components";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/language";
 import { productConfig } from "@/components/products/productConfig";
 import type { ProductItem } from "@/lib/types";
 import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";

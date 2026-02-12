@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useEffectEvent } from "react";
 import { toast } from "sonner";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/language";
 import {
   ContactForm,
   ContactHeader,

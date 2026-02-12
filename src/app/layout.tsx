@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 export const revalidate = false;
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
-import { LanguageProvider } from "@/context/LanguageContext";
+import { LanguageProvider } from "@/context/language";
 import { JsonLd } from "@/components/seo";
 import { ConvexClientProvider } from "@/context/ConvexClientProvider";
 import { getCanonicalBaseUrl } from "@/lib/seo";

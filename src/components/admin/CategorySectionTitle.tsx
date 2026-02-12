@@ -1,6 +1,6 @@
 "use client";
 
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/language";
 import type { CatalogSection } from "@/lib/types";
 
 type Props = { section: CatalogSection };

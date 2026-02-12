@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/language";
 import { getThumbnailPath } from "@/lib/thumbnails";
 
 function getLabel(

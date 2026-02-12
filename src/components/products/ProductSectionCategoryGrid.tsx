@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from "react";
 import { motion, useInView } from "framer-motion";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/context/language";
 import { useQuery } from "convex/react";
 import { api } from "convex/_generated/api";
 import {
