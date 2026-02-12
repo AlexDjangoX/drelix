@@ -31,7 +31,12 @@ export function ProductSectionCategoryGrid({
   reducedMotion: boolean;
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
-  const isGridInView = useInView(gridRef, { once: true, amount: 0.08 });
+  // Trigger earlier so fast scrollers see the grid animation; tight stagger in animations.ts
+const isGridInView = useInView(gridRef, {
+  once: true,
+  amount: 0.05,
+  margin: "120px 0px 0px 0px",
+});
   const sectionsFromConvex = useQuery(api.catalog.listCatalogSections);
   const { t } = useLanguage();
 

@@ -9,7 +9,12 @@ import {
 
 export default function ProductSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.05 });
+  // Trigger when section is ~150px below viewport so fast scrollers still see the animation
+const isInView = useInView(sectionRef, {
+  once: true,
+  amount: 0.05,
+  margin: "150px 0px 0px 0px",
+});
   const prefersReducedMotion = useReducedMotion();
   const reducedMotion = !!prefersReducedMotion;
 

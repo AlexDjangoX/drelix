@@ -388,17 +388,25 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 
 const LANGUAGE_STORAGE_KEY = "drelix-language";
 
+const DEFAULT_LANGUAGE: Language = "pl";
+
 function getStoredLanguage(): Language {
-  if (typeof window === "undefined") return "pl";
+  if (typeof window === "undefined") return DEFAULT_LANGUAGE;
   const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
   if (stored === "pl" || stored === "en") return stored;
-  return "pl";
+  return DEFAULT_LANGUAGE;
 }
 
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguageState] = useState<Language>(getStoredLanguage);
+  // Use fixed default so server and first client render match (avoids hydration mismatch).
+  const [language, setLanguageState] = useState<Language>(DEFAULT_LANGUAGE);
+
+  React.useEffect(() => {
+    const stored = getStoredLanguage();
+    setLanguageState(stored);
+  }, []);
 
   const setLanguage = React.useCallback((lang: Language) => {
     setLanguageState(lang);

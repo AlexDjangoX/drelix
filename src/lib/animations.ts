@@ -21,23 +21,23 @@ export const containerVariants: Variants = {
   }),
 };
 
-/** Stagger for grids (slightly longer delay for card-heavy layouts). */
+/** Stagger for grids – tight so fast scrollers still see the cascade. */
 export const gridStaggerVariants = (reduced: boolean): Variants => ({
   hidden: {},
   visible: {
     transition: reduced
       ? { staggerChildren: 0, delayChildren: 0 }
-      : { staggerChildren: 0.12, delayChildren: 0.12 },
+      : { staggerChildren: 0.06, delayChildren: 0.04 },
   },
 });
 
-/** Slide in from left. */
+/** Slide in from left – short duration so fast scroll still shows it. */
 export const fromLeftVariants = (reduced: boolean): Variants => ({
   hidden: { opacity: 0, x: reduced ? 0 : -SLIDE_DISTANCE },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: reduced ? 0 : 0.5, ease: EASE },
+    transition: { duration: reduced ? 0 : 0.28, ease: EASE },
   },
 });
 
@@ -47,17 +47,17 @@ export const fromRightVariants = (reduced: boolean): Variants => ({
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: reduced ? 0 : 0.5, ease: EASE },
+    transition: { duration: reduced ? 0 : 0.28, ease: EASE },
   },
 });
 
-/** Card slide from left (slightly longer duration for emphasis). */
+/** Card slide from left – quick so grid finishes before user scrolls past. */
 export const cardFromLeftVariants = (reduced: boolean): Variants => ({
   hidden: { opacity: 0, x: reduced ? 0 : -SLIDE_DISTANCE },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: reduced ? 0 : 0.65, ease: EASE },
+    transition: { duration: reduced ? 0 : 0.32, ease: EASE },
   },
 });
 
@@ -67,6 +67,6 @@ export const fadeUpVariants = (reduced: boolean): Variants => ({
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: reduced ? 0 : 0.5, ease: EASE },
+    transition: { duration: reduced ? 0 : 0.28, ease: EASE },
   },
 });
