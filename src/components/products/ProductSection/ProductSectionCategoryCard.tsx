@@ -24,7 +24,7 @@ function getLabel(
   return text.trim() || slug;
 }
 
-type ProductSectionCategoryCardProps = {
+type Props = {
   slug: string;
   titleKey: string;
   displayName?: string;
@@ -38,7 +38,7 @@ export function ProductSectionCategoryCard({
   displayName,
   icon: Icon,
   color,
-}: ProductSectionCategoryCardProps) {
+}: Props) {
   const { t } = useLanguage();
   const thumbnailPath = getThumbnailPath(slug);
   const label =

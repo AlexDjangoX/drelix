@@ -4,11 +4,8 @@ import { useMemo } from "react";
 import { useLanguage } from "@/context/language";
 import { useQuery } from "convex/react";
 import { api } from "convex/_generated/api";
-import {
-  ProductSectionCategoryCard,
-  CATEGORY_COLORS,
-  CATEGORY_ICONS,
-} from "@/components/products";
+import { ProductSectionCategoryCard } from "@/components/products/ProductSection/ProductSectionCategoryCard";
+import { CATEGORY_COLORS, CATEGORY_ICONS } from "@/components/products/ProductSection/productSectionData";
 
 function getLabel(
   t: Record<string, unknown>,

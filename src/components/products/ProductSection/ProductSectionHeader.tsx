@@ -6,17 +6,14 @@ import { AnimateText, TwoToneHeading } from "@/components";
 import {
   headerFromLeftVariants,
   headerFromRightVariants,
-} from "@/components/products";
+} from "@/components/products/ProductSection/productSectionAnimations";
 
-type ProductSectionHeaderProps = {
+type Props = {
   reducedMotion: boolean;
   isInView: boolean;
 };
 
-export function ProductSectionHeader({
-  reducedMotion,
-  isInView,
-}: ProductSectionHeaderProps) {
+export function ProductSectionHeader({ reducedMotion, isInView }: Props) {
   return (
     <div className="text-center mb-16">
       <motion.div

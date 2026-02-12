@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "convex/_generated/api";
 import { productConfig } from "@/components/products/productConfig";
-import { BreadcrumbJsonLd } from "@/components/products/BreadcrumbJsonLd";
+import { BreadcrumbJsonLd } from "@/components/products";
 import { getCanonicalBaseUrl } from "@/lib/seo";
 
 const siteUrl = getCanonicalBaseUrl();

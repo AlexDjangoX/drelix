@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Navbar, HeroSection, AboutSection, Footer } from "@/components";
 
 const ProductSection = dynamic(
-  () => import("@/components/products/ProductSection"),
+  () => import("@/components/products/ProductSection/ProductSection"),
   {
     ssr: true,
   },

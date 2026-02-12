@@ -2,10 +2,8 @@
 
 import { useRef } from "react";
 import { useReducedMotion, useInView } from "framer-motion";
-import {
-  ProductSectionHeader,
-  ProductSectionCategoryGrid,
-} from "@/components/products";
+import { ProductSectionHeader } from "@/components/products/ProductSection/ProductSectionHeader";
+import { ProductSectionCategoryGrid } from "@/components/products/ProductSection/ProductSectionCategoryGrid";
 
 export default function ProductSection() {
   const sectionRef = useRef<HTMLElement>(null);

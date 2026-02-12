@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "convex/_generated/api";
-import ProductPageClient from "@/components/products/ProductPageClient";
+import { ProductPageClient } from "@/components/products/ProductPage";
 
 type Props = { params: Promise<{ slug: string }> };
 
