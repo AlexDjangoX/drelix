@@ -14,8 +14,6 @@ const KOD = 'Kod';
  * Higher score means a better match.
  */
 function calculateMatchScore(row: CatalogRow, config: CategoryRule): number {
-  if (config.slug === 'other') return 0.1; // Baseline for 'other'
-
   const nazwaUpper = (row[NAZWA] ?? '').toUpperCase();
   const kodUpper = (row[KOD] ?? '').trim().toUpperCase();
   let score = 0;
@@ -26,6 +24,9 @@ function calculateMatchScore(row: CatalogRow, config: CategoryRule): number {
       return 1000;
     }
   }
+
+  // Baseline for 'other' category (only if no exactKods match)
+  if (config.slug === 'other') return 0.1;
 
   // 1. KOD Prefix Match (High priority)
   if (config.kodPrefixes?.length) {
