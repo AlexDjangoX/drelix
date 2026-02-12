@@ -15,6 +15,10 @@ const eslintConfig = defineConfig([
     // Generated / build artifacts
     'convex/_generated/**',
     'coverage/**',
+    // Debug and utility scripts (not production code)
+    'debug-scripts/**',
+    'convex/lib/serverLogger.ts',
+    'src/lib/upload-logger.ts',
   ]),
 ]);
 
