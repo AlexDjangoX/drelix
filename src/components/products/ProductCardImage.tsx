@@ -19,6 +19,8 @@ export type ProductCardImageProps = {
   className?: string;
   /** Image className (hover/transition). Applied to the Next Image. */
   imageClassName?: string;
+  /** Called when the image fails to load (e.g. to show a placeholder). */
+  onError?: () => void;
 };
 
 /**
@@ -33,6 +35,7 @@ export function ProductCardImage({
   className,
   imageClassName =
     "object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300",
+  onError,
 }: ProductCardImageProps) {
   const [aspect, setAspect] = useState<number>(1);
 
@@ -62,6 +65,7 @@ export function ProductCardImage({
         sizes={sizes}
         className={imageClassName}
         onLoad={onLoad}
+        onError={onError}
       />
     </div>
   );

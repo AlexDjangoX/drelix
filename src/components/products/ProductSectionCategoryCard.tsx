@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/context/language";
 import { getThumbnailPath } from "@/lib/thumbnails";
+import { ProductCardImage } from "@/components/products/ProductCardImage";
 
 function getLabel(
   t: Record<string, unknown>,
@@ -30,7 +30,6 @@ type ProductSectionCategoryCardProps = {
   displayName?: string;
   icon: LucideIcon;
   color: string;
-  reducedMotion: boolean;
 };
 
 export function ProductSectionCategoryCard({
@@ -39,7 +38,6 @@ export function ProductSectionCategoryCard({
   displayName,
   icon: Icon,
   color,
-  reducedMotion,
 }: ProductSectionCategoryCardProps) {
   const { t } = useLanguage();
   const thumbnailPath = getThumbnailPath(slug);
@@ -53,25 +51,24 @@ export function ProductSectionCategoryCard({
     <Link href={`/products/${slug}`} className="block h-full min-h-0">
       <Card className={cardClassName}>
         <CardContent className="p-6">
-          <div
-            className={`aspect-square relative rounded-xl mb-4 overflow-hidden bg-linear-to-br ${color} flex items-center justify-center group-hover:scale-105 transition-transform`}
-          >
-            {thumbnailPath ? (
-              <Image
-                src={thumbnailPath}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-              />
-            ) : (
+          {thumbnailPath ? (
+            <ProductCardImage
+              src={thumbnailPath}
+              alt=""
+              className={`relative w-full rounded-xl mb-4 overflow-hidden flex items-center justify-center bg-linear-to-br ${color}`}
+              imageClassName="object-contain object-center group-hover:scale-105 transition-transform"
+            />
+          ) : (
+            <div
+              className={`aspect-square relative rounded-xl mb-4 overflow-hidden bg-linear-to-br ${color} flex items-center justify-center`}
+            >
               <Icon
                 size={40}
                 className="text-foreground group-hover:text-primary transition-colors"
                 aria-hidden
               />
-            )}
-          </div>
+            </div>
+          )}
           <h3 className="text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors">
             {label}
           </h3>

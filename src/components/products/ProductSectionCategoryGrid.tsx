@@ -23,11 +23,7 @@ function getLabel(
   return typeof current === "string" ? current : section.slug;
 }
 
-export function ProductSectionCategoryGrid({
-  reducedMotion,
-}: {
-  reducedMotion: boolean;
-}) {
+export function ProductSectionCategoryGrid() {
   const sectionsFromConvex = useQuery(api.catalog.listCatalogSections);
   const { t } = useLanguage();
 
@@ -53,7 +49,6 @@ export function ProductSectionCategoryGrid({
           displayName={section.displayName}
           icon={CATEGORY_ICONS[i % CATEGORY_ICONS.length]}
           color={CATEGORY_COLORS[i % CATEGORY_COLORS.length]}
-          reducedMotion={reducedMotion}
         />
       ))}
     </div>

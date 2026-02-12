@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
+import { ProductCardImage } from "@/components/products/ProductCardImage";
 import type { CatalogRow } from "@/lib/types";
 import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
 
@@ -21,14 +21,13 @@ export function ProductCard({ row, index }: Props) {
     >
       <CardContent className="p-4">
         <div className="flex gap-4">
-          <div className="shrink-0 w-24 h-32 rounded-lg bg-muted flex items-center justify-center overflow-hidden">
-            <Image
+          <div className="shrink-0 w-24 min-h-0">
+            <ProductCardImage
               src={src}
               alt={row.Nazwa || row.Kod}
-              width={96}
-              height={128}
-              className="w-full h-full object-contain"
               sizes="96px"
+              className="relative w-full rounded-lg bg-muted flex items-center justify-center overflow-hidden"
+              imageClassName="object-contain object-center"
               onError={() => setImgError(true)}
             />
           </div>

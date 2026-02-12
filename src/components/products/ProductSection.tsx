@@ -30,7 +30,7 @@ export default function ProductSection() {
             reducedMotion={reducedMotion}
             isInView={isInView}
           />
-          <ProductSectionCategoryGrid reducedMotion={reducedMotion} />
+          <ProductSectionCategoryGrid />
         </div>
       </div>
     </section>

@@ -7,7 +7,6 @@ import {
   useEffectEvent,
   useMemo,
 } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, X, Loader2 } from "lucide-react";
 import { Navbar, Footer } from "@/components";
@@ -209,7 +208,7 @@ export default function ProductPageClient({ slug }: Props) {
               e.stopPropagation();
               closeLightbox();
             }}
-            className="absolute z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
+            className="absolute z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors cursor-pointer"
             style={{
               top: "max(1rem, env(safe-area-inset-top))",
               right: "max(1rem, env(safe-area-inset-right))",
@@ -225,7 +224,7 @@ export default function ProductPageClient({ slug }: Props) {
               e.stopPropagation();
               goPrev();
             }}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-black hover:bg-black/90 active:bg-black/80 text-primary border border-transparent hover:border-primary cursor-pointer hover:scale-110 active:scale-100 transition-all duration-200"
             style={{ left: "max(0.25rem, env(safe-area-inset-left))" }}
             aria-label="Poprzednie"
           >
@@ -233,35 +232,39 @@ export default function ProductPageClient({ slug }: Props) {
           </button>
 
           <div
-            className="relative w-full max-w-4xl flex-1 min-h-0"
+            className="relative w-full max-w-4xl flex-1 min-h-0 flex items-center justify-center"
             style={{
               height:
                 "min(85vh, calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 4rem))",
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <Image
-              src={items[lightboxIndex].largeSrc}
-              alt={items[lightboxIndex].name}
-              fill
-              sizes="90vw"
-              className="object-contain"
-              priority
-            />
-            <div className="absolute bottom-0 left-0 right-0 text-center py-3 px-4 rounded-t-xl bg-primary text-primary-foreground shadow-lg">
-              <p
-                className="font-semibold text-sm sm:text-base truncate max-w-full"
-                title={items[lightboxIndex].name}
-              >
-                {items[lightboxIndex].name}
-              </p>
-              {(items[lightboxIndex].price || items[lightboxIndex].unit) && (
-                <p className="text-primary-foreground/90 text-xs sm:text-sm font-normal mt-0.5">
-                  {items[lightboxIndex].price
-                    ? `${items[lightboxIndex].price} zł netto${items[lightboxIndex].unit ? ` / ${items[lightboxIndex].unit}` : ""}`
-                    : items[lightboxIndex].unit}
+            <div className="relative flex flex-col max-w-full max-h-full">
+              {/* Plain img so border-radius applies to the image element (Next/Image applies to wrapper span). */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={items[lightboxIndex].largeSrc}
+                alt={items[lightboxIndex].name}
+                className="max-w-full max-h-full rounded-t-xl block"
+                style={{ borderRadius: "0.75rem 0.75rem 0 0" }}
+                loading="eager"
+                decoding="async"
+              />
+              <div className="text-center py-3 px-4 bg-primary text-primary-foreground shadow-lg">
+                <p
+                  className="font-semibold text-sm sm:text-base truncate max-w-full"
+                  title={items[lightboxIndex].name}
+                >
+                  {items[lightboxIndex].name}
                 </p>
-              )}
+                {(items[lightboxIndex].price || items[lightboxIndex].unit) && (
+                  <p className="text-primary-foreground/90 text-xs sm:text-sm font-normal mt-0.5">
+                    {items[lightboxIndex].price
+                      ? `${items[lightboxIndex].price} zł netto${items[lightboxIndex].unit ? ` / ${items[lightboxIndex].unit}` : ""}`
+                      : items[lightboxIndex].unit}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -271,7 +274,7 @@ export default function ProductPageClient({ slug }: Props) {
               e.stopPropagation();
               goNext();
             }}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-black hover:bg-black/90 active:bg-black/80 text-primary border border-transparent hover:border-primary cursor-pointer hover:scale-110 active:scale-100 transition-all duration-200"
             style={{ right: "max(0.25rem, env(safe-area-inset-right))" }}
             aria-label="Następne"
           >
