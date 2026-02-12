@@ -16,44 +16,235 @@
     {
       "slug": "gloves",
       "titleKey": "productNames.gloves",
-      "keywords": ["RĘKAWICE", "OCHRONNE", "REKAWICE", "ROBOCZE"],
-      "kodPrefixes": ["R-"]
+      "keywords": [
+        "RĘKAWICE",
+        "OCHRONNE",
+        "REKAWICE",
+        "ROBOCZE"
+      ],
+      "kodPrefixes": [
+        "R-"
+      ],
+      "exactKods": [
+        "R-1020",
+        "R-1049",
+        "R-ANSEL",
+        "R-ANTYP",
+        "R-ARDON",
+        "R-BAW",
+        "R-BAW1",
+        "R-BAW2",
+        "R-BLUEGRIP",
+        "R-DRAG",
+        "R-DRAGON",
+        "R-DRELICH",
+        "R-DRIVER",
+        "R-DRIVEX",
+        "R-FISZ",
+        "R-FLOW",
+        "R-FROSEY",
+        "R-GARD",
+        "R-H",
+        "R-J",
+        "R-JM140",
+        "R-KWASO",
+        "R-KWASSZOR",
+        "R-L 8",
+        "R-LAT",
+        "R-LATE",
+        "R-LTOPER",
+        "R-MICRO",
+        "R-NITNIEB.",
+        "R-NITRIO",
+        "R-NITVEX",
+        "R-NITŻ",
+        "R-NITŻDABSTER",
+        "R-NORTEX",
+        "R-NYPOFIN",
+        "R-PCV35",
+        "R-PCVKR",
+        "R-PCY60",
+        "R-POL",
+        "R-RAPTOR",
+        "R-RBI",
+        "R-RBIVEX",
+        "R-RECODRAG",
+        "R-RECORANGE",
+        "R-RECOWIN",
+        "R-REXG",
+        "R-RGSJ",
+        "R-RHOT",
+        "R-RLAFO",
+        "R-RLŻ",
+        "R-RSL",
+        "R-RWNYL",
+        "R-SAN",
+        "R-SHOWA",
+        "R-TEL.A",
+        "R-TEPO",
+        "R-TOPER",
+        "R-TOPERMESH",
+        "R-TOPEX",
+        "R-VIBRA",
+        "R-VINEX",
+        "R-WAM",
+        "R-ŻABA"
+      ]
     },
     {
       "slug": "wkladki",
       "titleKey": "productNames.wkladki",
-      "keywords": ["WKŁADKI", "BUTÓW", "INSTERMA", "ALOES", "FILC", "IMPREGNOWANY"],
-      "kodPrefixes": ["WKŁ", "WKŁADKI"]
+      "keywords": [
+        "WKŁADKI",
+        "BUTÓW",
+        "INSTERMA",
+        "ALOES",
+        "FILC",
+        "IMPREGNOWANY"
+      ],
+      "kodPrefixes": [
+        "WKŁ",
+        "WKŁADKI"
+      ],
+      "exactKods": [
+        "WKŁ FILC",
+        "WKŁADKI",
+        "WKŁADKI ANBA",
+        "WKŁADKI MROZOOD",
+        "WKŁADKI PLASTIK",
+        "WKŁWĘGIEL"
+      ]
     },
     {
       "slug": "polbuty",
       "titleKey": "productNames.polbuty",
-      "keywords": ["OBUWIE", "PÓŁBUTY", "ZAWODOWE", "BEZPIECZNE", "BPÓŁ241"],
-      "kodPrefixes": ["BPOŁ", "BPÓŁ"],
-      "exactKods": ["BPÓŁAIRVENT", "BPÓŁBP", "BPÓŁFLUO", "BPÓŁ9010", "BPÓŁ241"]
+      "keywords": [
+        "OBUWIE",
+        "PÓŁBUTY",
+        "ZAWODOWE",
+        "BEZPIECZNE",
+        "BPÓŁ241"
+      ],
+      "kodPrefixes": [
+        "BPOŁ",
+        "BPÓŁ"
+      ],
+      "exactKods": [
+        "BPOŁ318",
+        "BPÓŁ1171",
+        "BPÓŁ201OB",
+        "BPÓŁ203OB",
+        "BPÓŁ203S1",
+        "BPÓŁ205OB",
+        "BPÓŁ212",
+        "BPÓŁ212OB",
+        "BPÓŁ214",
+        "BPÓŁ216",
+        "BPÓŁ224",
+        "BPÓŁ234",
+        "BPÓŁ241",
+        "BPÓŁ246",
+        "BPÓŁ249",
+        "BPÓŁ250S1",
+        "BPÓŁ252OB",
+        "BPÓŁ261OB",
+        "BPÓŁ261S1",
+        "BPÓŁ9010",
+        "BPÓŁAIRVENT",
+        "BPÓŁANTYS1",
+        "BPÓŁBP",
+        "BPÓŁBTEX",
+        "BPÓŁFLUO",
+        "BPÓŁHARBOR",
+        "BPÓŁLONGLIFE",
+        "BPÓŁLUMIAR",
+        "BPÓŁMAXPOP",
+        "BPÓŁRAZOR",
+        "BPÓŁU207SB"
+      ]
     },
     {
       "slug": "trzewiki",
       "titleKey": "productNames.trzewiki",
-      "keywords": ["TRZU120OB", "TRZEWIKI", "TRZEWIK", "OBUWIE", "BEZPIECZNE"],
-      "kodPrefixes": ["TRZ", "TRZU120OB"]
+      "keywords": [
+        "TRZEWIKI",
+        "TRZEWIK",
+        "OBUWIE",
+        "BEZPIECZNE",
+        "ZAWODOWE",
+        "CHOLEWKACH"
+      ],
+      "kodPrefixes": [
+        "TRZ"
+      ],
+      "exactKods": [
+        "TRZ 9072 S3",
+        "TRZ109",
+        "TRZ113S3",
+        "TRZ114",
+        "TRZ121",
+        "TRZ123",
+        "TRZ125S1",
+        "TRZ134S1",
+        "TRZ138",
+        "TRZ9002",
+        "TRZBEAR",
+        "TRZSPAW",
+        "TRZU",
+        "TRZU101OB",
+        "TRZU102S1",
+        "TRZU120OB",
+        "TRZU120SB",
+        "TRZUO",
+        "TRZUOĆ"
+      ]
     },
     {
       "slug": "sandaly",
       "titleKey": "productNames.sandaly",
-      "keywords": ["OBUWIE", "BEZPIECZNE", "KLAPKI", "SANDAŁY"],
-      "kodPrefixes": ["BS"]
+      "keywords": [
+        "OBUWIE",
+        "BEZPIECZNE",
+        "KLAPKI",
+        "SANDAŁY"
+      ],
+      "kodPrefixes": [
+        "BS"
+      ],
+      "exactKods": [
+        "BS310",
+        "BSNEKOTREK",
+        "BSU301",
+        "BSU303",
+        "BSU305"
+      ]
     },
     {
       "slug": "klapki",
       "titleKey": "productNames.klapki",
-      "keywords": ["KLAPKI", "CHODAKI"],
-      "kodPrefixes": ["BKLAP", "BKLAP338", "BKLAPK"]
+      "keywords": [
+        "KLAPKI",
+        "CHODAKI"
+      ],
+      "kodPrefixes": [
+        "BKLAP",
+        "BKLAPK"
+      ],
+      "exactKods": [
+        "BKLAP",
+        "BKLAP338",
+        "BKLAPK I"
+      ]
     },
     {
       "slug": "kalosze",
       "titleKey": "productNames.kalosze",
-      "keywords": ["BUTY", "GUMOWE", "KALOSZE", "KALOSZ"],
+      "keywords": [
+        "BUTY",
+        "GUMOWE",
+        "KALOSZE",
+        "KALOSZ"
+      ],
       "kodPrefixes": [
         "BGD",
         "BGFARMER",
@@ -62,12 +253,29 @@
         "BGPREDIATOR",
         "BGUMOFILCE",
         "BTROP"
+      ],
+      "exactKods": [
+        "BGD",
+        "BGD1",
+        "BGDLUNA",
+        "BGFARMER",
+        "BGM",
+        "BGMMAXX",
+        "BGNIT BIEL",
+        "BGPREDIATOR",
+        "BGUMOFILCE",
+        "BTROP",
+        "TRAMPKI"
       ]
     },
     {
       "slug": "caps",
       "titleKey": "productNames.caps",
-      "keywords": ["CZAPKA", "DRELICHOWA", "OCIEPLANA"],
+      "keywords": [
+        "CZAPKA",
+        "DRELICHOWA",
+        "OCIEPLANA"
+      ],
       "kodPrefixes": [
         "CZAPBAW",
         "CZAPDOĆ",
@@ -76,12 +284,24 @@
         "CZAPPROF",
         "CZPKOL"
       ],
-      "exactKods": ["CZAPPROF"]
+      "exactKods": [
+        "CZAPBAW1",
+        "CZAPBAW2",
+        "CZAPDOĆ",
+        "CZAPDZIANA",
+        "CZAPKOM",
+        "CZAPPROF",
+        "CZPKOL"
+      ]
     },
     {
       "slug": "aprons",
       "titleKey": "productNames.aprons",
-      "keywords": ["FARTUCH", "ZAPASKA", "OCHRONNY"],
+      "keywords": [
+        "FARTUCH",
+        "ZAPASKA",
+        "OCHRONNY"
+      ],
       "kodPrefixes": [
         "F023",
         "F129",
@@ -97,13 +317,45 @@
         "FPŁB",
         "ZAPASKA",
         "ZAPKOL"
+      ],
+      "exactKods": [
+        "F023",
+        "F129",
+        "F146E",
+        "F4440",
+        "FARBREZ",
+        "FARTUCH M017",
+        "FARTUCH M023",
+        "FCWO",
+        "FDR",
+        "FGAR",
+        "FPCV",
+        "FPCV1",
+        "FPRZEDNI",
+        "FPŁB",
+        "ZAPASKA",
+        "ZAPASKA M130",
+        "ZAPKOL",
+        "ZAPKOL1"
       ]
     },
     {
       "slug": "sweatshirts",
       "titleKey": "productNames.sweatshirts",
-      "keywords": ["BLUZA", "KURTKA"],
+      "keywords": [
+        "BLUZA",
+        "KURTKA"
+      ],
       "kodPrefixes": [
+        "BLARDON",
+        "BLBR",
+        "BLCLAS",
+        "BLEUROCL",
+        "BLFOREST",
+        "BLPROF",
+        "BMW"
+      ],
+      "exactKods": [
         "BLARDON",
         "BLBR",
         "BLCLAS",
@@ -116,19 +368,43 @@
     {
       "slug": "koszula",
       "titleKey": "productNames.koszula",
-      "keywords": ["KOSZULA", "KOSZULE", "FLANELOWE", "ROBOCZE"],
-      "kodPrefixes": ["KOSZLUX"]
+      "keywords": [
+        "KOSZULA",
+        "KOSZULE",
+        "FLANELOWE",
+        "ROBOCZE"
+      ],
+      "kodPrefixes": [
+        "KOSZLUX"
+      ],
+      "exactKods": [
+        "KOSZLUX"
+      ]
     },
     {
       "slug": "t-shirt",
       "titleKey": "productNames.tShirt",
-      "keywords": ["PODKOSZULEK", "SHIRT", "KOSZULKA"],
-      "kodPrefixes": ["T-SHIRT"]
+      "keywords": [
+        "PODKOSZULEK",
+        "SHIRT",
+        "KOSZULKA"
+      ],
+      "kodPrefixes": [
+        "T-SHIRT"
+      ],
+      "exactKods": [
+        "T-SHIRT",
+        "T-SHIRTODBLASK"
+      ]
     },
     {
       "slug": "jackets",
       "titleKey": "productNames.jackets",
-      "keywords": ["KURTKA", "OCIEPLANA", "CLASSIC"],
+      "keywords": [
+        "KURTKA",
+        "OCIEPLANA",
+        "CLASSIC"
+      ],
       "kodPrefixes": [
         "KURCLASSHORT",
         "KURCLASSIC-ONE",
@@ -139,31 +415,103 @@
         "KURSYBERIA",
         "KURTOPJACK",
         "KURY"
+      ],
+      "exactKods": [
+        "KURCLASSHORT",
+        "KURCLASSIC-ONE",
+        "KUREXPERT",
+        "KURFLASH",
+        "KURHYBRID",
+        "KURLEADER",
+        "KURSYBERIA",
+        "KURTOPJACK",
+        "KURY263",
+        "KURY8365"
       ]
     },
     {
       "slug": "kurtki-softshell",
       "titleKey": "productNames.kurtkiSoftshell",
-      "keywords": ["KURTKA", "SOFTSHELL"],
-      "kodPrefixes": ["KURSOFT"],
-      "exactKods": ["KURSOFT"]
+      "keywords": [
+        "KURTKA",
+        "SOFTSHELL"
+      ],
+      "kodPrefixes": [
+        "KURSOFT"
+      ],
+      "exactKods": [
+        "KURSOFT",
+        "KURSOFTCLAS",
+        "KURSOFTWINTER"
+      ]
     },
     {
       "slug": "polar",
       "titleKey": "productNames.polar",
-      "keywords": ["POLAR"],
-      "kodPrefixes": ["POLAR"]
+      "keywords": [
+        "POLAR"
+      ],
+      "kodPrefixes": [
+        "POLAR"
+      ],
+      "exactKods": [
+        "POLAR BI",
+        "POLAR I",
+        "POLAR OC",
+        "POLAR-SHELL",
+        "POLARNEXO",
+        "POLARODBLASK"
+      ]
     },
     {
       "slug": "spodnie",
       "titleKey": "productNames.clothing",
-      "keywords": ["SPODNIE", "OCHRONNE", "CLASSIC", "PROFESSIONAL", "PASA"],
-      "kodPrefixes": ["SP"]
+      "keywords": [
+        "SPODNIE",
+        "OCHRONNE",
+        "CLASSIC",
+        "PROFESSIONAL",
+        "PASA"
+      ],
+      "kodPrefixes": [
+        "SP"
+      ],
+      "exactKods": [
+        "SP CL-VIS JELL",
+        "SPBM",
+        "SPBRIXTON",
+        "SPCAMOU",
+        "SPCD881",
+        "SPCLASSIC",
+        "SPCLASSICWHITE",
+        "SPCOMFORD",
+        "SPEUROCLAS",
+        "SPEXO",
+        "SPEXOULTIMA",
+        "SPFLEXER",
+        "SPFORECO",
+        "SPHARVER",
+        "SPKA323",
+        "SPMASTER",
+        "SPMMS",
+        "SPMONTER",
+        "SPPFOOD",
+        "SPPROF",
+        "SPPROFCZARNE",
+        "SPPROFMONT",
+        "SPPROFREF",
+        "SPROF4DYN",
+        "SPSLIM",
+        "SPVOBSTER"
+      ]
     },
     {
       "slug": "ogrodniczki",
       "titleKey": "productNames.ogrodniczki",
-      "keywords": ["OGRODNICZKI", "OCHRONNE"],
+      "keywords": [
+        "OGRODNICZKI",
+        "OCHRONNE"
+      ],
       "kodPrefixes": [
         "OGRARDON",
         "OGRBISTER",
@@ -177,31 +525,94 @@
         "UBRCOMFODBL",
         "UBRMASTER"
       ],
-      "exactKods": ["OGRPROF"]
+      "exactKods": [
+        "OGRARDON",
+        "OGRBISTER",
+        "OGRCLASSIC",
+        "OGRFOREST",
+        "OGRMASTER",
+        "OGRMMS",
+        "OGRPROF",
+        "OGRPROF4DYN",
+        "OGRVIS",
+        "UBRCOMFODBL",
+        "UBRMASTER"
+      ]
     },
     {
       "slug": "spodnie-krotkie",
       "titleKey": "productNames.spodnieKrotkie",
-      "keywords": ["SPODNIE", "KRÓTKIE"],
-      "kodPrefixes": ["SPKRÓTKIE", "SPKREURO", "SPKRSLIM", "SPKRODBLASK"]
+      "keywords": [
+        "SPODNIE",
+        "KRÓTKIE"
+      ],
+      "kodPrefixes": [
+        "SPKRÓTKIE",
+        "SPKREURO",
+        "SPKRSLIM",
+        "SPKRODBLASK"
+      ],
+      "exactKods": [
+        "SPKREURO",
+        "SPKRODBLASK",
+        "SPKRSLIM",
+        "SPKRÓTKIE"
+      ]
     },
     {
       "slug": "spodnie-ocieplane",
       "titleKey": "productNames.spodnieOcieplane",
-      "keywords": ["SPODNIE", "TERMOAKTYWNE", "UNIWERSAL"],
-      "kodPrefixes": ["SPUNIVERSAL", "SPTERMOAKTYW"]
+      "keywords": [
+        "SPODNIE",
+        "TERMOAKTYWNE",
+        "UNIWERSAL"
+      ],
+      "kodPrefixes": [
+        "SPUNIVERSAL",
+        "SPTERMOAKTYW"
+      ],
+      "exactKods": [
+        "SPTERMOAKTYW",
+        "SPUNIVERSAL"
+      ]
     },
     {
       "slug": "vests",
       "titleKey": "productNames.vests",
-      "keywords": ["KAMIZELKA", "ODBLASKOWA", "BEZRĘKAWNIK"],
-      "kodPrefixes": ["KAMCLASSIC", "KAMODBLASK"]
+      "keywords": [
+        "KAMIZELKA",
+        "ODBLASKOWA",
+        "BEZRĘKAWNIK"
+      ],
+      "kodPrefixes": [
+        "KAMCLASSIC",
+        "KAMODBLASK"
+      ],
+      "exactKods": [
+        "KAMCLASSIC",
+        "KAMODBLASK"
+      ]
     },
     {
       "slug": "kamizelki-ocieplane",
       "titleKey": "productNames.kamizelkiOcieplane",
-      "keywords": ["KAMIZELKA", "OCIEPLANA", "BEZRĘKAWNIK"],
-      "kodPrefixes": ["KAMKORMORAN", "KAMLEŚNIK", "KAMURG", "KAMCLASSTOP"]
+      "keywords": [
+        "KAMIZELKA",
+        "OCIEPLANA",
+        "BEZRĘKAWNIK"
+      ],
+      "kodPrefixes": [
+        "KAMKORMORAN",
+        "KAMLEŚNIK",
+        "KAMURG",
+        "KAMCLASSTOP"
+      ],
+      "exactKods": [
+        "KAMCLASSTOP",
+        "KAMKORMORAN",
+        "KAMLEŚNIK",
+        "KAMURG"
+      ]
     },
     {
       "slug": "odziez-gastronomiczna",
@@ -225,56 +636,167 @@
         "CZEPEK1",
         "CZEPEK",
         "CZEPEKSIAT"
+      ],
+      "exactKods": [
+        "BLK",
+        "BLKBLACK",
+        "CHUSTA",
+        "CZEPEK",
+        "CZEPEK1",
+        "CZEPEKSIAT",
+        "FURAŻERKA",
+        "SPP",
+        "SPPBLACK"
       ]
     },
     {
       "slug": "helmets",
       "titleKey": "productNames.helmets",
-      "keywords": ["KASK", "HEŁM", "OCHRONNY"],
-      "kodPrefixes": ["KASK"]
+      "keywords": [
+        "KASK",
+        "HEŁM",
+        "OCHRONNY"
+      ],
+      "kodPrefixes": [
+        "KASK"
+      ],
+      "exactKods": [
+        "KASK",
+        "KASK3"
+      ]
     },
     {
       "slug": "eyewear",
       "titleKey": "productNames.eyewear",
-      "keywords": ["OKULARY", "GOGLE", "OCHRONNE"],
-      "kodPrefixes": ["OK"]
+      "keywords": [
+        "OKULARY",
+        "GOGLE",
+        "OCHRONNE"
+      ],
+      "kodPrefixes": [
+        "OK"
+      ],
+      "exactKods": [
+        "OK",
+        "OK1",
+        "OK3M",
+        "OKG1"
+      ]
     },
     {
       "slug": "earprotection",
       "titleKey": "productNames.earProtection",
-      "keywords": ["NAUSZNIKI", "ZATYCZKI", "SŁUCHU"],
-      "kodPrefixes": ["N1", "N3", "ZATYCZKI"]
+      "keywords": [
+        "NAUSZNIKI",
+        "ZATYCZKI",
+        "SŁUCHU"
+      ],
+      "kodPrefixes": [
+        "N1",
+        "N3",
+        "ZATYCZKI"
+      ],
+      "exactKods": [
+        "N1",
+        "N3",
+        "ZATYCZKI"
+      ]
     },
     {
       "slug": "masks",
       "titleKey": "productNames.masks",
-      "keywords": ["PÓŁMASKA", "MASKA", "WKŁADY", "POCHŁANIAJĄCE", "PRZECIWGAZOWYCH"],
-      "kodPrefixes": ["MASMIDI", "MP/G", "MPZAWÓR", "WKŁADY"]
+      "keywords": [
+        "PÓŁMASKA",
+        "MASKA",
+        "WKŁADY",
+        "POCHŁANIAJĄCE",
+        "PRZECIWGAZOWYCH"
+      ],
+      "kodPrefixes": [
+        "MASMIDI",
+        "MP/G",
+        "MPZAWÓR",
+        "WKŁADY"
+      ],
+      "exactKods": [
+        "MASMIDI",
+        "MP/G",
+        "MPZAWÓR",
+        "WKŁADY"
+      ]
     },
     {
       "slug": "kneeprotection",
       "titleKey": "productNames.kneeProtection",
-      "keywords": ["NAKOLANNIKI", "WKŁADY", "ŻELOWE"],
-      "kodPrefixes": ["NAKONYB", "NAKWKŁADKI", "NAKŻEL"]
+      "keywords": [
+        "NAKOLANNIKI",
+        "WKŁADY",
+        "ŻELOWE"
+      ],
+      "kodPrefixes": [
+        "NAKONYB",
+        "NAKWKŁADKI",
+        "NAKŻEL"
+      ],
+      "exactKods": [
+        "NAKONYB",
+        "NAKWKŁADKI",
+        "NAKŻEL"
+      ]
     },
     {
       "slug": "rainwear",
       "titleKey": "productNames.rainwear",
-      "keywords": ["PRZECIWDESZCZOWE", "KOMPLET", "PŁASZCZ"],
-      "kodPrefixes": ["KOMP/D", "PŁASZCZ", "SPP/D", "SPRP"]
+      "keywords": [
+        "PRZECIWDESZCZOWE",
+        "KOMPLET",
+        "PŁASZCZ"
+      ],
+      "kodPrefixes": [
+        "KOMP/D",
+        "PŁASZCZ",
+        "SPP/D",
+        "SPRP"
+      ],
+      "exactKods": [
+        "KOMP/D",
+        "KOMP/D3",
+        "KUR KPR",
+        "KURKPNP",
+        "PŁASZCZ",
+        "PŁASZCZ PD",
+        "SPP/D",
+        "SPRP"
+      ]
     },
     {
       "slug": "firstaid",
       "titleKey": "productNames.firstAid",
-      "keywords": ["APTECZKA"],
-      "kodPrefixes": ["APT"]
+      "keywords": [
+        "APTECZKA"
+      ],
+      "kodPrefixes": [
+        "APT"
+      ],
+      "exactKods": [
+        "APT",
+        "APT1"
+      ]
     },
     {
       "slug": "reczniki",
       "titleKey": "productNames.reczniki",
-      "keywords": ["RĘCZNIK"],
-      "kodPrefixes": ["RĘCZ"],
-      "exactKods": ["RĘCZ50/90", "RĘCZ70/140 1"]
+      "keywords": [
+        "RĘCZNIK"
+      ],
+      "kodPrefixes": [
+        "RĘCZ"
+      ],
+      "exactKods": [
+        "RĘCZ50/90",
+        "RĘCZ70/140",
+        "RĘCZ70/140 1"
+      ]
     },
     {
       "slug": "other",
@@ -291,6 +813,7 @@
         "OCIEPLACZ",
         "OSŁONA",
         "PAS",
+        "PASTA",
         "SKARPETY",
         "SZELKI",
         "SZNURÓWKI",
@@ -299,6 +822,30 @@
         "TORNAN",
         "TRAMPKI",
         "ZACZEP"
+      ],
+      "exactKods": [
+        "AMORTYZ",
+        "KIESZEŃ",
+        "KOMMAL1",
+        "KOMMICRO",
+        "LINKA",
+        "MIARA ZWIJANA",
+        "MIARA5M",
+        "NOZYK",
+        "OCIEPLACZ FARME",
+        "OSŁONA",
+        "PAS",
+        "PASTA DOBUTÓW",
+        "PASPROF",
+        "SKARPETY",
+        "SZELKI",
+        "SZNURÓWKI",
+        "TASMA 100",
+        "TASMA 500",
+        "TAŚMA200",
+        "TORNAN",
+        "TORNAN DOUBLE",
+        "ZACZEP TAŚ"
       ]
     }
   ]
