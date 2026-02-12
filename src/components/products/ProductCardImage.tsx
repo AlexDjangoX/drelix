@@ -33,22 +33,18 @@ export function ProductCardImage({
   alt,
   sizes = DEFAULT_SIZES,
   className,
-  imageClassName =
-    "object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300",
+  imageClassName = "object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300",
   onError,
 }: ProductCardImageProps) {
   const [aspect, setAspect] = useState<number>(1);
 
-  const onLoad = useCallback(
-    (e: React.SyntheticEvent<HTMLImageElement>) => {
-      const img = e.currentTarget;
-      if (img.naturalWidth && img.naturalHeight) {
-        const ratio = img.naturalWidth / img.naturalHeight;
-        setAspect(Math.min(ASPECT_MAX, Math.max(ASPECT_MIN, ratio)));
-      }
-    },
-    [],
-  );
+  const onLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    if (img.naturalWidth && img.naturalHeight) {
+      const ratio = img.naturalWidth / img.naturalHeight;
+      setAspect(Math.min(ASPECT_MAX, Math.max(ASPECT_MIN, ratio)));
+    }
+  }, []);
 
   return (
     <div

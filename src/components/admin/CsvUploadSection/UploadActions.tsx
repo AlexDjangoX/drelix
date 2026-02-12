@@ -49,7 +49,11 @@ export function UploadActions({
   if (file) {
     return (
       <div className="mt-4 flex gap-3">
-        <Button variant="outline" onClick={onClearFile} className="cursor-pointer">
+        <Button
+          variant="outline"
+          onClick={onClearFile}
+          className="cursor-pointer"
+        >
           Wyczyść
         </Button>
       </div>

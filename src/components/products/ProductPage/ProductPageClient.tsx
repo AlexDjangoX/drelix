@@ -79,7 +79,6 @@ export function ProductPageClient({ slug }: Props) {
     setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length));
   }, [items.length]);
 
-
   if (sectionFromConvex === undefined) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">

@@ -51,12 +51,7 @@ export function ProductRowActions({
           </Button>
         </span>
       ) : (
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={onEdit}
-          aria-label="Edit"
-        >
+        <Button size="sm" variant="ghost" onClick={onEdit} aria-label="Edit">
           <Pencil className="w-4 h-4" />
         </Button>
       )}
