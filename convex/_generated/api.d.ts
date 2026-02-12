@@ -17,6 +17,7 @@ import type * as lib_convexAuth from "../lib/convexAuth.js";
 import type * as lib_errorMessages from "../lib/errorMessages.js";
 import type * as lib_helpers from "../lib/helpers.js";
 import type * as lib_index from "../lib/index.js";
+import type * as lib_serverLogger from "../lib/serverLogger.js";
 import type * as lib_types from "../lib/types.js";
 import type * as lib_validators from "../lib/validators.js";
 
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   "lib/errorMessages": typeof lib_errorMessages;
   "lib/helpers": typeof lib_helpers;
   "lib/index": typeof lib_index;
+  "lib/serverLogger": typeof lib_serverLogger;
   "lib/types": typeof lib_types;
   "lib/validators": typeof lib_validators;
 }>;
