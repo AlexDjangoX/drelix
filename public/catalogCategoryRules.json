@@ -240,7 +240,7 @@
       "kodPrefixes": ["OK"]
     },
     {
-      "slug": "earProtection",
+      "slug": "earprotection",
       "titleKey": "productNames.earProtection",
       "keywords": ["NAUSZNIKI", "ZATYCZKI", "SŁUCHU"],
       "kodPrefixes": ["N1", "N3", "ZATYCZKI"]
@@ -252,7 +252,7 @@
       "kodPrefixes": ["MASMIDI", "MP/G", "MPZAWÓR", "WKŁADY"]
     },
     {
-      "slug": "kneeProtection",
+      "slug": "kneeprotection",
       "titleKey": "productNames.kneeProtection",
       "keywords": ["NAKOLANNIKI", "WKŁADY", "ŻELOWE"],
       "kodPrefixes": ["NAKONYB", "NAKWKŁADKI", "NAKŻEL"]
@@ -264,7 +264,7 @@
       "kodPrefixes": ["KOMP/D", "PŁASZCZ", "SPP/D", "SPRP"]
     },
     {
-      "slug": "firstAid",
+      "slug": "firstaid",
       "titleKey": "productNames.firstAid",
       "keywords": ["APTECZKA"],
       "kodPrefixes": ["APT"]
