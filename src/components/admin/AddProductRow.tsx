@@ -16,6 +16,7 @@ const EMPTY_ROW = {
   Kod: '',
   Nazwa: '',
   Opis: '',
+  ProductDescription: '',
   CenaNetto: '',
   KodKlasyfikacji: '',
   Uwagi: '',
