@@ -1,12 +1,12 @@
-import { internalMutation, mutation, query } from './_generated/server';
-import { v } from 'convex/values';
+import { internalMutation, mutation, query } from "./_generated/server";
+import { v } from "convex/values";
 import {
   MAX_LOGIN_ATTEMPTS,
   LOGIN_LOCKOUT_MS,
   LOGIN_ATTEMPTS_CLEANUP_AGE_MS,
-} from './lib/constants';
-import { getLoginAttemptState } from './lib/authHelpers';
-import { validateRateLimitKey } from './lib/convexAuth';
+} from "./lib/constants";
+import { getLoginAttemptState } from "./lib/authHelpers";
+import { validateRateLimitKey } from "./lib/convexAuth";
 
 /** Read-only check: is login allowed for this key? */
 export const checkLoginAllowed = query({
@@ -17,8 +17,8 @@ export const checkLoginAllowed = query({
 
     const now = Date.now();
     const existing = await ctx.db
-      .query('loginAttempts')
-      .withIndex('by_key', (q) => q.eq('key', validatedKey))
+      .query("loginAttempts")
+      .withIndex("by_key", (q) => q.eq("key", validatedKey))
       .unique();
 
     const { isLockedOut, lockoutUntil } = getLoginAttemptState(existing, now);
@@ -39,13 +39,13 @@ export const recordFailedLoginAttempt = mutation({
 
     const now = Date.now();
     const existing = await ctx.db
-      .query('loginAttempts')
-      .withIndex('by_key', (q) => q.eq('key', validatedKey))
+      .query("loginAttempts")
+      .withIndex("by_key", (q) => q.eq("key", validatedKey))
       .unique();
 
     const { attempts, isLockedOut, lockoutUntil } = getLoginAttemptState(
       existing,
-      now
+      now,
     );
 
     if (existing) {
@@ -70,7 +70,7 @@ export const recordFailedLoginAttempt = mutation({
       return { allowed: true };
     }
 
-    await ctx.db.insert('loginAttempts', {
+    await ctx.db.insert("loginAttempts", {
       key: validatedKey,
       attempts: 1,
       lastAttemptAt: now,
@@ -87,8 +87,8 @@ export const clearLoginAttempts = mutation({
     const validatedKey = validateRateLimitKey(key);
 
     const existing = await ctx.db
-      .query('loginAttempts')
-      .withIndex('by_key', (q) => q.eq('key', validatedKey))
+      .query("loginAttempts")
+      .withIndex("by_key", (q) => q.eq("key", validatedKey))
       .unique();
     if (existing) {
       await ctx.db.delete(existing._id);
@@ -103,8 +103,8 @@ export const cleanupStaleLoginAttempts = internalMutation({
   handler: async (ctx) => {
     const cutoff = Date.now() - LOGIN_ATTEMPTS_CLEANUP_AGE_MS;
     const stale = await ctx.db
-      .query('loginAttempts')
-      .withIndex('by_lastAttemptAt', (q) => q.lt('lastAttemptAt', cutoff))
+      .query("loginAttempts")
+      .withIndex("by_lastAttemptAt", (q) => q.lt("lastAttemptAt", cutoff))
       .collect();
     for (const row of stale) {
       await ctx.db.delete(row._id);

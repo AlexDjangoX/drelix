@@ -1,18 +1,18 @@
 /** Allowed MIME types for upload. */
 export const IMAGE_MIME_TYPES = [
-  'image/jpeg',
-  'image/png',
-  'image/gif',
-  'image/webp',
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
 ] as const;
 
 /** Allowed file extensions. */
 export const IMAGE_EXTENSIONS = [
-  '.jpg',
-  '.jpeg',
-  '.png',
-  '.gif',
-  '.webp',
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".webp",
 ] as const;
 
 /** Max upload size (10MB). */

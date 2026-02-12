@@ -2,10 +2,10 @@
  * Unit tests for storage deletion error handling in helpers.ts.
  * Tests the Promise.allSettled error recovery logic.
  */
-import { describe, it, expect } from 'vitest';
-import { deleteProductImages } from '../../convex/lib/helpers';
-import type { ProductDoc } from '../../convex/lib/types';
-import type { MutationCtx } from '../../convex/_generated/server';
+import { describe, it, expect } from "vitest";
+import { deleteProductImages } from "../../convex/lib/helpers";
+import type { ProductDoc } from "../../convex/lib/types";
+import type { MutationCtx } from "../../convex/_generated/server";
 
 /** Minimal ctx mock for deleteProductImages (only uses storage.delete) */
 function createMockCtx(storage: {
@@ -14,12 +14,12 @@ function createMockCtx(storage: {
   return { storage } as unknown as MutationCtx;
 }
 
-describe('deleteProductImages error handling', () => {
-  it('handles successful deletion of both images', async () => {
+describe("deleteProductImages error handling", () => {
+  it("handles successful deletion of both images", async () => {
     const mockProduct = {
-      Kod: 'TEST-001',
-      imageStorageId: 'img-123',
-      thumbnailStorageId: 'thumb-456',
+      Kod: "TEST-001",
+      imageStorageId: "img-123",
+      thumbnailStorageId: "thumb-456",
     } as ProductDoc;
 
     const ctx = createMockCtx({
@@ -31,9 +31,9 @@ describe('deleteProductImages error handling', () => {
     expect(result.failed).toBe(0);
   });
 
-  it('returns zero when no images to delete', async () => {
+  it("returns zero when no images to delete", async () => {
     const mockProduct = {
-      Kod: 'TEST-002',
+      Kod: "TEST-002",
     } as ProductDoc;
 
     const ctx = createMockCtx({
@@ -45,7 +45,7 @@ describe('deleteProductImages error handling', () => {
     expect(result.failed).toBe(0);
   });
 
-  it('continues on storage deletion failures and logs warning', async () => {
+  it("continues on storage deletion failures and logs warning", async () => {
     const originalConsoleWarn = console.warn;
     let warnCalled = false;
 
@@ -54,15 +54,15 @@ describe('deleteProductImages error handling', () => {
     };
 
     const mockProduct = {
-      Kod: 'TEST-003',
-      imageStorageId: 'img-fail',
-      thumbnailStorageId: 'thumb-success',
+      Kod: "TEST-003",
+      imageStorageId: "img-fail",
+      thumbnailStorageId: "thumb-success",
     } as ProductDoc;
 
     const ctx = createMockCtx({
       delete: async (id: string) => {
-        if (id === 'img-fail') {
-          throw new Error('Storage deletion failed');
+        if (id === "img-fail") {
+          throw new Error("Storage deletion failed");
         }
         return Promise.resolve();
       },
@@ -80,7 +80,7 @@ describe('deleteProductImages error handling', () => {
     console.warn = originalConsoleWarn;
   });
 
-  it('handles all deletions failing', async () => {
+  it("handles all deletions failing", async () => {
     const originalConsoleWarn = console.warn;
     let warnCalled = false;
 
@@ -89,14 +89,14 @@ describe('deleteProductImages error handling', () => {
     };
 
     const mockProduct = {
-      Kod: 'TEST-004',
-      imageStorageId: 'img-fail',
-      thumbnailStorageId: 'thumb-fail',
+      Kod: "TEST-004",
+      imageStorageId: "img-fail",
+      thumbnailStorageId: "thumb-fail",
     } as ProductDoc;
 
     const ctx = createMockCtx({
       delete: async () => {
-        throw new Error('Storage service unavailable');
+        throw new Error("Storage service unavailable");
       },
     });
 
@@ -109,10 +109,10 @@ describe('deleteProductImages error handling', () => {
     console.warn = originalConsoleWarn;
   });
 
-  it('handles partial deletion (only large image exists)', async () => {
+  it("handles partial deletion (only large image exists)", async () => {
     const mockProduct = {
-      Kod: 'TEST-005',
-      imageStorageId: 'img-only',
+      Kod: "TEST-005",
+      imageStorageId: "img-only",
     } as ProductDoc;
 
     const ctx = createMockCtx({

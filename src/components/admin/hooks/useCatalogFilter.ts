@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import { useQuery } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import { useLanguage } from '@/context/LanguageContext';
-import type { CatalogRow, CatalogSection } from '@/lib/types';
+import { useMemo } from "react";
+import { useQuery } from "convex/react";
+import { api } from "convex/_generated/api";
+import { useLanguage } from "@/context/LanguageContext";
+import type { CatalogRow, CatalogSection } from "@/lib/types";
 
 function getSectionLabel(
   t: Record<string, unknown>,
-  section: CatalogSection
+  section: CatalogSection,
 ): string {
   if (section.displayName) return section.displayName;
-  const keys = (section.titleKey ?? '').split('.');
+  const keys = (section.titleKey ?? "").split(".");
   let current: unknown = t;
   for (const key of keys) {
     current = (current as Record<string, unknown>)?.[key];
   }
-  return typeof current === 'string' ? current : section.slug;
+  return typeof current === "string" ? current : section.slug;
 }
 
 export function useCatalogFilter(
   previewSections: CatalogSection[] | null,
-  searchQuery: string
+  searchQuery: string,
 ) {
   const { t } = useLanguage();
   const sectionsFromConvex = useQuery(api.catalog.listCatalogSections);
@@ -34,7 +34,7 @@ export function useCatalogFilter(
     if (!activeSections) return 0;
     return activeSections.reduce(
       (sum, section) => sum + section.items.length,
-      0
+      0,
     );
   }, [activeSections]);
 
@@ -49,13 +49,13 @@ export function useCatalogFilter(
         .map((section) => {
           const items = section.items.filter(
             (item: CatalogRow) =>
-              (item.Kod ?? '').toLowerCase().includes(query) ||
-              (item.Nazwa ?? '').toLowerCase().includes(query)
+              (item.Kod ?? "").toLowerCase().includes(query) ||
+              (item.Nazwa ?? "").toLowerCase().includes(query),
           );
           // Prioritise Kod matches: sort so Kod matches appear before Nazwa-only matches
           const sorted = [...items].sort((a, b) => {
-            const aKodMatch = (a.Kod ?? '').toLowerCase().includes(query);
-            const bKodMatch = (b.Kod ?? '').toLowerCase().includes(query);
+            const aKodMatch = (a.Kod ?? "").toLowerCase().includes(query);
+            const bKodMatch = (b.Kod ?? "").toLowerCase().includes(query);
             if (aKodMatch && !bKodMatch) return -1;
             if (!aKodMatch && bKodMatch) return 1;
             return 0;
@@ -68,8 +68,8 @@ export function useCatalogFilter(
       getSectionLabel(t as unknown as Record<string, unknown>, a).localeCompare(
         getSectionLabel(t as unknown as Record<string, unknown>, b),
         undefined,
-        { sensitivity: 'base' }
-      )
+        { sensitivity: "base" },
+      ),
     );
   }, [activeSections, searchQuery, t]);
 
@@ -77,7 +77,7 @@ export function useCatalogFilter(
     if (!filteredSections) return 0;
     return filteredSections.reduce(
       (sum, section) => sum + section.items.length,
-      0
+      0,
     );
   }, [filteredSections]);
 

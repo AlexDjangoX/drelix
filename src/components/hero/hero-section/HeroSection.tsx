@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from "framer-motion";
 import {
   HeroBackground,
   HeroContent,
   HeroDecorations,
   HeroScrollIndicator,
-} from '@/components/hero/hero-section';
+} from "@/components/hero/hero-section";
 
 function scrollToSection(selector: string) {
-  document.querySelector(selector)?.scrollIntoView({ behavior: 'smooth' });
+  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
 }
 
 export default function HeroSection() {
@@ -27,12 +27,12 @@ export default function HeroSection() {
         <div className="flex-1 flex flex-col justify-center">
           <HeroContent
             reducedMotion={reducedMotion}
-            onScrollToProducts={() => scrollToSection('#products')}
+            onScrollToProducts={() => scrollToSection("#products")}
           />
         </div>
         <div className="shrink-0 pb-8 flex justify-center">
           <HeroScrollIndicator
-            onScrollToMap={() => scrollToSection('#contact')}
+            onScrollToMap={() => scrollToSection("#contact")}
           />
         </div>
       </div>

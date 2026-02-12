@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { useLanguage } from '@/context/LanguageContext';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { useLanguage } from "@/context/LanguageContext";
+import { cn } from "@/lib/utils";
 
 type SupportedHTMLTag =
-  | 'span'
-  | 'p'
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
-  | 'div'
-  | 'label';
+  | "span"
+  | "p"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "div"
+  | "label";
 
 function getTextByPath(t: Record<string, unknown>, path: string): string {
   const value = path
-    .split('.')
+    .split(".")
     .reduce<unknown>(
       (obj, key) =>
-        obj != null && typeof obj === 'object'
+        obj != null && typeof obj === "object"
           ? (obj as Record<string, unknown>)[key]
           : undefined,
-      t
+      t,
     );
-  return typeof value === 'string' ? value : String(value ?? '');
+  return typeof value === "string" ? value : String(value ?? "");
 }
 
 type AnimateTextProps = {
@@ -34,19 +34,19 @@ type AnimateTextProps = {
   className?: string;
   tag?: SupportedHTMLTag;
   animate?: boolean;
-} & Omit<React.HTMLAttributes<HTMLElement>, 'children'>;
+} & Omit<React.HTMLAttributes<HTMLElement>, "children">;
 
 export const AnimateText = ({
   k,
   className,
-  tag = 'span',
+  tag = "span",
   animate = true,
   ...rest
 }: AnimateTextProps) => {
   const { t, language } = useLanguage();
   const text = getTextByPath(t as unknown as Record<string, unknown>, k);
   const baseClass = animate
-    ? cn('inline-block animate-text-pop', className)
+    ? cn("inline-block animate-text-pop", className)
     : className;
   const key = `${language}-${k}`;
 

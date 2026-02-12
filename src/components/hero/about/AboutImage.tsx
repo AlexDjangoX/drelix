@@ -1,7 +1,7 @@
-import Image from 'next/image';
+import Image from "next/image";
 
-const IMAGE_ALT = 'Drelix - odzież robocza i ochronna Wadowice';
-const IMAGE_SRC = '/images/drelix.jpg';
+const IMAGE_ALT = "Drelix - odzież robocza i ochronna Wadowice";
+const IMAGE_SRC = "/images/drelix.jpg";
 
 export function AboutImage() {
   return (

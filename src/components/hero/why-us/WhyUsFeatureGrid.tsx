@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { WhyUsFeatureCard, WHY_US_FEATURES } from '@/components/hero/why-us';
-import { gridStaggerVariants } from '@/lib/animations';
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { WhyUsFeatureCard, WHY_US_FEATURES } from "@/components/hero/why-us";
+import { gridStaggerVariants } from "@/lib/animations";
 
 type WhyUsFeatureGridProps = {
   reducedMotion: boolean;
@@ -20,7 +20,7 @@ export function WhyUsFeatureGrid({ reducedMotion }: WhyUsFeatureGridProps) {
       className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,260px),1fr))] gap-8 w-full"
       variants={gridStaggerVariants(reducedMotion)}
       initial="hidden"
-      animate={isGridInView ? 'visible' : 'hidden'}
+      animate={isGridInView ? "visible" : "hidden"}
     >
       {WHY_US_FEATURES.map((feature, index) => (
         <WhyUsFeatureCard

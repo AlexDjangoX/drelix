@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect } from "react";
+import { useMutation } from "convex/react";
+import { api } from "convex/_generated/api";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Pencil,
   Save,
@@ -13,12 +13,12 @@ import {
   Trash2,
   Ban,
   CircleCheckBig,
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { ImageUploadCell } from '@/components/admin/ImageUploadCell';
-import { CategorySelect } from '@/components/admin/CategorySelect';
-import { CategoryLabel } from '@/components/admin/CategoryLabel';
-import { DISPLAY_KEYS, type CatalogRow } from '@/lib/types';
+} from "lucide-react";
+import { toast } from "sonner";
+import { ImageUploadCell } from "@/components/admin/ImageUploadCell";
+import { CategorySelect } from "@/components/admin/CategorySelect";
+import { CategoryLabel } from "@/components/admin/CategoryLabel";
+import { DISPLAY_KEYS, type CatalogRow } from "@/lib/types";
 
 type Props = { row: CatalogRow };
 
@@ -32,7 +32,7 @@ export function ProductRow({ row }: Props) {
   const updateProduct = useMutation(api.catalog.updateProduct);
   const deleteProduct = useMutation(api.catalog.deleteProduct);
 
-  const kod = row['Kod'] ?? '';
+  const kod = row["Kod"] ?? "";
 
   useEffect(() => {
     if (!editing) setDraft({ ...row });
@@ -41,14 +41,14 @@ export function ProductRow({ row }: Props) {
   const handleSave = async () => {
     setSaving(true);
     setError(null);
-    const toastId = toast.loading('Zapisywanie zmian...');
+    const toastId = toast.loading("Zapisywanie zmian...");
     try {
       const updates: Record<string, string> = {};
       for (const { key } of DISPLAY_KEYS) {
-        if (draft[key] !== row[key]) updates[key] = draft[key] ?? '';
+        if (draft[key] !== row[key]) updates[key] = draft[key] ?? "";
       }
       if (draft.categorySlug !== row.categorySlug) {
-        updates.categorySlug = draft.categorySlug ?? '';
+        updates.categorySlug = draft.categorySlug ?? "";
       }
       if (Object.keys(updates).length === 0) {
         setEditing(false);
@@ -57,9 +57,9 @@ export function ProductRow({ row }: Props) {
       }
       await updateProduct({ kod, updates });
       setEditing(false);
-      toast.success('Produkt został zaktualizowany', { id: toastId });
+      toast.success("Produkt został zaktualizowany", { id: toastId });
     } catch (e) {
-      const msg = e instanceof Error ? e.message : 'Błąd zapisu';
+      const msg = e instanceof Error ? e.message : "Błąd zapisu";
       setError(msg);
       toast.error(msg, { id: toastId });
     } finally {
@@ -89,13 +89,13 @@ export function ProductRow({ row }: Props) {
     e.preventDefault();
     e.stopPropagation();
     setDeleting(true);
-    const toastId = toast.loading('Usuwanie produktu...');
+    const toastId = toast.loading("Usuwanie produktu...");
     try {
       await deleteProduct({ kod });
-      toast.success('Produkt został usunięty', { id: toastId });
+      toast.success("Produkt został usunięty", { id: toastId });
       setConfirmingDelete(false);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Błąd usuwania';
+      const msg = err instanceof Error ? err.message : "Błąd usuwania";
       toast.error(msg, { id: toastId });
     } finally {
       setDeleting(false);
@@ -110,26 +110,26 @@ export function ProductRow({ row }: Props) {
       <td className="p-2 align-top border-r border-border/50">
         {editing ? (
           <CategorySelect
-            currentSlug={draft.categorySlug ?? ''}
+            currentSlug={draft.categorySlug ?? ""}
             onSelect={(slug) => setDraft((d) => ({ ...d, categorySlug: slug }))}
             disabled={saving}
           />
         ) : (
-          <CategoryLabel slug={row.categorySlug ?? ''} />
+          <CategoryLabel slug={row.categorySlug ?? ""} />
         )}
       </td>
       {DISPLAY_KEYS.map(({ key }) => (
         <td key={key} className="p-2 align-top border-r border-border/50">
           {editing ? (
             <Input
-              value={draft[key] ?? ''}
+              value={draft[key] ?? ""}
               onChange={(e) =>
                 setDraft((d) => ({ ...d, [key]: e.target.value }))
               }
               className="h-8 text-sm"
             />
           ) : (
-            <span className="text-sm">{row[key] ?? '—'}</span>
+            <span className="text-sm">{row[key] ?? "—"}</span>
           )}
         </td>
       ))}

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const DarkToggle = () => {
   const { theme, setTheme, systemTheme } = useTheme();
@@ -19,11 +19,11 @@ const DarkToggle = () => {
   }
 
   // Use next-themes systemTheme for system mode
-  const resolvedTheme = theme === 'system' ? systemTheme : theme;
-  const darkMode = resolvedTheme === 'dark';
+  const resolvedTheme = theme === "system" ? systemTheme : theme;
+  const darkMode = resolvedTheme === "dark";
 
   const toggleDarkMode = () => {
-    setTheme(darkMode ? 'light' : 'dark');
+    setTheme(darkMode ? "light" : "dark");
     setRotationCount(rotationCount + 1);
   };
 
@@ -52,9 +52,9 @@ const DarkToggle = () => {
           x: darkMode ? 54 : 2,
           rotate: rotationCount * 360,
         }}
-        style={{ left: '1px' }}
+        style={{ left: "1px" }}
         transition={{
-          type: 'spring',
+          type: "spring",
           stiffness: 300,
           damping: 20,
         }}

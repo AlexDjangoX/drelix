@@ -1,22 +1,22 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Navbar, Footer } from '@/components';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Navbar, Footer } from "@/components";
+import { getCanonicalBaseUrl } from "@/lib/seo";
 
 const siteUrl = getCanonicalBaseUrl();
 
 export const metadata: Metadata = {
-  title: 'Regulamin',
+  title: "Regulamin",
   description:
-    'Regulamin serwisu Drelix. Warunki korzystania ze strony, informacje o sprzedawcy i prawach konsumenta zgodnie z prawem polskim i UE. Wadowice.',
+    "Regulamin serwisu Drelix. Warunki korzystania ze strony, informacje o sprzedawcy i prawach konsumenta zgodnie z prawem polskim i UE. Wadowice.",
   alternates: { canonical: `${siteUrl}/terms` },
   openGraph: {
-    type: 'website',
+    type: "website",
     url: `${siteUrl}/terms`,
-    siteName: 'Drelix - Odzież Robocza i Ochronna',
-    title: 'Regulamin | Drelix',
-    description: 'Regulamin serwisu i warunki korzystania. Drelix Wadowice.',
-    locale: 'pl_PL',
+    siteName: "Drelix - Odzież Robocza i Ochronna",
+    title: "Regulamin | Drelix",
+    description: "Regulamin serwisu i warunki korzystania. Drelix Wadowice.",
+    locale: "pl_PL",
   },
   robots: { index: true, follow: true },
 };
@@ -52,7 +52,7 @@ export default function TermsPage() {
               <p>
                 Serwis ma charakter informacyjny i prezentuje ofertę oraz dane
                 kontaktowe. Korzystanie ze strony oznacza akceptację niniejszego
-                regulaminu oraz{' '}
+                regulaminu oraz{" "}
                 <Link href="/privacy">Polityki prywatności</Link>.
               </p>
             </section>
@@ -63,7 +63,7 @@ export default function TermsPage() {
               </h2>
               <p>
                 Sprzedawcą / usługodawcą jest <strong>Drelix</strong>, Emila
-                Zegadłowicza 43, 34-100 Wadowice, Polska. Kontakt: e-mail{' '}
+                Zegadłowicza 43, 34-100 Wadowice, Polska. Kontakt: e-mail{" "}
                 <a href="mailto:annabadura7@gmail.com">annabadura7@gmail.com</a>
                 , telefon +48 725 695 933.
               </p>
@@ -98,7 +98,7 @@ export default function TermsPage() {
               <p>
                 <strong>
                   Sprzedaż prowadzona jest wyłącznie w lokalu stacjonarnym.
-                </strong>{' '}
+                </strong>{" "}
                 Umowy sprzedaży zawierane są w sklepie stacjonarnym, a nie na
                 odległość ani poza lokalem przedsiębiorstwa. Strona internetowa
                 ma charakter wyłącznie informacyjny i prezentuje ofertę; zakupy
@@ -173,7 +173,7 @@ export default function TermsPage() {
               </h2>
               <p>
                 W sprawach spornych wynikających z umów z konsumentami konsument
-                może skorzystać z platformy ODR Komisji Europejskiej:{' '}
+                może skorzystać z platformy ODR Komisji Europejskiej:{" "}
                 <a
                   href="https://ec.europa.eu/consumers/odr"
                   target="_blank"

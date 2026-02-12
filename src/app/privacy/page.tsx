@@ -1,23 +1,23 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Navbar, Footer } from '@/components';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Navbar, Footer } from "@/components";
+import { getCanonicalBaseUrl } from "@/lib/seo";
 
 const siteUrl = getCanonicalBaseUrl();
 
 export const metadata: Metadata = {
-  title: 'Polityka prywatności',
+  title: "Polityka prywatności",
   description:
-    'Polityka prywatności Drelix. Informacje o przetwarzaniu danych osobowych zgodnie z RODO i ustawą o ochronie danych osobowych. Kontakt: Wadowice.',
+    "Polityka prywatności Drelix. Informacje o przetwarzaniu danych osobowych zgodnie z RODO i ustawą o ochronie danych osobowych. Kontakt: Wadowice.",
   alternates: { canonical: `${siteUrl}/privacy` },
   openGraph: {
-    type: 'website',
+    type: "website",
     url: `${siteUrl}/privacy`,
-    siteName: 'Drelix - Odzież Robocza i Ochronna',
-    title: 'Polityka prywatności | Drelix',
+    siteName: "Drelix - Odzież Robocza i Ochronna",
+    title: "Polityka prywatności | Drelix",
     description:
-      'Polityka prywatności i informacje o ochronie danych osobowych. Drelix Wadowice.',
-    locale: 'pl_PL',
+      "Polityka prywatności i informacje o ochronie danych osobowych. Drelix Wadowice.",
+    locale: "pl_PL",
   },
   robots: { index: true, follow: true },
 };
@@ -45,12 +45,12 @@ export default function PrivacyPage() {
                 1. Administrator danych
               </h2>
               <p>
-                Administratorem Twoich danych osobowych jest{' '}
+                Administratorem Twoich danych osobowych jest{" "}
                 <strong>Drelix</strong> (odzież robocza i ochronna), Emila
                 Zegadłowicza 43, 34-100 Wadowice, Polska.
               </p>
               <p>
-                Kontakt: e-mail{' '}
+                Kontakt: e-mail{" "}
                 <a href="mailto:annabadura7@gmail.com">annabadura7@gmail.com</a>
                 , telefon +48 725 695 933.
               </p>
@@ -61,16 +61,16 @@ export default function PrivacyPage() {
                 2. Podstawa prawna i cele przetwarzania (RODO)
               </h2>
               <p>
-                Przetwarzamy dane osobowe zgodnie z{' '}
+                Przetwarzamy dane osobowe zgodnie z{" "}
                 <strong>
                   Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679
                   (RODO)
-                </strong>{' '}
+                </strong>{" "}
                 oraz
                 <strong>
-                  {' '}
+                  {" "}
                   ustawą z dnia 10 maja 2018 r. o ochronie danych osobowych
-                </strong>{' '}
+                </strong>{" "}
                 (Dz.U. 2018 poz. 1000 z późn. zm.).
               </p>
               <ul className="list-disc pl-6 space-y-2 mt-4">
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
                 <li>
                   <strong>
                     Funkcjonowanie strony (logi, pliki cookies niezbędne):
-                  </strong>{' '}
+                  </strong>{" "}
                   podstawą jest prawnie uzasadniony interes administratora (art.
                   6 ust. 1 lit. f RODO) – zapewnienie bezpieczeństwa i
                   poprawnego działania serwisu.
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
                 <li>
                   <strong>
                     Cookies analityczne lub marketingowe (jeśli stosowane):
-                  </strong>{' '}
+                  </strong>{" "}
                   podstawą jest Twoja zgoda (art. 6 ust. 1 lit. a RODO),
                   wyrażona w ustawieniach cookies.
                 </li>
@@ -157,9 +157,9 @@ export default function PrivacyPage() {
                 zgody (bez wpływu na legalność przetwarzania przed cofnięciem).
               </p>
               <p>
-                Możesz złożyć skargę do organu nadzorczego:{' '}
+                Możesz złożyć skargę do organu nadzorczego:{" "}
                 <strong>Prezes Urzędu Ochrony Danych Osobowych (PUODO)</strong>,
-                ul. Stawki 2, 00-193 Warszawa,{' '}
+                ul. Stawki 2, 00-193 Warszawa,{" "}
                 <a
                   href="https://uodo.gov.pl"
                   target="_blank"
@@ -170,7 +170,7 @@ export default function PrivacyPage() {
                 .
               </p>
               <p>
-                W sprawach danych osobowych pisz na:{' '}
+                W sprawach danych osobowych pisz na:{" "}
                 <a href="mailto:annabadura7@gmail.com">annabadura7@gmail.com</a>
                 .
               </p>

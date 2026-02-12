@@ -7,7 +7,7 @@
  *
  * SEO: Content remains in the DOM; animations are purely visual.
  */
-import type { Variants } from 'framer-motion';
+import type { Variants } from "framer-motion";
 
 export const SLIDE_DISTANCE = 56;
 export const EASE = [0.25, 0.46, 0.45, 0.94] as const;

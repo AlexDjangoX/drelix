@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { Logo } from '@/components';
-import { FOOTER_ADDRESS } from '@/components/hero/footer';
+import Link from "next/link";
+import { Logo } from "@/components";
+import { FOOTER_ADDRESS } from "@/components/hero/footer";
 
 export function FooterBrand() {
   return (

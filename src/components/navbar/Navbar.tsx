@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import LanguageSelector from '@/components/reusable/LanguageSelector';
-import DarkToggle from '@/components/reusable/DarkToggle';
+import { useState, useCallback } from "react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import LanguageSelector from "@/components/reusable/LanguageSelector";
+import DarkToggle from "@/components/reusable/DarkToggle";
 import {
   NavbarScrollProgress,
   NavbarLogo,
@@ -13,15 +13,15 @@ import {
   NavbarMenuButton,
   useNavbarScroll,
   NAV_ITEMS,
-} from '@/components/navbar';
+} from "@/components/navbar";
 
 function scrollToSection(href: string) {
-  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
 }
 
 export default function Navbar() {
   const pathname = usePathname();
-  const isHome = pathname === '/';
+  const isHome = pathname === "/";
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isScrolled, activeSection, scaleX } = useNavbarScroll(isHome);
@@ -37,10 +37,10 @@ export default function Navbar() {
       <nav
         data-testid="main-navbar"
         className={cn(
-          'fixed inset-x-0 top-0 z-40 min-w-[320px] transition-all duration-300',
+          "fixed inset-x-0 top-0 z-40 min-w-[320px] transition-all duration-300",
           isScrolled
-            ? 'bg-background/95 backdrop-blur-md shadow-lg border-b border-border'
-            : 'bg-transparent'
+            ? "bg-background/95 backdrop-blur-md shadow-lg border-b border-border"
+            : "bg-transparent",
         )}
       >
         <div className="container mx-auto px-4">

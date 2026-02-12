@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { AnimateText } from '@/components';
+import Link from "next/link";
+import { AnimateText } from "@/components";
 
 export function FooterBottomBar() {
   const currentYear = new Date().getFullYear();

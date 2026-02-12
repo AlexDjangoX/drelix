@@ -1,14 +1,14 @@
-import sharp from 'sharp';
+import sharp from "sharp";
 import {
   THUMBNAIL_MAX,
   THUMBNAIL_QUALITY,
   LARGE_MAX,
   LARGE_QUALITY,
-} from '@/lib/image/constants';
-import { sanitizeFilename, slugifyForFilename } from '@/lib/utils';
-import type { ImageVariants } from '@/lib/types';
+} from "@/lib/image/constants";
+import { sanitizeFilename, slugifyForFilename } from "@/lib/utils";
+import type { ImageVariants } from "@/lib/types";
 
-export type { ImageVariants } from '@/lib/types';
+export type { ImageVariants } from "@/lib/types";
 
 /**
  * Process a raw image buffer into thumbnail + large WebP variants.
@@ -16,15 +16,15 @@ export type { ImageVariants } from '@/lib/types';
  */
 export async function processImageToVariants(
   buffer: Buffer,
-  options: { kod?: string; nazwa?: string; originalFilename?: string }
+  options: { kod?: string; nazwa?: string; originalFilename?: string },
 ): Promise<ImageVariants> {
-  const { kod: kodRaw, nazwa: nazwaRaw, originalFilename = '' } = options;
+  const { kod: kodRaw, nazwa: nazwaRaw, originalFilename = "" } = options;
   const kod =
-    typeof kodRaw === 'string' && kodRaw.trim()
+    typeof kodRaw === "string" && kodRaw.trim()
       ? sanitizeFilename(kodRaw.trim())
-      : '';
+      : "";
   const nazwaSlug = slugifyForFilename(
-    typeof nazwaRaw === 'string' ? nazwaRaw : ''
+    typeof nazwaRaw === "string" ? nazwaRaw : "",
   );
   const baseName =
     kod && nazwaSlug
@@ -33,7 +33,7 @@ export async function processImageToVariants(
         ? kod
         : nazwaSlug
           ? nazwaSlug
-          : sanitizeFilename(originalFilename).replace(/\.[^/.]+$/, '') ||
+          : sanitizeFilename(originalFilename).replace(/\.[^/.]+$/, "") ||
             `upload-${Date.now()}`;
   const thumbnailFilename = `${baseName}-thumb.webp`;
   const largeFilename = `${baseName}.webp`;
@@ -43,7 +43,7 @@ export async function processImageToVariants(
       .resize({
         width: THUMBNAIL_MAX,
         height: THUMBNAIL_MAX,
-        fit: 'inside',
+        fit: "inside",
         withoutEnlargement: true,
       })
       .webp({
@@ -56,7 +56,7 @@ export async function processImageToVariants(
       .resize({
         width: LARGE_MAX,
         height: LARGE_MAX,
-        fit: 'inside',
+        fit: "inside",
         withoutEnlargement: true,
       })
       .webp({
@@ -69,11 +69,11 @@ export async function processImageToVariants(
 
   return {
     thumbnail: {
-      base64: thumbnailBuffer.toString('base64'),
+      base64: thumbnailBuffer.toString("base64"),
       filename: thumbnailFilename,
     },
     large: {
-      base64: largeBuffer.toString('base64'),
+      base64: largeBuffer.toString("base64"),
       filename: largeFilename,
     },
   };

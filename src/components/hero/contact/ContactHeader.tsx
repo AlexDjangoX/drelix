@@ -1,4 +1,4 @@
-import { AnimateText, TwoToneHeading } from '@/components';
+import { AnimateText, TwoToneHeading } from "@/components";
 
 export function ContactHeader() {
   return (

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { AnimateText } from '@/components';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { ContactSubmitButton } from '@/components/hero/contact';
+import { AnimateText } from "@/components";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ContactSubmitButton } from "@/components/hero/contact";
 
 type ContactState = { error: string | null; success: boolean } | null;
 
@@ -22,7 +22,7 @@ export function ContactForm({
     <div className="bg-card rounded-2xl p-6 md:p-8 border border-border shadow-card h-fit lg:h-full flex flex-col">
       <form
         action={formAction}
-        key={state?.success ? 'submitted' : 'form'}
+        key={state?.success ? "submitted" : "form"}
         className="flex flex-col gap-5 flex-1"
       >
         <div>

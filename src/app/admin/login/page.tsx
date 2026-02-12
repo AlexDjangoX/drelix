@@ -1,4 +1,4 @@
-import { AdminLoginSection } from '@/components/admin/login';
+import { AdminLoginSection } from "@/components/admin/login";
 
 export default function AdminLoginPage() {
   return <AdminLoginSection />;

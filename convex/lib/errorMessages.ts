@@ -5,12 +5,12 @@
 
 /** Generic error messages (safe for public display). */
 export const PUBLIC_ERRORS = {
-  UNAUTHORIZED: 'Authentication required',
-  FORBIDDEN: 'Access denied',
-  NOT_FOUND: 'Resource not found',
-  INVALID_INPUT: 'Invalid input provided',
-  SERVER_ERROR: 'An error occurred. Please try again.',
-  RATE_LIMITED: 'Too many requests. Please try again later.',
+  UNAUTHORIZED: "Authentication required",
+  FORBIDDEN: "Access denied",
+  NOT_FOUND: "Resource not found",
+  INVALID_INPUT: "Invalid input provided",
+  SERVER_ERROR: "An error occurred. Please try again.",
+  RATE_LIMITED: "Too many requests. Please try again later.",
 } as const;
 
 /** Detailed error messages (admin-only). */
@@ -22,7 +22,7 @@ export const ADMIN_ERRORS = {
   CATEGORY_HAS_PRODUCTS: (slug: string, count: number) =>
     `Cannot delete category "${slug}": it contains ${count} product(s)`,
   INVALID_SLUG:
-    'Slug must contain only lowercase letters, numbers, hyphens, and underscores',
+    "Slug must contain only lowercase letters, numbers, hyphens, and underscores",
   SLUG_TOO_LONG: (max: number) =>
     `Slug exceeds maximum length of ${max} characters`,
   STRING_TOO_LONG: (field: string, max: number) =>
@@ -31,7 +31,7 @@ export const ADMIN_ERRORS = {
   INVALID_TYPE: (field: string, expected: string) =>
     `${field} must be a ${expected}`,
   DESTRUCTIVE_OPERATION_REQUIRES_CONFIRMATION:
-    'This destructive operation requires explicit confirmation',
+    "This destructive operation requires explicit confirmation",
   MEMORY_WARNING: (count: number) =>
     `Warning: Operation involves ${count} records - consider implementing pagination`,
 } as const;
@@ -46,21 +46,21 @@ export function sanitizeErrorForPublic(error: unknown): string {
     const message = error.message.toLowerCase();
 
     if (
-      message.includes('unauthorized') ||
-      message.includes('not authenticated')
+      message.includes("unauthorized") ||
+      message.includes("not authenticated")
     ) {
       return PUBLIC_ERRORS.UNAUTHORIZED;
     }
-    if (message.includes('forbidden') || message.includes('access denied')) {
+    if (message.includes("forbidden") || message.includes("access denied")) {
       return PUBLIC_ERRORS.FORBIDDEN;
     }
-    if (message.includes('not found')) {
+    if (message.includes("not found")) {
       return PUBLIC_ERRORS.NOT_FOUND;
     }
-    if (message.includes('invalid') || message.includes('validation')) {
+    if (message.includes("invalid") || message.includes("validation")) {
       return PUBLIC_ERRORS.INVALID_INPUT;
     }
-    if (message.includes('rate limit') || message.includes('too many')) {
+    if (message.includes("rate limit") || message.includes("too many")) {
       return PUBLIC_ERRORS.RATE_LIMITED;
     }
   }
@@ -74,6 +74,6 @@ export function sanitizeErrorForPublic(error: unknown): string {
 export function logError(context: string, error: unknown): void {
   console.error(`[${context}]`, error instanceof Error ? error.message : error);
   if (error instanceof Error && error.stack) {
-    console.error('Stack trace:', error.stack);
+    console.error("Stack trace:", error.stack);
   }
 }

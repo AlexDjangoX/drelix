@@ -2,7 +2,7 @@ import {
   MAX_LOGIN_ATTEMPTS,
   LOGIN_WINDOW_MS,
   LOGIN_LOCKOUT_MS,
-} from './constants';
+} from "./constants";
 
 type LoginAttemptRow = { attempts: number; lastAttemptAt: number };
 
@@ -12,7 +12,7 @@ type LoginAttemptRow = { attempts: number; lastAttemptAt: number };
  */
 export function getLoginAttemptState(
   existing: LoginAttemptRow | null,
-  now: number
+  now: number,
 ): {
   attempts: number;
   lockoutUntil: number | undefined;

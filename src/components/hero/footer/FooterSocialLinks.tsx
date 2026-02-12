@@ -1,5 +1,5 @@
-import { AnimateText } from '@/components';
-import { SOCIAL_LINKS } from '@/components/hero/footer';
+import { AnimateText } from "@/components";
+import { SOCIAL_LINKS } from "@/components/hero/footer";
 
 export function FooterSocialLinks() {
   return (
@@ -12,7 +12,7 @@ export function FooterSocialLinks() {
           const Icon = social.icon;
           const className =
             social.className ??
-            'text-muted-foreground hover:text-primary hover:bg-primary/10';
+            "text-muted-foreground hover:text-primary hover:bg-primary/10";
           return (
             <a
               key={social.id}

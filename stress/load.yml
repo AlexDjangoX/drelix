@@ -2,32 +2,32 @@
 # Run: npm run test:load (localhost)
 # Prod: npm run test:load:prod
 config:
-  target: 'http://localhost:3000'
+  target: "http://localhost:3000"
   environments:
     prod:
-      target: 'https://drelix.org'
+      target: "https://drelix.org"
   phases:
     - duration: 10
       arrivalRate: 2
-      name: 'Ramp up'
+      name: "Ramp up"
     - duration: 20
       arrivalRate: 5
-      name: 'Sustained load'
+      name: "Sustained load"
     - duration: 10
       arrivalRate: 10
-      name: 'Stress'
+      name: "Stress"
   ensure:
     maxErrorRate: 0.05
     p95: 3000
 
 scenarios:
-  - name: 'Public pages'
+  - name: "Public pages"
     flow:
       - get:
-          url: '/'
+          url: "/"
       - think: 0.5
       - get:
-          url: '/products'
+          url: "/products"
       - think: 0.5
       - get:
-          url: '/admin/login'
+          url: "/admin/login"

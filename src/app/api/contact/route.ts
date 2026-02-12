@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
 
 /** Recipient for contact form messages (business email). */
 const CONTACT_TO_EMAIL =
-  process.env.CONTACT_TO_EMAIL ?? 'annabadura7@gmail.com';
+  process.env.CONTACT_TO_EMAIL ?? "annabadura7@gmail.com";
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
 export async function POST(request: Request) {
   if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
-    console.error('[contact] Missing RESEND_API_KEY or RESEND_FROM_EMAIL');
+    console.error("[contact] Missing RESEND_API_KEY or RESEND_FROM_EMAIL");
     return NextResponse.json(
-      { error: 'Email not configured' },
-      { status: 503 }
+      { error: "Email not configured" },
+      { status: 503 },
     );
   }
 
@@ -20,17 +20,17 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const name = typeof body.name === 'string' ? body.name.trim() : '';
-  const email = typeof body.email === 'string' ? body.email.trim() : '';
-  const message = typeof body.message === 'string' ? body.message.trim() : '';
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+  const email = typeof body.email === "string" ? body.email.trim() : "";
+  const message = typeof body.message === "string" ? body.message.trim() : "";
 
   if (!name || !email || !message) {
     return NextResponse.json(
-      { error: 'Name, email and message are required' },
-      { status: 400 }
+      { error: "Name, email and message are required" },
+      { status: 400 },
     );
   }
 
@@ -38,8 +38,8 @@ export async function POST(request: Request) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return NextResponse.json(
-      { error: 'Invalid email address' },
-      { status: 400 }
+      { error: "Invalid email address" },
+      { status: 400 },
     );
   }
 
@@ -55,19 +55,19 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      console.error('[contact] Resend error:', error);
+      console.error("[contact] Resend error:", error);
       return NextResponse.json(
-        { error: 'Failed to send email' },
-        { status: 500 }
+        { error: "Failed to send email" },
+        { status: 500 },
       );
     }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error('[contact] Send failed:', err);
+    console.error("[contact] Send failed:", err);
     return NextResponse.json(
-      { error: 'Failed to send email' },
-      { status: 500 }
+      { error: "Failed to send email" },
+      { status: 500 },
     );
   }
 }

@@ -1,24 +1,24 @@
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-import { Navbar, HeroSection, AboutSection, Footer } from '@/components';
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import { Navbar, HeroSection, AboutSection, Footer } from "@/components";
 
 const ProductSection = dynamic(
-  () => import('@/components/products/ProductSection'),
+  () => import("@/components/products/ProductSection"),
   {
     ssr: true,
-  }
+  },
 );
 const WhyUsSection = dynamic(
-  () => import('@/components/hero/why-us/WhyUsSection'),
+  () => import("@/components/hero/why-us/WhyUsSection"),
   {
     ssr: true,
-  }
+  },
 );
 const ContactSection = dynamic(
-  () => import('@/components/hero/contact/ContactSection'),
+  () => import("@/components/hero/contact/ContactSection"),
   {
     ssr: true,
-  }
+  },
 );
 
 function SectionFallback() {

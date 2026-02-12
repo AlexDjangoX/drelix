@@ -1,4 +1,4 @@
-import { AboutContent, AboutImage } from '@/components/hero/about';
+import { AboutContent, AboutImage } from "@/components/hero/about";
 
 export default function AboutSection() {
   return (

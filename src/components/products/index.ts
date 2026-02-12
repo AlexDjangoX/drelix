@@ -1,11 +1,11 @@
-export { default as ProductSection } from '@/components/products/ProductSection';
-export { ProductSectionCategoryCard } from '@/components/products/ProductSectionCategoryCard';
-export { ProductSectionCategoryGrid } from '@/components/products/ProductSectionCategoryGrid';
-export { ProductSectionHeader } from '@/components/products/ProductSectionHeader';
+export { default as ProductSection } from "@/components/products/ProductSection";
+export { ProductSectionCategoryCard } from "@/components/products/ProductSectionCategoryCard";
+export { ProductSectionCategoryGrid } from "@/components/products/ProductSectionCategoryGrid";
+export { ProductSectionHeader } from "@/components/products/ProductSectionHeader";
 export {
   CATEGORY_COLORS,
   CATEGORY_ICONS,
-} from '@/components/products/productSectionData';
+} from "@/components/products/productSectionData";
 export {
   SLIDE_DISTANCE,
   EASE,
@@ -13,4 +13,4 @@ export {
   headerFromRightVariants,
   gridDominoVariants,
   cardFromLeftVariants,
-} from '@/components/products/productSectionAnimations';
+} from "@/components/products/productSectionAnimations";

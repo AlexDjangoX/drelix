@@ -1,4 +1,4 @@
-import { HardHat, Shield } from 'lucide-react';
+import { HardHat, Shield } from "lucide-react";
 
 export function HeroDecorations() {
   return (
@@ -27,7 +27,7 @@ export function HeroDecorations() {
         style={{
           backgroundImage: `linear-gradient(hsl(var(--grid-pattern)) 1px, transparent 1px),
                            linear-gradient(90deg, hsl(var(--grid-pattern)) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
+          backgroundSize: "50px 50px",
         }}
         aria-hidden
       />

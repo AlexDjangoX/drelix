@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 type NavLinkProps = {
   href: string;
@@ -10,13 +10,13 @@ type NavLinkProps = {
 };
 
 function NavLink({ href, children, className }: NavLinkProps) {
-  if (href.startsWith('#')) {
+  if (href.startsWith("#")) {
     return (
       <a
         href={href}
         className={cn(
-          'text-foreground/80 hover:text-primary transition-colors font-medium',
-          className
+          "text-foreground/80 hover:text-primary transition-colors font-medium",
+          className,
         )}
       >
         {children}
@@ -27,8 +27,8 @@ function NavLink({ href, children, className }: NavLinkProps) {
     <Link
       href={href}
       className={cn(
-        'text-foreground/80 hover:text-primary transition-colors font-medium',
-        className
+        "text-foreground/80 hover:text-primary transition-colors font-medium",
+        className,
       )}
     >
       {children}

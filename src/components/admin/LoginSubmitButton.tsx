@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useFormStatus } from 'react-dom';
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { useFormStatus } from "react-dom";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 /** React 19: useFormStatus must be used in a descendant of the form. */
 export function LoginSubmitButton() {
@@ -20,7 +20,7 @@ export function LoginSubmitButton() {
           Logowanie...
         </>
       ) : (
-        'Zaloguj'
+        "Zaloguj"
       )}
     </Button>
   );

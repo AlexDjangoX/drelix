@@ -1,9 +1,9 @@
-import type { LucideIcon } from 'lucide-react';
-import { AnimateText } from '@/components';
+import type { LucideIcon } from "lucide-react";
+import { AnimateText } from "@/components";
 
 type HeroTrustBadgeProps = {
   icon: LucideIcon;
-  textKey: 'hero.trust1' | 'hero.trust2' | 'hero.trust3';
+  textKey: "hero.trust1" | "hero.trust2" | "hero.trust3";
 };
 
 export function HeroTrustBadge({ icon: Icon, textKey }: HeroTrustBadgeProps) {

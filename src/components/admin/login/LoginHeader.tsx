@@ -1,6 +1,6 @@
-import { CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Lock } from 'lucide-react';
-import { LOGIN_STRINGS } from '@/components/admin/login';
+import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Lock } from "lucide-react";
+import { LOGIN_STRINGS } from "@/components/admin/login";
 
 export function LoginHeader() {
   return (

@@ -1,4 +1,4 @@
-import { StatCard, ABOUT_STATS } from '@/components/hero/about';
+import { StatCard, ABOUT_STATS } from "@/components/hero/about";
 
 export function AboutStats() {
   return (

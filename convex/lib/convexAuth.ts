@@ -3,7 +3,7 @@
  * Works with JWT tokens from Next.js API routes.
  */
 
-import type { QueryCtx, MutationCtx } from '../_generated/server';
+import type { QueryCtx, MutationCtx } from "../_generated/server";
 
 export type AuthenticatedCtx = QueryCtx | MutationCtx;
 
@@ -60,9 +60,9 @@ export async function isAdmin(ctx: AuthenticatedCtx): Promise<boolean> {
 export function sanitizeString(
   value: string,
   maxLength = 1000,
-  fieldName = 'Input'
+  fieldName = "Input",
 ): string {
-  if (typeof value !== 'string') {
+  if (typeof value !== "string") {
     throw new Error(`${fieldName} must be a string`);
   }
   const trimmed = value.trim();
@@ -71,7 +71,7 @@ export function sanitizeString(
   }
   if (trimmed.length > maxLength) {
     throw new Error(
-      `${fieldName} exceeds maximum length of ${maxLength} characters`
+      `${fieldName} exceeds maximum length of ${maxLength} characters`,
     );
   }
   return trimmed;
@@ -84,9 +84,9 @@ export function sanitizeString(
  * @returns Normalized slug
  */
 export function validateSlug(slug: string, maxLength = 100): string {
-  const normalized = slug.trim().toLowerCase().replace(/\s+/g, '-');
+  const normalized = slug.trim().toLowerCase().replace(/\s+/g, "-");
   if (!normalized) {
-    throw new Error('Slug cannot be empty');
+    throw new Error("Slug cannot be empty");
   }
   if (normalized.length > maxLength) {
     throw new Error(`Slug exceeds maximum length of ${maxLength} characters`);
@@ -94,7 +94,7 @@ export function validateSlug(slug: string, maxLength = 100): string {
   // Allow only alphanumeric, hyphens, and underscores
   if (!/^[a-z0-9_-]+$/.test(normalized)) {
     throw new Error(
-      'Slug can only contain lowercase letters, numbers, hyphens, and underscores'
+      "Slug can only contain lowercase letters, numbers, hyphens, and underscores",
     );
   }
   return normalized;
@@ -106,16 +106,16 @@ export function validateSlug(slug: string, maxLength = 100): string {
  * @returns Validated key
  */
 export function validateRateLimitKey(key: string): string {
-  if (typeof key !== 'string') {
-    throw new Error('Rate limit key must be a string');
+  if (typeof key !== "string") {
+    throw new Error("Rate limit key must be a string");
   }
   // SHA-256 hash is 64 hex characters
   if (key.length < 32 || key.length > 128) {
-    throw new Error('Invalid rate limit key format');
+    throw new Error("Invalid rate limit key format");
   }
   // Ensure it's hex
   if (!/^[a-f0-9]+$/i.test(key)) {
-    throw new Error('Invalid rate limit key format');
+    throw new Error("Invalid rate limit key format");
   }
   return key;
 }

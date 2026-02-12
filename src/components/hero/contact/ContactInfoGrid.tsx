@@ -1,4 +1,4 @@
-import { ContactInfoCard, CONTACT_INFO_ITEMS } from '@/components/hero/contact';
+import { ContactInfoCard, CONTACT_INFO_ITEMS } from "@/components/hero/contact";
 
 export function ContactInfoGrid() {
   return (

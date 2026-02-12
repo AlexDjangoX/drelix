@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Navbar, Footer } from '@/components';
-import { AnimateText, TwoToneHeading } from '@/components';
-import { ProductCard } from '@/components/products/ProductCard';
-import type { CatalogSection } from '@/lib/types';
+import Link from "next/link";
+import { Navbar, Footer } from "@/components";
+import { AnimateText, TwoToneHeading } from "@/components";
+import { ProductCard } from "@/components/products/ProductCard";
+import type { CatalogSection } from "@/lib/types";
 
 type Props = { sections: CatalogSection[]; totalCount: number };
 

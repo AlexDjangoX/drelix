@@ -8,4 +8,4 @@ export {
   fromRightVariants as headerFromRightVariants,
   gridStaggerVariants as gridDominoVariants,
   cardFromLeftVariants,
-} from '@/lib/animations';
+} from "@/lib/animations";

@@ -1,7 +1,7 @@
-import type { MetadataRoute } from 'next';
-import { fetchQuery } from 'convex/nextjs';
-import { api } from 'convex/_generated/api';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import type { MetadataRoute } from "next";
+import { fetchQuery } from "convex/nextjs";
+import { api } from "convex/_generated/api";
+import { getCanonicalBaseUrl } from "@/lib/seo";
 
 /**
  * Next.js serves this at /sitemap.xml (no public/sitemap.xml needed).
@@ -17,31 +17,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: baseUrl,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
+      changeFrequency: "weekly" as const,
       priority: 1,
     },
     {
       url: `${baseUrl}/products`,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
+      changeFrequency: "weekly" as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/privacy`,
       lastModified: now,
-      changeFrequency: 'monthly' as const,
+      changeFrequency: "monthly" as const,
       priority: 0.5,
     },
     {
       url: `${baseUrl}/terms`,
       lastModified: now,
-      changeFrequency: 'monthly' as const,
+      changeFrequency: "monthly" as const,
       priority: 0.5,
     },
     ...slugs.map((slug) => ({
       url: `${baseUrl}/products/${slug}`,
       lastModified: now,
-      changeFrequency: 'weekly' as const,
+      changeFrequency: "weekly" as const,
       priority: 0.9,
     })),
   ];

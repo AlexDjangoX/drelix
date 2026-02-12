@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Plus, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { DISPLAY_KEYS } from '@/lib/types';
+import { useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "convex/_generated/api";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { DISPLAY_KEYS } from "@/lib/types";
 
 const EMPTY_ROW = {
-  Rodzaj: '',
-  JednostkaMiary: 'szt',
-  StawkaVAT: '23',
-  Kod: '',
-  Nazwa: '',
-  Opis: '',
-  ProductDescription: '',
-  CenaNetto: '',
-  KodKlasyfikacji: '',
-  Uwagi: '',
-  OstatniaCenaZakupu: '',
-  OstatniaDataZakupu: '',
+  Rodzaj: "",
+  JednostkaMiary: "szt",
+  StawkaVAT: "23",
+  Kod: "",
+  Nazwa: "",
+  Opis: "",
+  ProductDescription: "",
+  CenaNetto: "",
+  KodKlasyfikacji: "",
+  Uwagi: "",
+  OstatniaCenaZakupu: "",
+  OstatniaDataZakupu: "",
 };
 
 type Props = {
@@ -40,11 +40,11 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
     const kod = row.Kod.trim();
     const nazwa = row.Nazwa.trim();
     if (!kod || !nazwa) {
-      toast.error('Kod i Nazwa są wymagane');
+      toast.error("Kod i Nazwa są wymagane");
       return;
     }
     setSaving(true);
-    const toastId = toast.loading('Dodawanie produktu...');
+    const toastId = toast.loading("Dodawanie produktu...");
     try {
       await createProduct({
         categorySlug,
@@ -54,11 +54,11 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
           Nazwa: nazwa,
         },
       });
-      toast.success('Produkt został dodany', { id: toastId });
+      toast.success("Produkt został dodany", { id: toastId });
       setRow(EMPTY_ROW);
       setExpanded(false);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Błąd dodawania';
+      const msg = err instanceof Error ? err.message : "Błąd dodawania";
       toast.error(msg, { id: toastId });
     } finally {
       setSaving(false);
@@ -103,11 +103,11 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
                   {key}
                 </label>
                 <Input
-                  value={row[key as keyof typeof row] ?? ''}
+                  value={row[key as keyof typeof row] ?? ""}
                   onChange={(e) =>
                     setRow((r) => ({ ...r, [key]: e.target.value }))
                   }
-                  placeholder={key === 'Kod' ? 'np. ABC123' : ''}
+                  placeholder={key === "Kod" ? "np. ABC123" : ""}
                   className="h-7 text-xs"
                 />
               </div>

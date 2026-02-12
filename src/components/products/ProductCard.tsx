@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
-import type { CatalogRow } from '@/lib/types';
-import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
+import { useState } from "react";
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import type { CatalogRow } from "@/lib/types";
+import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
 
 type Props = { row: CatalogRow; index: number };
 
 export function ProductCard({ row, index }: Props) {
   const [imgError, setImgError] = useState(false);
-  const thumbnailUrl = row.thumbnailUrl ?? row.imageUrl ?? row.image ?? '';
+  const thumbnailUrl = row.thumbnailUrl ?? row.imageUrl ?? row.image ?? "";
   const src =
     thumbnailUrl && !imgError ? thumbnailUrl : PLACEHOLDER_PRODUCT_IMAGE;
 
@@ -48,7 +48,7 @@ export function ProductCard({ row, index }: Props) {
             <div className="mt-2 flex items-baseline gap-2 flex-wrap">
               {row.CenaNetto ? (
                 <span className="text-sm font-medium text-primary">
-                  {row.CenaNetto} zł{' '}
+                  {row.CenaNetto} zł{" "}
                   <span className="text-muted-foreground font-normal">
                     netto
                   </span>

@@ -1,12 +1,12 @@
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { AnimateText } from '@/components';
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { AnimateText } from "@/components";
 import {
   HeroTrustBadges,
   containerVariants,
   fromLeftVariants,
   fromRightVariants,
-} from '@/components/hero/hero-section';
+} from "@/components/hero/hero-section";
 
 type HeroContentProps = {
   reducedMotion: boolean;

@@ -1,4 +1,4 @@
-import { v } from 'convex/values';
+import { v } from "convex/values";
 
 /** Convex validators for product fields (CSV row shape). Must be explicit for Convex defineTable. */
 export const productFieldValidators = {
@@ -27,7 +27,7 @@ export const sectionValidator = v.object({
     v.object({
       ...productFieldValidators,
       categorySlug: v.optional(v.string()),
-    })
+    }),
   ),
 });
 

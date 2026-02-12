@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   useState,
@@ -6,38 +6,38 @@ import {
   useEffect,
   useEffectEvent,
   useMemo,
-} from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { ChevronLeft, ChevronRight, X, Loader2 } from 'lucide-react';
-import { Navbar, Footer } from '@/components';
-import { Card, CardContent } from '@/components/ui/card';
-import { AnimateText, TwoToneHeading } from '@/components';
-import { useLanguage } from '@/context/LanguageContext';
-import { productConfig } from '@/components/products/productConfig';
-import type { ProductItem } from '@/lib/types';
-import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
-import { useQuery } from 'convex/react';
-import { api } from 'convex/_generated/api';
+} from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, X, Loader2 } from "lucide-react";
+import { Navbar, Footer } from "@/components";
+import { Card, CardContent } from "@/components/ui/card";
+import { AnimateText, TwoToneHeading } from "@/components";
+import { useLanguage } from "@/context/LanguageContext";
+import { productConfig } from "@/components/products/productConfig";
+import type { ProductItem } from "@/lib/types";
+import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
+import { useQuery } from "convex/react";
+import { api } from "convex/_generated/api";
 
 type Props = { slug: string };
 
-const COD = 'Kod';
+const COD = "Kod";
 
 function resolveTitle(
   t: Record<string, unknown>,
   titleKey: string,
-  slug: string
+  slug: string,
 ): string {
-  const keys = titleKey.split('.');
+  const keys = titleKey.split(".");
   let current: unknown = t;
   for (const key of keys) {
     current =
-      current != null && typeof current === 'object'
+      current != null && typeof current === "object"
         ? (current as Record<string, unknown>)[key]
         : undefined;
   }
-  const text = typeof current === 'string' ? current : '';
+  const text = typeof current === "string" ? current : "";
   return text.trim() || slug;
 }
 
@@ -49,35 +49,35 @@ export default function ProductPageClient({ slug }: Props) {
   const titleKey =
     config?.titleKey ??
     sectionFromConvex?.titleKey ??
-    'products.catalogCustomCategory';
+    "products.catalogCustomCategory";
   const resolvedTitle = resolveTitle(
     t as unknown as Record<string, unknown>,
     titleKey,
-    slug
+    slug,
   );
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const items: ProductItem[] = useMemo(() => {
     if (!sectionFromConvex) return [];
     return sectionFromConvex.items.map((row) => ({
-      id: row[COD] ?? '',
+      id: row[COD] ?? "",
       src: row.thumbnailUrl || row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
       largeSrc: row.imageUrl || row.thumbnailUrl || PLACEHOLDER_PRODUCT_IMAGE,
-      name: row.Nazwa ?? '',
-      price: row.CenaNetto ?? '',
-      unit: row.JednostkaMiary ?? '',
+      name: row.Nazwa ?? "",
+      price: row.CenaNetto ?? "",
+      unit: row.JednostkaMiary ?? "",
     }));
   }, [sectionFromConvex]);
 
   const openLightbox = useCallback(
     (index: number) => setLightboxIndex(index),
-    []
+    [],
   );
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
   const goPrev = useCallback(() => {
     setLightboxIndex((i) =>
-      i === null ? null : (i - 1 + items.length) % items.length
+      i === null ? null : (i - 1 + items.length) % items.length,
     );
   }, [items.length]);
 
@@ -86,34 +86,34 @@ export default function ProductPageClient({ slug }: Props) {
   }, [items.length]);
 
   const onKeydown = useEffectEvent((e: KeyboardEvent) => {
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') goPrev();
-    if (e.key === 'ArrowRight') goNext();
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") goPrev();
+    if (e.key === "ArrowRight") goNext();
   });
 
   useEffect(() => {
     if (lightboxIndex === null) return;
-    window.addEventListener('keydown', onKeydown);
-    return () => window.removeEventListener('keydown', onKeydown);
+    window.addEventListener("keydown", onKeydown);
+    return () => window.removeEventListener("keydown", onKeydown);
   }, [lightboxIndex]);
 
   useEffect(() => {
     if (lightboxIndex !== null) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [lightboxIndex]);
 
   const objectContain = [
-    'gloves',
-    'polbuty',
-    'trzewiki',
-    'sandaly',
-    'kalosze',
+    "gloves",
+    "polbuty",
+    "trzewiki",
+    "sandaly",
+    "kalosze",
   ].includes(slug);
 
   if (sectionFromConvex === undefined) {
@@ -162,7 +162,7 @@ export default function ProductPageClient({ slug }: Props) {
                 key={item.id}
                 className="group cursor-pointer border-border bg-card hover:border-primary/50 active:scale-[0.98] transition-all duration-300 hover:shadow-glow hover:-translate-y-1 overflow-hidden touch-manipulation"
                 onClick={() => openLightbox(index)}
-                onKeyDown={(e) => e.key === 'Enter' && openLightbox(index)}
+                onKeyDown={(e) => e.key === "Enter" && openLightbox(index)}
                 role="button"
                 tabIndex={0}
               >
@@ -175,8 +175,8 @@ export default function ProductPageClient({ slug }: Props) {
                       sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
                       className={
                         objectContain
-                          ? 'object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300'
-                          : 'object-cover object-top group-hover:scale-105 group-active:scale-100 transition-transform duration-300'
+                          ? "object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300"
+                          : "object-cover object-top group-hover:scale-105 group-active:scale-100 transition-transform duration-300"
                       }
                     />
                   </div>
@@ -187,7 +187,7 @@ export default function ProductPageClient({ slug }: Props) {
                     <p className="px-2 pb-2 sm:px-3 sm:pb-3 text-center">
                       {item.price ? (
                         <span className="text-sm font-medium text-primary">
-                          {item.price} zł{' '}
+                          {item.price} zł{" "}
                           <span className="text-muted-foreground font-normal">
                             netto
                           </span>
@@ -212,10 +212,10 @@ export default function ProductPageClient({ slug }: Props) {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4 touch-manipulation"
           style={{
-            paddingLeft: 'max(1rem, env(safe-area-inset-left))',
-            paddingRight: 'max(1rem, env(safe-area-inset-right))',
-            paddingTop: 'max(1rem, env(safe-area-inset-top))',
-            paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+            paddingLeft: "max(1rem, env(safe-area-inset-left))",
+            paddingRight: "max(1rem, env(safe-area-inset-right))",
+            paddingTop: "max(1rem, env(safe-area-inset-top))",
+            paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
           }}
           onClick={closeLightbox}
           role="dialog"
@@ -230,8 +230,8 @@ export default function ProductPageClient({ slug }: Props) {
             }}
             className="absolute z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
             style={{
-              top: 'max(1rem, env(safe-area-inset-top))',
-              right: 'max(1rem, env(safe-area-inset-right))',
+              top: "max(1rem, env(safe-area-inset-top))",
+              right: "max(1rem, env(safe-area-inset-right))",
             }}
             aria-label="Zamknij"
           >
@@ -245,7 +245,7 @@ export default function ProductPageClient({ slug }: Props) {
               goPrev();
             }}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
-            style={{ left: 'max(0.25rem, env(safe-area-inset-left))' }}
+            style={{ left: "max(0.25rem, env(safe-area-inset-left))" }}
             aria-label="Poprzednie"
           >
             <ChevronLeft size={32} />
@@ -255,7 +255,7 @@ export default function ProductPageClient({ slug }: Props) {
             className="relative w-full max-w-4xl flex-1 min-h-0"
             style={{
               height:
-                'min(85vh, calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 4rem))',
+                "min(85vh, calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 4rem))",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -277,7 +277,7 @@ export default function ProductPageClient({ slug }: Props) {
               {(items[lightboxIndex].price || items[lightboxIndex].unit) && (
                 <p className="text-primary-foreground/90 text-xs sm:text-sm font-normal mt-0.5">
                   {items[lightboxIndex].price
-                    ? `${items[lightboxIndex].price} zł netto${items[lightboxIndex].unit ? ` / ${items[lightboxIndex].unit}` : ''}`
+                    ? `${items[lightboxIndex].price} zł netto${items[lightboxIndex].unit ? ` / ${items[lightboxIndex].unit}` : ""}`
                     : items[lightboxIndex].unit}
                 </p>
               )}
@@ -291,7 +291,7 @@ export default function ProductPageClient({ slug }: Props) {
               goNext();
             }}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors"
-            style={{ right: 'max(0.25rem, env(safe-area-inset-right))' }}
+            style={{ right: "max(0.25rem, env(safe-area-inset-right))" }}
             aria-label="Następne"
           >
             <ChevronRight size={32} />

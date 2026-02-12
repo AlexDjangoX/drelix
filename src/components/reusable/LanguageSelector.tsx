@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { useLanguage } from '@/context/LanguageContext';
-import { motion } from 'framer-motion';
-import { Languages } from 'lucide-react';
+import { useState } from "react";
+import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
+import { motion } from "framer-motion";
+import { Languages } from "lucide-react";
 
 export default function LanguageSelector() {
   const { language, setLanguage } = useLanguage();
@@ -12,7 +12,7 @@ export default function LanguageSelector() {
   const [rotationCount, setRotationCount] = useState(0);
 
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'pl' : 'en');
+    setLanguage(language === "en" ? "pl" : "en");
     setRotationCount(rotationCount + 1);
   };
 
@@ -48,12 +48,12 @@ export default function LanguageSelector() {
       <motion.div
         className="absolute top-1 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-linear-to-b from-red-300 to-red-600 shadow-md transition-colors duration-300 dark:bg-linear-to-b dark:from-gray-500 dark:to-gray-800"
         animate={{
-          x: language === 'pl' ? 2 : 54,
+          x: language === "pl" ? 2 : 54,
           rotate: rotationCount * 360,
         }}
-        style={{ left: '1px' }}
+        style={{ left: "1px" }}
         transition={{
-          type: 'spring',
+          type: "spring",
           stiffness: 300,
           damping: 20,
         }}

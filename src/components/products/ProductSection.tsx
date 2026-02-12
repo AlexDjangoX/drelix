@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
-import { useReducedMotion, useInView } from 'framer-motion';
+import { useRef } from "react";
+import { useReducedMotion, useInView } from "framer-motion";
 import {
   ProductSectionHeader,
   ProductSectionCategoryGrid,
-} from '@/components/products';
+} from "@/components/products";
 
 export default function ProductSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

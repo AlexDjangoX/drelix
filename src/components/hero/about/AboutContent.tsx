@@ -1,5 +1,5 @@
-import { AnimateText, TwoToneHeading } from '@/components';
-import { AboutStats } from '@/components/hero/about';
+import { AnimateText, TwoToneHeading } from "@/components";
+import { AboutStats } from "@/components/hero/about";
 
 export function AboutContent() {
   return (

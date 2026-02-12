@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
-import { fetchQuery } from 'convex/nextjs';
-import { api } from 'convex/_generated/api';
-import { productConfig } from '@/components/products/productConfig';
-import { BreadcrumbJsonLd } from '@/components/products/BreadcrumbJsonLd';
-import { getCanonicalBaseUrl } from '@/lib/seo';
+import type { Metadata } from "next";
+import { fetchQuery } from "convex/nextjs";
+import { api } from "convex/_generated/api";
+import { productConfig } from "@/components/products/productConfig";
+import { BreadcrumbJsonLd } from "@/components/products/BreadcrumbJsonLd";
+import { getCanonicalBaseUrl } from "@/lib/seo";
 
 const siteUrl = getCanonicalBaseUrl();
 
@@ -17,11 +17,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const section = await fetchQuery(api.catalog.getCatalogSection, { slug });
-  if (!section) return { title: 'Produkty | Drelix' };
+  if (!section) return { title: "Produkty | Drelix" };
 
   const config = productConfig[slug as keyof typeof productConfig];
   const title = config?.metadata.title ?? section.displayName ?? slug;
-  const description = config?.metadata.description ?? '';
+  const description = config?.metadata.description ?? "";
 
   const path = `/products/${slug}`;
   const canonical = `${siteUrl}${path}`;
@@ -31,15 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical },
     openGraph: {
-      type: 'website',
+      type: "website",
       url: canonical,
-      siteName: 'Drelix - Odzież Robocza i Ochronna',
+      siteName: "Drelix - Odzież Robocza i Ochronna",
       title: `${title} | Drelix`,
       description,
-      locale: 'pl_PL',
+      locale: "pl_PL",
       images: [
         {
-          url: '/og-image.png',
+          url: "/og-image.png",
           width: 1200,
           height: 630,
           alt: title,
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${title} | Drelix`,
       description,
     },

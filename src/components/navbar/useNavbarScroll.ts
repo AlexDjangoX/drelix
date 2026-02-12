@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useEffectEvent } from 'react';
-import { useScroll, useSpring } from 'framer-motion';
-import { SECTION_IDS, SCROLL_SPY_OFFSET } from '@/components/navbar/navbarData';
+import { useState, useEffect, useEffectEvent } from "react";
+import { useScroll, useSpring } from "framer-motion";
+import { SECTION_IDS, SCROLL_SPY_OFFSET } from "@/components/navbar/navbarData";
 
 export function useNavbarScroll(isHome: boolean) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,7 +25,7 @@ export function useNavbarScroll(isHome: boolean) {
       el: document.querySelector(id),
     })).filter(
       (s): s is { id: (typeof SECTION_IDS)[number]; el: Element } =>
-        s.el != null
+        s.el != null,
     );
 
     let current: string = SECTION_IDS[0];
@@ -42,8 +42,8 @@ export function useNavbarScroll(isHome: boolean) {
 
   useEffect(() => {
     onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return { isScrolled, activeSection, scaleX };

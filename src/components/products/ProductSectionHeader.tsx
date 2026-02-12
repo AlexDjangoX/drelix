@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { AnimateText, TwoToneHeading } from '@/components';
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { AnimateText, TwoToneHeading } from "@/components";
 import {
   headerFromLeftVariants,
   headerFromRightVariants,
-} from '@/components/products';
+} from "@/components/products";
 
 type ProductSectionHeaderProps = {
   reducedMotion: boolean;
@@ -22,7 +22,7 @@ export function ProductSectionHeader({
       <motion.div
         variants={headerFromLeftVariants(reducedMotion)}
         initial="hidden"
-        animate={isInView ? 'visible' : 'hidden'}
+        animate={isInView ? "visible" : "hidden"}
         className="mb-4"
       >
         <TwoToneHeading as="h2" className="text-3xl md:text-5xl font-black">
@@ -32,7 +32,7 @@ export function ProductSectionHeader({
       <motion.div
         variants={headerFromRightVariants(reducedMotion)}
         initial="hidden"
-        animate={isInView ? 'visible' : 'hidden'}
+        animate={isInView ? "visible" : "hidden"}
       >
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           <AnimateText k="products.subtitle" />

@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import type { LucideIcon } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { useLanguage } from '@/context/LanguageContext';
-import { getThumbnailPath } from '@/lib/thumbnails';
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { useLanguage } from "@/context/LanguageContext";
+import { getThumbnailPath } from "@/lib/thumbnails";
 
 function getLabel(
   t: Record<string, unknown>,
   titleKey: string,
-  slug: string
+  slug: string,
 ): string {
-  const keys = titleKey.split('.');
+  const keys = titleKey.split(".");
   let current: unknown = t;
   for (const key of keys) {
     current =
-      current != null && typeof current === 'object'
+      current != null && typeof current === "object"
         ? (current as Record<string, unknown>)[key]
         : undefined;
   }
-  const text = typeof current === 'string' ? current : '';
+  const text = typeof current === "string" ? current : "";
   return text.trim() || slug;
 }
-import { cardFromLeftVariants } from '@/components/products';
+import { cardFromLeftVariants } from "@/components/products";
 
 type ProductSectionCategoryCardProps = {
   slug: string;
@@ -49,7 +49,7 @@ export function ProductSectionCategoryCard({
     displayName ??
     getLabel(t as unknown as Record<string, unknown>, titleKey, slug);
   const cardClassName =
-    'group cursor-pointer border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-glow hover:-translate-y-1 h-full';
+    "group cursor-pointer border-border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-glow hover:-translate-y-1 h-full";
 
   return (
     <motion.div variants={cardFromLeftVariants(reducedMotion)}>

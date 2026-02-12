@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { AnimateText } from '@/components';
-import { QUICK_LINK_ITEMS } from '@/components/hero/footer';
+import Link from "next/link";
+import { AnimateText } from "@/components";
+import { QUICK_LINK_ITEMS } from "@/components/hero/footer";
 
 export function FooterQuickLinks() {
   return (

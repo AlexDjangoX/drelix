@@ -3,14 +3,14 @@
  * See docs/SEO_Guide.md.
  */
 
-const raw = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://drelix.org';
+const raw = process.env.NEXT_PUBLIC_SITE_URL ?? "https://drelix.org";
 
 /**
  * Canonical base URL with no trailing slash. All canonicals, sitemap URLs, and
  * JSON-LD urls must use this so we stay consistent (SEO_Guide: non–trailing-slash).
  */
 export function getCanonicalBaseUrl(): string {
-  return raw.replace(/\/+$/, '') || raw;
+  return raw.replace(/\/+$/, "") || raw;
 }
 
 /** Target max length for page titles (SERPs; ~60 chars ideal). */

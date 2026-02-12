@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   startTransition,
@@ -6,14 +6,14 @@ import React, {
   useOptimistic,
   useRef,
   useEffect,
-} from 'react';
-import { useMutation } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import Image from 'next/image';
-import { Ban, CircleCheckBig, Loader2, Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { base64ToBlob, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
-import type { CatalogRow } from '@/lib/types';
+} from "react";
+import { useMutation } from "convex/react";
+import { api } from "convex/_generated/api";
+import Image from "next/image";
+import { Ban, CircleCheckBig, Loader2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { base64ToBlob, PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
+import type { CatalogRow } from "@/lib/types";
 
 type ImageDisplayState = { thumbnailUrl: string; imageUrl: string };
 
@@ -29,19 +29,19 @@ export function ImageUploadCell({ row }: Props) {
   const updateProductImage = useMutation(api.catalog.updateProductImage);
   const clearProductImage = useMutation(api.catalog.clearProductImage);
 
-  const kod = row['Kod'] ?? '';
-  const nazwa = row['Nazwa'] ?? '';
-  const imageUrl = row['imageUrl'];
-  const thumbnailUrl = row['thumbnailUrl'];
+  const kod = row["Kod"] ?? "";
+  const nazwa = row["Nazwa"] ?? "";
+  const imageUrl = row["imageUrl"];
+  const thumbnailUrl = row["thumbnailUrl"];
   const hasImage = !!(thumbnailUrl || imageUrl);
 
   const actualState: ImageDisplayState = {
-    thumbnailUrl: thumbnailUrl ?? '',
-    imageUrl: imageUrl ?? '',
+    thumbnailUrl: thumbnailUrl ?? "",
+    imageUrl: imageUrl ?? "",
   };
   const [optimisticState, addOptimistic] = useOptimistic(
     actualState,
-    (state, opt: Partial<ImageDisplayState>) => ({ ...state, ...opt })
+    (state, opt: Partial<ImageDisplayState>) => ({ ...state, ...opt }),
   );
   const displayThumb =
     optimisticState.thumbnailUrl ||
@@ -57,8 +57,8 @@ export function ImageUploadCell({ row }: Props) {
   }, []);
 
   const handleUpload = async (file: File) => {
-    if (!file.type.startsWith('image/')) {
-      toast.error('Proszę wybrać plik graficzny');
+    if (!file.type.startsWith("image/")) {
+      toast.error("Proszę wybrać plik graficzny");
       return;
     }
     const blobUrl = URL.createObjectURL(file);
@@ -67,27 +67,27 @@ export function ImageUploadCell({ row }: Props) {
       addOptimistic({ thumbnailUrl: blobUrl, imageUrl: blobUrl });
     });
     setUploading(true);
-    const toastId = toast.loading('Przesyłanie zdjęcia...');
+    const toastId = toast.loading("Przesyłanie zdjęcia...");
     try {
       const formData = new FormData();
-      formData.set('image', file);
-      if (kod) formData.set('kod', kod);
-      if (nazwa) formData.set('nazwa', nazwa);
-      const processRes = await fetch('/api/image', {
-        method: 'POST',
+      formData.set("image", file);
+      if (kod) formData.set("kod", kod);
+      if (nazwa) formData.set("nazwa", nazwa);
+      const processRes = await fetch("/api/image", {
+        method: "POST",
         body: formData,
       });
       if (!processRes.ok) {
         const text = await processRes.text();
-        toast.error(text || 'Błąd przetwarzania obrazu', { id: toastId });
+        toast.error(text || "Błąd przetwarzania obrazu", { id: toastId });
         return;
       }
       const { thumbnail, large } = (await processRes.json()) as {
         thumbnail: { base64: string; filename: string };
         large: { base64: string; filename: string };
       };
-      const thumbnailBlob = base64ToBlob(thumbnail.base64, 'image/webp');
-      const largeBlob = base64ToBlob(large.base64, 'image/webp');
+      const thumbnailBlob = base64ToBlob(thumbnail.base64, "image/webp");
+      const largeBlob = base64ToBlob(large.base64, "image/webp");
 
       const [thumbUrl, largeUrl] = await Promise.all([
         generateUploadUrl(),
@@ -95,18 +95,18 @@ export function ImageUploadCell({ row }: Props) {
       ]);
       const [thumbUploadRes, largeUploadRes] = await Promise.all([
         fetch(thumbUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'image/webp' },
+          method: "POST",
+          headers: { "Content-Type": "image/webp" },
           body: thumbnailBlob,
         }),
         fetch(largeUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'image/webp' },
+          method: "POST",
+          headers: { "Content-Type": "image/webp" },
           body: largeBlob,
         }),
       ]);
       if (!thumbUploadRes.ok || !largeUploadRes.ok) {
-        toast.error('Nie udało się przesłać plików do magazynu', {
+        toast.error("Nie udało się przesłać plików do magazynu", {
           id: toastId,
         });
         return;
@@ -119,10 +119,10 @@ export function ImageUploadCell({ row }: Props) {
         storageId,
         thumbnailStorageId,
       });
-      toast.success('Zdjęcie zostało zaktualizowane', { id: toastId });
+      toast.success("Zdjęcie zostało zaktualizowane", { id: toastId });
     } catch (e) {
-      console.error('Upload failed', e);
-      toast.error('Nie udało się przesłać zdjęcia', { id: toastId });
+      console.error("Upload failed", e);
+      toast.error("Nie udało się przesłać zdjęcia", { id: toastId });
     } finally {
       setUploading(false);
       setDragOver(false);
@@ -150,13 +150,13 @@ export function ImageUploadCell({ row }: Props) {
     e.stopPropagation();
     setConfirmingDelete(false);
     setDeleting(true);
-    const toastId = toast.loading('Usuwanie zdjęcia...');
+    const toastId = toast.loading("Usuwanie zdjęcia...");
     try {
       await clearProductImage({ kod });
-      toast.success('Zdjęcie zostało usunięte', { id: toastId });
+      toast.success("Zdjęcie zostało usunięte", { id: toastId });
     } catch (err) {
-      console.error('Delete image failed', err);
-      toast.error('Nie udało się usunąć zdjęcia', { id: toastId });
+      console.error("Delete image failed", err);
+      toast.error("Nie udało się usunąć zdjęcia", { id: toastId });
     } finally {
       setDeleting(false);
     }
@@ -177,8 +177,8 @@ export function ImageUploadCell({ row }: Props) {
         }}
         className={`relative w-16 h-16 shrink-0 rounded border-2 border-dashed flex items-center justify-center overflow-hidden transition-colors ${
           dragOver
-            ? 'border-primary bg-primary/10'
-            : 'border-muted-foreground/30'
+            ? "border-primary bg-primary/10"
+            : "border-muted-foreground/30"
         }`}
       >
         {uploading || deleting ? (

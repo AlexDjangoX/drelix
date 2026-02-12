@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useActionState, useEffect, useEffectEvent } from 'react';
-import { toast } from 'sonner';
-import { useLanguage } from '@/context/LanguageContext';
+import { useActionState, useEffect, useEffectEvent } from "react";
+import { toast } from "sonner";
+import { useLanguage } from "@/context/LanguageContext";
 import {
   ContactForm,
   ContactHeader,
   ContactInfoGrid,
   ContactMap,
   submitContact,
-} from '@/components/hero/contact';
+} from "@/components/hero/contact";
 
 export default function ContactSection() {
   const { t } = useLanguage();

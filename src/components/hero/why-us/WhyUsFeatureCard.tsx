@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { AnimateText } from '@/components/reusable/AnimateText';
-import { fadeUpVariants } from '@/lib/animations';
-import type { WhyUsFeatureItem } from '@/components/hero/why-us';
+import { motion } from "framer-motion";
+import { AnimateText } from "@/components/reusable/AnimateText";
+import { fadeUpVariants } from "@/lib/animations";
+import type { WhyUsFeatureItem } from "@/components/hero/why-us";
 
 type WhyUsFeatureCardProps = WhyUsFeatureItem & {
   index: number;
@@ -17,7 +17,7 @@ export function WhyUsFeatureCard({
   index,
   reducedMotion,
 }: WhyUsFeatureCardProps) {
-  const numberLabel = (index + 1).toString().padStart(2, '0');
+  const numberLabel = (index + 1).toString().padStart(2, "0");
 
   return (
     <motion.div

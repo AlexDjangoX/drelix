@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import {
   HeroTrustBadge,
   fromRightVariants,
   HERO_TRUST_ITEMS,
-} from '@/components/hero/hero-section';
+} from "@/components/hero/hero-section";
 
 type HeroTrustBadgesProps = {
   reducedMotion: boolean;

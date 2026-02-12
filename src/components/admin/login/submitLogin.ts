@@ -2,14 +2,14 @@ export type LoginState = { success: boolean; error: string | null } | null;
 
 export async function submitLogin(
   _prev: LoginState,
-  formData: FormData
+  formData: FormData,
 ): Promise<LoginState> {
-  const password = (formData.get('password') as string) ?? '';
+  const password = (formData.get("password") as string) ?? "";
 
   try {
-    const res = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
     });
     const data = await res.json().catch(() => ({}));
@@ -19,9 +19,9 @@ export async function submitLogin(
     }
     return {
       success: false,
-      error: (data.error as string) || 'Błąd logowania',
+      error: (data.error as string) || "Błąd logowania",
     };
   } catch {
-    return { success: false, error: 'Wystąpił błąd sieciowy' };
+    return { success: false, error: "Wystąpił błąd sieciowy" };
   }
 }

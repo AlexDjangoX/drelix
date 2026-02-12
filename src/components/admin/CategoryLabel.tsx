@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useQuery } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import { useLanguage } from '@/context/LanguageContext';
+import { useQuery } from "convex/react";
+import { api } from "convex/_generated/api";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Props = { slug: string };
 
@@ -28,12 +28,12 @@ export function CategoryLabel({ slug }: Props) {
     );
   }
 
-  const keys = cat.titleKey.split('.');
+  const keys = cat.titleKey.split(".");
   let current: unknown = t;
   for (const key of keys) {
     current = (current as Record<string, unknown>)?.[key];
   }
-  const label = typeof current === 'string' ? current : slug;
+  const label = typeof current === "string" ? current : slug;
 
   return (
     <span className="text-xs font-medium bg-orange-100 text-orange-800 dark:bg-primary/10 dark:text-primary px-1.5 py-0.5 rounded">

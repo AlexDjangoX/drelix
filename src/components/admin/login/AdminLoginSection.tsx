@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useActionState, useEffect, useEffectEvent } from 'react';
-import { useRouter } from 'next/navigation';
-import { Card } from '@/components/ui/card';
-import { toast } from 'sonner';
-import { LoginHeader } from '@/components/admin/login';
-import { LoginForm } from '@/components/admin/login';
-import { submitLogin } from '@/components/admin/login';
+import { useActionState, useEffect, useEffectEvent } from "react";
+import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
+import { toast } from "sonner";
+import { LoginHeader } from "@/components/admin/login";
+import { LoginForm } from "@/components/admin/login";
+import { submitLogin } from "@/components/admin/login";
 
 export function AdminLoginSection() {
   const router = useRouter();
@@ -15,8 +15,8 @@ export function AdminLoginSection() {
   const onStateChange = useEffectEvent(() => {
     if (!state) return;
     if (state.success) {
-      toast.success('Zalogowano pomyślnie');
-      router.push('/admin');
+      toast.success("Zalogowano pomyślnie");
+      router.push("/admin");
       router.refresh();
     } else if (state.error) {
       toast.error(state.error);

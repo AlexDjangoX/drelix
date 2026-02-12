@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useFormStatus } from 'react-dom';
-import { Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { AnimateText } from '@/components';
+import { useFormStatus } from "react-dom";
+import { Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AnimateText } from "@/components";
 
 /** React 19: useFormStatus must be used in a descendant of the form. */
 export function ContactSubmitButton() {

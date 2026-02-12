@@ -1,7 +1,7 @@
 /**
  * Shared app types. Re-exports data-driven slug type; defines catalog, image, and product types.
  */
-import type { CategorySlug } from '@/lib/catalog/catalogCategories';
+import type { CategorySlug } from "@/lib/catalog/catalogCategories";
 
 export type { CategorySlug };
 
@@ -41,10 +41,10 @@ export type ProductItem = {
 
 /** Admin product table column config (label + field key). */
 export const DISPLAY_KEYS = [
-  { label: 'Kod', key: 'Kod' },
-  { label: 'Nazwa', key: 'Nazwa' },
-  { label: 'Product Description', key: 'ProductDescription' },
-  { label: 'Cena netto', key: 'CenaNetto' },
-  { label: 'Jednostka miary', key: 'JednostkaMiary' },
-  { label: 'Stawka VAT', key: 'StawkaVAT' },
+  { label: "Kod", key: "Kod" },
+  { label: "Nazwa", key: "Nazwa" },
+  { label: "Product Description", key: "ProductDescription" },
+  { label: "Cena netto", key: "CenaNetto" },
+  { label: "Jednostka miary", key: "JednostkaMiary" },
+  { label: "Stawka VAT", key: "StawkaVAT" },
 ] as const;

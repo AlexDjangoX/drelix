@@ -1,5 +1,5 @@
-import { ChevronDown } from 'lucide-react';
-import { AnimateText } from '@/components';
+import { ChevronDown } from "lucide-react";
+import { AnimateText } from "@/components";
 
 type HeroScrollIndicatorProps = {
   onScrollToMap: () => void;

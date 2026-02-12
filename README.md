@@ -641,9 +641,11 @@ Complete security audit and hardening of Convex backend:
 <summary><strong>Catalog Management & Admin UX (Feb 2026)</strong></summary>
 
 **Critical Bug Fix:**
+
 - **Categorization logic fix** – Fixed priority bug where "other" category returned score of 0.1 before checking `exactKods`, causing products to be miscategorized. Now `exactKods` check (score 1000) runs first, ensuring exact matches take precedence. All 312 products from Kartoteki2.csv now categorize correctly.
 
 **Admin UI Improvements:**
+
 - **Sticky search bar** – Search and theme toggle stick to top of page when scrolling, always accessible
 - **Light/dark mode toggle** – Added to admin header for quick theme switching
 - **Table column borders** – Subtle borders between columns for better readability
@@ -652,6 +654,7 @@ Complete security audit and hardening of Convex backend:
 - **Removed debug logging** – All `uploadLogger` and `serverLogger` calls removed for production
 
 **Catalog Features:**
+
 - **Dynamic category system** – Sitemap, product pages, and homepage fetch categories directly from Convex. Single source of truth.
 - **Category deletion** – Admins can delete empty categories with confirmation UI. Cascade protection prevents accidental data loss.
 - **Product description field** – Added `ProductDescription` field to product schema. Displays in admin table.
@@ -662,6 +665,7 @@ Complete security audit and hardening of Convex backend:
 - **CSV upload workflow** – Preview changes before confirming, cache-busting for rules file, Windows-1250 encoding support.
 
 **Debug Tools:**
+
 - **debug-scripts/ folder** – 5 utility scripts for categorization testing, database queries, and schema verification (documented in `debug-scripts/README.md`)
 
 </details>

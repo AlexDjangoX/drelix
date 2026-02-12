@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
-import { useReducedMotion, useInView } from 'framer-motion';
-import { WhyUsFeatureGrid, WhyUsHeader } from '@/components/hero/why-us';
+import { useRef } from "react";
+import { useReducedMotion, useInView } from "framer-motion";
+import { WhyUsFeatureGrid, WhyUsHeader } from "@/components/hero/why-us";
 
 export default function WhyUsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);

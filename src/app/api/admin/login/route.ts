@@ -1,23 +1,23 @@
-import { NextResponse } from 'next/server';
-import { fetchMutation, fetchQuery } from 'convex/nextjs';
-import { api } from 'convex/_generated/api';
+import { NextResponse } from "next/server";
+import { fetchMutation, fetchQuery } from "convex/nextjs";
+import { api } from "convex/_generated/api";
 import {
   COOKIE_NAME,
   createAdminSession,
   getClientIp,
   hashClientIp,
   timingSafeEqual,
-} from '@/lib/auth';
+} from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
     const adminPassword = process.env.ADMIN_PASSWORD;
 
     if (!adminPassword) {
-      console.error('ADMIN_PASSWORD not set in environment');
+      console.error("ADMIN_PASSWORD not set in environment");
       return NextResponse.json(
-        { error: 'Błąd konfiguracji serwera' },
-        { status: 500 }
+        { error: "Błąd konfiguracji serwera" },
+        { status: 500 },
       );
     }
 
@@ -34,19 +34,19 @@ export async function POST(request: Request) {
         {
           error: `Zbyt wiele prób. Spróbuj ponownie za ${mins} minut.`,
         },
-        { status: 429 }
+        { status: 429 },
       );
     }
 
     const { password } = await request.json();
-    const submitted = typeof password === 'string' ? password : '';
+    const submitted = typeof password === "string" ? password : "";
 
     // 2. Timing-safe password check
     if (!timingSafeEqual(submitted, adminPassword)) {
       await fetchMutation(api.auth.recordFailedLoginAttempt, { key });
       return NextResponse.json(
-        { error: 'Nieprawidłowe hasło' },
-        { status: 401 }
+        { error: "Nieprawidłowe hasło" },
+        { status: 401 },
       );
     }
 
@@ -58,18 +58,18 @@ export async function POST(request: Request) {
 
     response.cookies.set(COOKIE_NAME, token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: 60 * 60 * 24, // 24 hours
-      path: '/',
+      path: "/",
     });
 
     return response;
   } catch (error) {
-    console.error('Login error:', error);
+    console.error("Login error:", error);
     return NextResponse.json(
-      { error: 'Wystąpił błąd podczas logowania' },
-      { status: 500 }
+      { error: "Wystąpił błąd podczas logowania" },
+      { status: 500 },
     );
   }
 }

@@ -1,10 +1,10 @@
-import type { LucideIcon } from 'lucide-react';
-import { AnimateText } from '@/components';
+import type { LucideIcon } from "lucide-react";
+import { AnimateText } from "@/components";
 
 type StatCardProps = {
   icon: LucideIcon;
   value: string;
-  labelKey: 'about.experience' | 'about.quality' | 'about.trust';
+  labelKey: "about.experience" | "about.quality" | "about.trust";
 };
 
 export function StatCard({ icon: Icon, value, labelKey }: StatCardProps) {

@@ -7,4 +7,4 @@ export {
   containerVariants,
   fromLeftVariants,
   fromRightVariants,
-} from '@/lib/animations';
+} from "@/lib/animations";

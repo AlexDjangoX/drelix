@@ -3,7 +3,7 @@ import {
   FooterBrand,
   FooterQuickLinks,
   FooterSocialLinks,
-} from '@/components/hero/footer';
+} from "@/components/hero/footer";
 
 export default function Footer() {
   return (

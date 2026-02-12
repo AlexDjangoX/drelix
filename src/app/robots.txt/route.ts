@@ -1,4 +1,4 @@
-import { getRobotsTxt, getCanonicalBaseUrl } from '@/lib/seo';
+import { getRobotsTxt, getCanonicalBaseUrl } from "@/lib/seo";
 
 /**
  * Serves /robots.txt with the same baseUrl as sitemap (getCanonicalBaseUrl).
@@ -10,8 +10,8 @@ export function GET() {
   const body = getRobotsTxt(baseUrl);
   return new Response(body, {
     headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, s-maxage=3600",
     },
   });
 }

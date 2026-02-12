@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { motion, type MotionValue } from 'framer-motion';
+import { motion, type MotionValue } from "framer-motion";
 
 type NavbarScrollProgressProps = {
   scaleX: MotionValue<number>;

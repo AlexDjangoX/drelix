@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 import {
   CsvUploadSection,
   CatalogTable,
   CreateCategorySection,
-} from '@/components/admin';
-import { useCsvPreview, useCatalogFilter } from '@/components/admin/hooks';
+} from "@/components/admin";
+import { useCsvPreview, useCatalogFilter } from "@/components/admin/hooks";
 
 export default function AdminPage() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const {
     file,
     dragOver,
@@ -36,8 +36,8 @@ export default function AdminPage() {
   } = useCatalogFilter(previewSections, searchQuery);
 
   const logout = async () => {
-    await fetch('/api/admin/logout', { method: 'POST' });
-    window.location.href = '/';
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/";
   };
 
   return (
@@ -51,7 +51,12 @@ export default function AdminPage() {
             </p>
           )}
         </div>
-        <Button variant="outline" size="sm" onClick={logout} className="gap-2 dark:text-orange-400 dark:hover:text-white">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={logout}
+          className="gap-2 dark:text-orange-400 dark:hover:text-white"
+        >
           <LogOut className="w-4 h-4" />
           Log out
         </Button>

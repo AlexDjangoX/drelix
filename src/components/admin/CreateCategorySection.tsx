@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Plus, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "convex/_generated/api";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Plus, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export function CreateCategorySection() {
   const [expanded, setExpanded] = useState(false);
-  const [slug, setSlug] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [slug, setSlug] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [saving, setSaving] = useState(false);
   const createCategory = useMutation(api.catalog.createCategory);
 
@@ -20,19 +20,19 @@ export function CreateCategorySection() {
     const s = slug.trim();
     const d = displayName.trim();
     if (!s || !d) {
-      toast.error('Wprowadź slug i nazwę kategorii');
+      toast.error("Wprowadź slug i nazwę kategorii");
       return;
     }
     setSaving(true);
-    const toastId = toast.loading('Tworzenie kategorii...');
+    const toastId = toast.loading("Tworzenie kategorii...");
     try {
       await createCategory({ slug: s, displayName: d });
-      toast.success('Kategoria została utworzona', { id: toastId });
-      setSlug('');
-      setDisplayName('');
+      toast.success("Kategoria została utworzona", { id: toastId });
+      setSlug("");
+      setDisplayName("");
       setExpanded(false);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Błąd tworzenia';
+      const msg = err instanceof Error ? err.message : "Błąd tworzenia";
       toast.error(msg, { id: toastId });
     } finally {
       setSaving(false);
@@ -41,8 +41,8 @@ export function CreateCategorySection() {
 
   const handleCancel = () => {
     setExpanded(false);
-    setSlug('');
-    setDisplayName('');
+    setSlug("");
+    setDisplayName("");
   };
 
   return (

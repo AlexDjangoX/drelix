@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useQuery } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import { useLanguage } from '@/context/LanguageContext';
+import { useQuery } from "convex/react";
+import { api } from "convex/_generated/api";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Props = {
   currentSlug: string;
@@ -23,16 +23,16 @@ export function CategorySelect({ currentSlug, onSelect, disabled }: Props) {
     displayName?: string;
   }) => {
     if (cat.displayName) return cat.displayName;
-    const keys = cat.titleKey.split('.');
+    const keys = cat.titleKey.split(".");
     let current: unknown = t;
     for (const key of keys) {
       current = (current as Record<string, unknown>)?.[key];
     }
-    return typeof current === 'string' ? current : cat.slug;
+    return typeof current === "string" ? current : cat.slug;
   };
 
   const sorted = [...categories].sort((a, b) =>
-    getLabel(a).localeCompare(getLabel(b), undefined, { sensitivity: 'base' })
+    getLabel(a).localeCompare(getLabel(b), undefined, { sensitivity: "base" }),
   );
 
   return (

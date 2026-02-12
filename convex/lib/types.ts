@@ -1,4 +1,4 @@
-import type { Doc } from '../_generated/dataModel';
+import type { Doc } from "../_generated/dataModel";
 
 /** Shape for db.insert('products', ...) */
 export type ProductInsert = {
@@ -20,7 +20,7 @@ export type ProductInsert = {
 };
 
 /** Product document from Convex. */
-export type ProductDoc = Doc<'products'>;
+export type ProductDoc = Doc<"products">;
 
 /** Catalog section with items (for UI and CSV replace). */
 export type CatalogSection = {

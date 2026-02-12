@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { CardContent } from '@/components/ui/card';
-import { LoginSubmitButton } from '@/components/admin';
-import { LoginBackLink } from '@/components/admin/login';
-import { LOGIN_STRINGS } from '@/components/admin/login';
+import { Input } from "@/components/ui/input";
+import { CardContent } from "@/components/ui/card";
+import { LoginSubmitButton } from "@/components/admin";
+import { LoginBackLink } from "@/components/admin/login";
+import { LOGIN_STRINGS } from "@/components/admin/login";
 
 type LoginFormProps = {
   formAction: (formData: FormData) => void;

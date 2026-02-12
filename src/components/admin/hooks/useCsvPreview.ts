@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import { useMutation } from 'convex/react';
-import { api } from 'convex/_generated/api';
-import { categorizeCatalog } from '@/lib/process-csv/catalogCategorize';
-import type { CategoryRule, CatalogSection } from '@/lib/types';
-import { csvToRows } from '@/lib/process-csv/csvParseClient';
-import { toast } from 'sonner';
+import { useState, useCallback } from "react";
+import { useMutation } from "convex/react";
+import { api } from "convex/_generated/api";
+import { categorizeCatalog } from "@/lib/process-csv/catalogCategorize";
+import type { CategoryRule, CatalogSection } from "@/lib/types";
+import { csvToRows } from "@/lib/process-csv/csvParseClient";
+import { toast } from "sonner";
 
 export function useCsvPreview() {
   const [file, setFile] = useState<File | null>(null);
@@ -18,37 +18,39 @@ export function useCsvPreview() {
   const replaceCatalog = useMutation(api.catalog.replaceCatalogFromSections);
 
   const handleFileSelect = useCallback(async (f: File) => {
-    if (!f.name.endsWith('.csv') && f.type !== 'text/csv') {
-      toast.error('Proszę wybrać plik CSV');
+    if (!f.name.endsWith(".csv") && f.type !== "text/csv") {
+      toast.error("Proszę wybrać plik CSV");
       return;
     }
-    
+
     setFile(f);
     setLoading(true);
-    const toastId = toast.loading('Parsowanie pliku...');
+    const toastId = toast.loading("Parsowanie pliku...");
 
     try {
       const buffer = await f.arrayBuffer();
       const rawRows = csvToRows(buffer);
 
       const rows = rawRows.map((row) => ({
-        Rodzaj: row['Rodzaj'] ?? '',
-        JednostkaMiary: row['Jednostka miary'] ?? '',
-        StawkaVAT: row['Stawka VAT'] ?? '',
-        Kod: row['Kod'] ?? '',
-        Nazwa: row['Nazwa'] ?? '',
-        Opis: row['Opis'] ?? '',
-        ProductDescription: row['ProductDescription'] ?? '',
-        CenaNetto: row['Cena netto'] ?? '',
-        KodKlasyfikacji: row['Kod klasyfikacji'] ?? '',
-        Uwagi: row['Uwagi'] ?? '',
-        OstatniaCenaZakupu: row['Ostatnia cena zakupu'] ?? '',
-        OstatniaDataZakupu: row['Ostatnia data zakupu'] ?? '',
+        Rodzaj: row["Rodzaj"] ?? "",
+        JednostkaMiary: row["Jednostka miary"] ?? "",
+        StawkaVAT: row["Stawka VAT"] ?? "",
+        Kod: row["Kod"] ?? "",
+        Nazwa: row["Nazwa"] ?? "",
+        Opis: row["Opis"] ?? "",
+        ProductDescription: row["ProductDescription"] ?? "",
+        CenaNetto: row["Cena netto"] ?? "",
+        KodKlasyfikacji: row["Kod klasyfikacji"] ?? "",
+        Uwagi: row["Uwagi"] ?? "",
+        OstatniaCenaZakupu: row["Ostatnia cena zakupu"] ?? "",
+        OstatniaDataZakupu: row["Ostatnia data zakupu"] ?? "",
       }));
 
-      const rulesRes = await fetch(`/catalogCategoryRules.json?v=${Date.now()}`);
+      const rulesRes = await fetch(
+        `/catalogCategoryRules.json?v=${Date.now()}`,
+      );
       if (!rulesRes.ok) {
-        throw new Error('Nie udało się załadować reguł kategorii');
+        throw new Error("Nie udało się załadować reguł kategorii");
       }
       const rulesData = (await rulesRes.json()) as
         | CategoryRule[]
@@ -63,10 +65,10 @@ export function useCsvPreview() {
       setPreviewSections(categorized);
       toast.success(
         `Plik wczytany: ${rows.length} produktów w ${categorized.length} kategoriach`,
-        { id: toastId }
+        { id: toastId },
       );
     } catch (e) {
-      const msg = e instanceof Error ? e.message : 'Błąd parsowania';
+      const msg = e instanceof Error ? e.message : "Błąd parsowania";
       toast.error(msg, { id: toastId });
       setFile(null);
     } finally {
@@ -76,21 +78,21 @@ export function useCsvPreview() {
 
   const processUpload = useCallback(async () => {
     if (!previewSections) return;
-    
+
     setLoading(true);
-    const toastId = toast.loading('Aktualizacja bazy danych...');
-    
+    const toastId = toast.loading("Aktualizacja bazy danych...");
+
     try {
       await replaceCatalog({ sections: previewSections as never });
-      
-      toast.success('Katalog został zaktualizowany pomyślnie', {
+
+      toast.success("Katalog został zaktualizowany pomyślnie", {
         id: toastId,
       });
-      
+
       setPreviewSections(null);
       setFile(null);
     } catch (e) {
-      const msg = e instanceof Error ? e.message : 'Błąd serwera';
+      const msg = e instanceof Error ? e.message : "Błąd serwera";
       toast.error(msg, { id: toastId });
     } finally {
       setLoading(false);
@@ -100,7 +102,7 @@ export function useCsvPreview() {
   const cancelPreview = useCallback(() => {
     setPreviewSections(null);
     setFile(null);
-    toast.info('Podgląd anulowany');
+    toast.info("Podgląd anulowany");
   }, []);
 
   const onDrop = useCallback(
@@ -110,7 +112,7 @@ export function useCsvPreview() {
       const f = e.dataTransfer.files?.[0];
       if (f) handleFileSelect(f);
     },
-    [handleFileSelect]
+    [handleFileSelect],
   );
 
   const onDragOver = useCallback((e: React.DragEvent) => {
@@ -128,7 +130,7 @@ export function useCsvPreview() {
       const f = e.target.files?.[0];
       if (f) handleFileSelect(f);
     },
-    [handleFileSelect]
+    [handleFileSelect],
   );
 
   return {

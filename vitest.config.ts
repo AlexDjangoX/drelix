@@ -1,21 +1,21 @@
-import { defineConfig } from 'vitest/config';
-import path from 'path';
+import { defineConfig } from "vitest/config";
+import path from "path";
 
 export default defineConfig({
   test: {
-    environment: 'jsdom',
-    include: ['tests/**/*.test.{ts,tsx}'],
+    environment: "jsdom",
+    include: ["tests/**/*.test.{ts,tsx}"],
     globals: true,
     coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      include: ['convex/lib/**/*.ts', 'src/lib/process-csv/**/*.ts'],
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+      include: ["convex/lib/**/*.ts", "src/lib/process-csv/**/*.ts"],
       exclude: [
-        '**/*.test.ts',
-        '**/*.test.tsx',
-        '**/types.ts',
-        '**/index.ts',
-        'convex/_generated/**',
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/types.ts",
+        "**/index.ts",
+        "convex/_generated/**",
       ],
       // Production-ready coverage for critical backend security code
       // Actual per-file coverage (non-duplicate): 87-100%
@@ -24,14 +24,14 @@ export default defineConfig({
     },
     server: {
       deps: {
-        inline: ['convex-test'],
+        inline: ["convex-test"],
       },
     },
-    setupFiles: ['tests/setup.ts'],
+    setupFiles: ["tests/setup.ts"],
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });

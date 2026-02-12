@@ -1,5 +1,5 @@
-import { AnimateText } from '@/components';
-import type { ContactInfoItem } from '@/components/hero/contact';
+import { AnimateText } from "@/components";
+import type { ContactInfoItem } from "@/components/hero/contact";
 
 type ContactInfoCardProps = {
   item: ContactInfoItem;
@@ -8,7 +8,7 @@ type ContactInfoCardProps = {
 export function ContactInfoCard({ item }: ContactInfoCardProps) {
   const Icon = item.icon;
   const content =
-    'valueKey' in item ? <AnimateText k={item.valueKey} /> : item.value;
+    "valueKey" in item ? <AnimateText k={item.valueKey} /> : item.value;
 
   return (
     <div className="bg-card rounded-xl p-4 border border-border hover:border-primary/30 transition-colors">
