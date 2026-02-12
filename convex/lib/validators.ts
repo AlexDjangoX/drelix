@@ -8,6 +8,7 @@ export const productFieldValidators = {
   Kod: v.string(),
   Nazwa: v.string(),
   Opis: v.optional(v.string()),
+  ProductDescription: v.optional(v.string()),
   CenaNetto: v.string(),
   KodKlasyfikacji: v.string(),
   Uwagi: v.string(),
