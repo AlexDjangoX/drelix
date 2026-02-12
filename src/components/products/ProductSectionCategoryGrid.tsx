@@ -1,13 +1,11 @@
 "use client";
 
-import { useRef, useMemo } from "react";
-import { motion, useInView } from "framer-motion";
+import { useMemo } from "react";
 import { useLanguage } from "@/context/language";
 import { useQuery } from "convex/react";
 import { api } from "convex/_generated/api";
 import {
   ProductSectionCategoryCard,
-  gridDominoVariants,
   CATEGORY_COLORS,
   CATEGORY_ICONS,
 } from "@/components/products";
@@ -30,13 +28,6 @@ export function ProductSectionCategoryGrid({
 }: {
   reducedMotion: boolean;
 }) {
-  const gridRef = useRef<HTMLDivElement>(null);
-  // Trigger earlier so fast scrollers see the grid animation; tight stagger in animations.ts
-const isGridInView = useInView(gridRef, {
-  once: true,
-  amount: 0.05,
-  margin: "120px 0px 0px 0px",
-});
   const sectionsFromConvex = useQuery(api.catalog.listCatalogSections);
   const { t } = useLanguage();
 
@@ -53,13 +44,7 @@ const isGridInView = useInView(gridRef, {
   }, [sectionsFromConvex, t]);
 
   return (
-    <motion.div
-      ref={gridRef}
-      className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6"
-      variants={gridDominoVariants(reducedMotion)}
-      initial="hidden"
-      animate={isGridInView ? "visible" : "hidden"}
-    >
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
       {sorted.map((section, i) => (
         <ProductSectionCategoryCard
           key={section.slug}
@@ -71,6 +56,6 @@ const isGridInView = useInView(gridRef, {
           reducedMotion={reducedMotion}
         />
       ))}
-    </motion.div>
+    </div>
   );
 }

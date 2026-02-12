@@ -8,23 +8,23 @@ import {
 } from "@/components/products";
 
 export default function ProductSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  // Trigger when section is ~150px below viewport so fast scrollers still see the animation
-const isInView = useInView(sectionRef, {
-  once: true,
-  amount: 0.05,
-  margin: "150px 0px 0px 0px",
-});
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, {
+    once: true,
+    amount: 0.05,
+    margin: "150px 0px 0px 0px",
+  });
   const prefersReducedMotion = useReducedMotion();
   const reducedMotion = !!prefersReducedMotion;
 
   return (
     <section
+      ref={sectionRef}
       id="products"
       data-testid="products-section"
       className="py-20 md:py-32 overflow-x-hidden"
     >
-      <div ref={sectionRef} className="container mx-auto px-4">
+      <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <ProductSectionHeader
             reducedMotion={reducedMotion}
