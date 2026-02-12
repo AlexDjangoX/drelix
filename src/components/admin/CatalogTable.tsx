@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { ProductRow } from '@/components/admin/ProductRow';
 import { AddProductRow } from '@/components/admin/AddProductRow';
 import { CategorySectionTitle } from '@/components/admin/CategorySectionTitle';
+import DarkToggle from '@/components/reusable/DarkToggle';
 import {
   DISPLAY_KEYS,
   type CatalogRow,
@@ -63,9 +64,8 @@ function DeleteCategoryButton({
     return (
       <div className="flex items-center gap-1">
         <Button
-          variant="destructive"
           size="sm"
-          className="h-7 text-xs"
+          className="h-7 text-xs bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
           onClick={handleConfirm}
           disabled={deleting}
         >
@@ -73,9 +73,8 @@ function DeleteCategoryButton({
           Usuń
         </Button>
         <Button
-          variant="ghost"
           size="sm"
-          className="h-7 text-xs"
+          className="h-7 text-xs bg-green-600 text-white hover:bg-green-700 dark:bg-green-600 dark:text-white dark:hover:bg-green-700"
           onClick={() => setConfirming(false)}
           disabled={deleting}
         >
@@ -88,9 +87,9 @@ function DeleteCategoryButton({
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="sm"
-      className="h-7 text-xs text-muted-foreground hover:text-destructive"
+      className="h-7 text-xs border-red-300 text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white dark:hover:border-red-600"
       onClick={() => setConfirming(true)}
       disabled={disabled}
       title="Usuń kategorię"
@@ -112,36 +111,42 @@ export function CatalogTable({
 }: Props) {
   return (
     <section data-testid="catalog-table">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 className="text-lg font-semibold">
-            {isPreview ? 'Podgląd produktów' : 'Produkty w bazie'}
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            {isPreview
-              ? 'To są dane, które zostaną zapisane. Możesz je przeszukać przed wysłaniem.'
-              : 'Edytuj wiersz i kliknij Zapisz, aby zaktualizować produkt w Convex.'}
-          </p>
-        </div>
-        <div className="relative w-full md:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Search by name or code..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-9"
-            data-testid="catalog-search"
-          />
-          {searchQuery && (
-            <p className="absolute -bottom-5 right-0 text-[10px] text-muted-foreground">
-              Found {filteredTotalCount} products
+      <div className="sticky top-0 z-10 bg-background pb-4 pt-2 -mt-2 border-b border-transparent hover:border-border transition-colors">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold">
+              {isPreview ? 'Podgląd produktów' : 'Produkty w bazie'}
+            </h2>
+            <p className="text-gray-600 dark:text-muted-foreground text-sm">
+              {isPreview
+                ? 'To są dane, które zostaną zapisane. Możesz je przeszukać przed wysłaniem.'
+                : 'Edytuj wiersz i kliknij Zapisz, aby zaktualizować produkt w Convex.'}
             </p>
-          )}
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="relative w-full md:w-72">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 dark:text-muted-foreground" />
+              <Input
+                placeholder="Search by name or code..."
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="pl-9"
+                data-testid="catalog-search"
+              />
+              {searchQuery && (
+                <p className="absolute -bottom-5 right-0 text-[10px] text-gray-600 dark:text-muted-foreground">
+                  Found {filteredTotalCount} products
+                </p>
+              )}
+            </div>
+            <DarkToggle />
+          </div>
         </div>
       </div>
+      <div className="mt-6">
 
       {loading && (
-        <div className="flex items-center gap-2 text-muted-foreground py-8">
+        <div className="flex items-center gap-2 text-gray-600 dark:text-muted-foreground py-8">
           <Loader2 className="w-5 h-5 animate-spin" />
           Loading catalog…
         </div>
@@ -162,10 +167,10 @@ export function CatalogTable({
               key={section.slug}
               className="rounded-lg border border-border overflow-hidden"
             >
-              <div className="bg-muted/50 px-4 py-2 font-medium text-sm flex justify-between items-center">
+              <div className="bg-muted/50 px-4 py-2 font-medium text-sm flex justify-between items-center text-orange-800 dark:text-foreground">
                 <CategorySectionTitle section={section} />
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-gray-600 dark:text-muted-foreground">
                     {section.items.length} products
                   </span>
                   {!isPreview && section.items.length === 0 && (
@@ -180,24 +185,24 @@ export function CatalogTable({
                 <table className="w-full text-left">
                   <thead>
                     <tr className="border-b border-border bg-muted/30">
-                      <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-20">
+                      <th className="p-2 text-xs font-semibold text-gray-700 dark:text-muted-foreground uppercase w-20 border-r border-border/50">
                         Photo
                       </th>
-                      <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-32">
+                      <th className="p-2 text-xs font-semibold text-gray-700 dark:text-muted-foreground uppercase w-32 border-r border-border/50">
                         Category
                       </th>
                       {DISPLAY_KEYS.map(({ label, key }) => (
                         <th
                           key={key}
-                          className="p-2 text-xs font-semibold text-muted-foreground uppercase"
+                          className="p-2 text-xs font-semibold text-gray-700 dark:text-muted-foreground uppercase border-r border-border/50"
                         >
                           {label}
                         </th>
                       ))}
-                      <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-20">
+                      <th className="p-2 text-xs font-semibold text-gray-700 dark:text-muted-foreground uppercase w-20 border-r border-border/50">
                         Delete
                       </th>
-                      <th className="p-2 text-xs font-semibold text-muted-foreground uppercase w-24 text-right">
+                      <th className="p-2 text-xs font-semibold text-gray-700 dark:text-muted-foreground uppercase w-24 text-right">
                         Actions
                       </th>
                     </tr>
@@ -222,6 +227,7 @@ export function CatalogTable({
           ))}
         </div>
       )}
+      </div>
     </section>
   );
 }
