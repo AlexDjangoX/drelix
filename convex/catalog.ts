@@ -406,11 +406,9 @@ export const replaceCatalogFromSections = mutation({
         const row = { ...item, categorySlug } as Record<string, string>;
         const kod = row.Kod ?? '';
         const existingImages = imagesByKod.get(kod);
+        const productInsert = toProductInsert(row, categorySlug, existingImages);
 
-        await ctx.db.insert(
-          'products',
-          toProductInsert(row, categorySlug, existingImages)
-        );
+        await ctx.db.insert('products', productInsert);
         productsInserted++;
       }
     }
@@ -421,7 +419,9 @@ export const replaceCatalogFromSections = mutation({
 
     for (const c of existingCats) {
       // Keep admin-created categories (they have displayName)
-      if (c.displayName) continue;
+      if (c.displayName) {
+        continue;
+      }
       // Delete categories not in the new catalog
       if (!slugToTitleKey.has(c.slug)) {
         await ctx.db.delete(c._id);
