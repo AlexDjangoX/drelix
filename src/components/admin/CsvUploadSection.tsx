@@ -65,14 +65,14 @@ export function CsvUploadSection({
         />
         <label
           htmlFor="csv-upload"
-          className={loading ? 'cursor-not-allowed' : 'cursor-pointer block'}
+          className={loading ? 'cursor-not-allowed' : 'cursor-pointer block hover:opacity-90'}
         >
           {previewSections ? (
             <CheckCircle className="w-10 h-10 mx-auto text-green-500 mb-3" />
           ) : (
-            <Upload className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
+            <Upload className="w-10 h-10 mx-auto text-muted-foreground dark:text-orange-400 dark:hover:text-white mb-3 transition-colors" />
           )}
-          <span className="text-foreground font-medium">
+          <span className="text-foreground dark:text-orange-400 dark:hover:text-white font-medium transition-colors">
             {previewSections
               ? 'Plik wczytany pomyślnie'
               : file
