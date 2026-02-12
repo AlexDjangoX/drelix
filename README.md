@@ -6,7 +6,7 @@
 
 **Built for:** Local brick-and-mortar businesses that need an online presence to be found, inform visitors, and manage product data.
 
-**At a glance (for clients):** SEO-optimized, Lighthouse 91/100, GDPR-compliant legal pages, admin product management, 137 tests passing, production-ready security.
+**At a glance (for clients):** SEO-optimized, Lighthouse 91/100, GDPR-compliant legal pages, admin product management, 99 tests passing, production-ready security, deterministic product categorization.
 
 ---
 
@@ -321,8 +321,9 @@ Convex powers the entire product catalog with production-ready security, real-ti
 **Core Features:**
 
 - **Real-time catalog sync** – Products, categories, and images update instantly across all pages
-- **CSV import/export** – Kartoteki format support with automatic categorization by keywords and product codes
-- **Inline editing** – Admin table with live edit mode, category reassignment, and bulk operations
+- **CSV import/export** – Kartoteki format support (Windows-1250 encoding) with automatic categorization by exact KOD matching, keyword analysis, and product code prefixes. Preview changes before confirming upload.
+- **Deterministic categorization** – 100% reliable product categorization using three-tier matching: (1) Exact KOD match (score 1000), (2) Code prefix match (score 10-30), (3) Keyword match (score 5-100+). All 301 existing products have exact KOD entries.
+- **Inline editing** – Admin table with live edit mode, category reassignment, search filtering, and sticky controls
 - **Image management** – Upload, thumbnail generation, storage with automatic cleanup on deletion
 - **Dynamic sitemap** – Category URLs fetched from Convex at build time, single source of truth
 
@@ -376,6 +377,16 @@ loginAttempts (table)
 3. Upload image → Stored in Convex Cloud → Auto-cleanup on deletion
 4. Create category → Available immediately in dropdowns and sitemap
 
+**Debug Tools (`debug-scripts/`):**
+
+- `check-product.js` - Test how any product KOD gets categorized
+- `check-db-product.js` - Query database for specific product's current category
+- `verify-categorization.js` - Validate all CSV products against rules
+- `extract-exact-kods.js` - Sync exactKods from current database state
+- `verify-schema.js` - Confirm database schema includes all expected fields
+
+See `debug-scripts/README.md` for usage and documentation.
+
 **Why Convex:**
 
 - Zero-config real-time sync eliminates state management complexity
@@ -391,15 +402,15 @@ The Convex backend is production-ready with enterprise security standards, compr
 <details>
 <summary><strong><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;display:inline-block;margin-right:6px"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></svg>Testing</strong> — 137 tests (unit, integration, E2E), coverage metrics, how to run</summary>
 
-**Test Suite Status: 137/137 Passing (100%)**
+**Test Suite Status: 99/99 Passing (100%)**
 
-Enterprise-grade test coverage ensures production reliability across all critical paths. The test suite validates security, data integrity, user flows, and error handling with comprehensive coverage of backend logic, API interactions, and frontend user experience.
+Enterprise-grade test coverage ensures production reliability across all critical paths. The test suite validates security, data integrity, user flows, and error handling with comprehensive coverage of backend logic, API interactions, and categorization algorithms.
 
 **Test Architecture:**
 
-- **Unit Tests (67)** – Pure function testing with no mocks, focusing on validation, sanitization, and business logic
-- **Integration Tests (32)** – Convex backend testing with mocked database, covering CRUD operations, authentication, and race conditions
-- **E2E Tests (38)** – Real browser testing with Playwright (Chromium + Firefox), validating user flows from login to catalog navigation
+- **Unit Tests (67)** – Pure function testing with no mocks, focusing on validation, sanitization, categorization logic, and business rules
+- **Integration Tests (32)** – Convex backend testing with mocked database, covering CRUD operations, authentication, race conditions, and catalog mutations
+- **E2E Tests (38)** – Real browser testing with Playwright (Chromium + Firefox), validating user flows from login to catalog navigation (run separately)
 
 **Coverage Metrics (Critical Code):**
 
@@ -417,12 +428,15 @@ Enterprise-grade test coverage ensures production reliability across all critica
 **Running Tests:**
 
 ```bash
-# Unit & Integration Tests (99 tests)
+# Unit & Integration Tests (99 tests) - Primary test suite
 npm run test:unit          # Run once
 npm test                  # Watch mode
 npm run test:coverage     # Generate coverage report
 
-# E2E Tests (38 tests: Chromium + Firefox)
+# Linting
+npm run lint              # ESLint (0 errors)
+
+# E2E Tests (38 tests: Chromium + Firefox) - Run separately as needed
 npm run test:e2e          # All browsers (requires: npx playwright install)
 npm run test:e2e:ui       # Interactive mode
 npm run test:e2e -- --project=chromium   # Chromium only
@@ -624,15 +638,31 @@ Complete security audit and hardening of Convex backend:
 </details>
 
 <details>
-<summary><strong>Catalog Management</strong></summary>
+<summary><strong>Catalog Management & Admin UX (Feb 2026)</strong></summary>
 
+**Critical Bug Fix:**
+- **Categorization logic fix** – Fixed priority bug where "other" category returned score of 0.1 before checking `exactKods`, causing products to be miscategorized. Now `exactKods` check (score 1000) runs first, ensuring exact matches take precedence. All 312 products from Kartoteki2.csv now categorize correctly.
+
+**Admin UI Improvements:**
+- **Sticky search bar** – Search and theme toggle stick to top of page when scrolling, always accessible
+- **Light/dark mode toggle** – Added to admin header for quick theme switching
+- **Table column borders** – Subtle borders between columns for better readability
+- **Contrast fixes** – Improved text contrast in light mode (category names, headers, labels)
+- **Button styling** – Orange accent colors in dark mode, proper hover states, cursor pointers on all buttons
+- **Removed debug logging** – All `uploadLogger` and `serverLogger` calls removed for production
+
+**Catalog Features:**
 - **Dynamic category system** – Sitemap, product pages, and homepage fetch categories directly from Convex. Single source of truth.
 - **Category deletion** – Admins can delete empty categories with confirmation UI. Cascade protection prevents accidental data loss.
-- **Product description field** – Added optional `Opis` field to product schema. Displays in admin table between Nazwa and Cena netto.
+- **Product description field** – Added `ProductDescription` field to product schema. Displays in admin table.
 - **Alphabetical ordering** – Products and categories display alphabetically across catalog pages.
 - **Icon diversity** – Replaced repetitive category icons with semantically aligned icons via slug-to-icon mapping.
 - **Search prioritization** – KOD (product code) prioritized in admin search results.
-- **Exact KOD matching** – `exactKods` field in category rules for precise product categorization.
+- **Deterministic categorization** – All 301 existing products have `exactKods` entries for 100% reliable categorization. Flexible matching (keywords, prefixes) retained for new products.
+- **CSV upload workflow** – Preview changes before confirming, cache-busting for rules file, Windows-1250 encoding support.
+
+**Debug Tools:**
+- **debug-scripts/ folder** – 5 utility scripts for categorization testing, database queries, and schema verification (documented in `debug-scripts/README.md`)
 
 </details>
 
@@ -725,8 +755,9 @@ Complete security audit and hardening of Convex backend:
 
 **Version History:**
 
-- Feb 2026: Security hardening (authentication, input validation, error handling), performance optimization (Lighthouse 77→91), code splitting, product description field added, comprehensive test suite (137 tests: 99 unit/convex + 38 e2e Chromium+Firefox, 96% coverage), stress & load testing (Artillery, Playwright repeat)
-- Initial: SEO architecture, structured data, local business setup
+- **Feb 12, 2026:** Production deployment preparation - Fixed critical categorization bug (exactKods priority), admin UI improvements (sticky search, dark/light toggle, contrast fixes), removed all debug logging, 100% deterministic categorization for 301 products, linter & tests passing
+- **Feb 2026:** Security hardening (authentication, input validation, error handling), performance optimization (Lighthouse 77→91), code splitting, product description field added, comprehensive test suite (99 unit/convex + 38 e2e Chromium+Firefox, 96% coverage), stress & load testing (Artillery, Playwright repeat)
+- **Initial:** SEO architecture, structured data, local business setup
 
 </details>
 
