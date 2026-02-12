@@ -8,6 +8,7 @@ export type ProductInsert = {
   Kod: string;
   Nazwa: string;
   Opis?: string;
+  ProductDescription?: string;
   CenaNetto: string;
   KodKlasyfikacji: string;
   Uwagi: string;
@@ -40,6 +41,7 @@ export type ProductUpdateResult = {
   Kod: string;
   Nazwa: string;
   Opis?: string;
+  ProductDescription?: string;
   CenaNetto: string;
   KodKlasyfikacji: string;
   Uwagi: string;
