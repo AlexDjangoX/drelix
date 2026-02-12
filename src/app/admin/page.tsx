@@ -51,7 +51,7 @@ export default function AdminPage() {
             </p>
           )}
         </div>
-        <Button variant="outline" size="sm" onClick={logout} className="gap-2">
+        <Button variant="outline" size="sm" onClick={logout} className="gap-2 dark:text-orange-400 dark:hover:text-white">
           <LogOut className="w-4 h-4" />
           Log out
         </Button>
