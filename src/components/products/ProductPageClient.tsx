@@ -14,6 +14,7 @@ import { Navbar, Footer } from "@/components";
 import { Card, CardContent } from "@/components/ui/card";
 import { AnimateText, TwoToneHeading } from "@/components";
 import { useLanguage } from "@/context/language";
+import { ProductCardImage } from "@/components/products/ProductCardImage";
 import { productConfig } from "@/components/products/productConfig";
 import type { ProductItem } from "@/lib/types";
 import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
@@ -108,14 +109,6 @@ export default function ProductPageClient({ slug }: Props) {
     };
   }, [lightboxIndex]);
 
-  const objectContain = [
-    "gloves",
-    "polbuty",
-    "trzewiki",
-    "sandaly",
-    "kalosze",
-  ].includes(slug);
-
   if (sectionFromConvex === undefined) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -167,19 +160,7 @@ export default function ProductPageClient({ slug }: Props) {
                 tabIndex={0}
               >
                 <CardContent className="p-0">
-                  <div className="aspect-2/3 relative bg-muted flex items-center justify-center">
-                    <Image
-                      src={item.src}
-                      alt={item.name}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                      className={
-                        objectContain
-                          ? "object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300"
-                          : "object-cover object-top group-hover:scale-105 group-active:scale-100 transition-transform duration-300"
-                      }
-                    />
-                  </div>
+                  <ProductCardImage src={item.src} alt={item.name} />
                   <p className="p-2 sm:p-3 text-xs sm:text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors truncate">
                     {item.name}
                   </p>

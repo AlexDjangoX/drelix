@@ -1,3 +1,4 @@
+export { ProductCardImage } from "@/components/products/ProductCardImage";
 export { default as ProductSection } from "@/components/products/ProductSection";
 export { ProductSectionCategoryCard } from "@/components/products/ProductSectionCategoryCard";
 export { ProductSectionCategoryGrid } from "@/components/products/ProductSectionCategoryGrid";
