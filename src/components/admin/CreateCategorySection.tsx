@@ -53,7 +53,7 @@ export function CreateCategorySection() {
           variant="outline"
           size="sm"
           onClick={() => setExpanded(true)}
-          className="gap-2"
+          className="gap-2 dark:text-orange-400 dark:hover:text-white"
         >
           <Plus className="w-4 h-4" />
           Nowa kategoria
