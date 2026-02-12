@@ -22,8 +22,8 @@
     {
       "slug": "wkladki",
       "titleKey": "productNames.wkladki",
-      "keywords": ["WKŁADKI", "BUTÓW"],
-      "kodPrefixes": ["WKŁ"]
+      "keywords": ["WKŁADKI", "BUTÓW", "INSTERMA", "ALOES", "FILC", "IMPREGNOWANY"],
+      "kodPrefixes": ["WKŁ", "WKŁADKI"]
     },
     {
       "slug": "polbuty",
@@ -209,6 +209,7 @@
       "keywords": [
         "SPODNIE",
         "PIEKARSKIE",
+        "PIEKARNICZE",
         "BLUZA",
         "KUCHARSKA",
         "CHUSTA",
@@ -217,7 +218,6 @@
       ],
       "kodPrefixes": [
         "SPPBLACK",
-        "SPP",
         "BLK",
         "BLKBLACK",
         "CHUSTA",
@@ -248,7 +248,7 @@
     {
       "slug": "masks",
       "titleKey": "productNames.masks",
-      "keywords": ["PÓŁMASKA", "MASKA", "WKŁADY"],
+      "keywords": ["PÓŁMASKA", "MASKA", "WKŁADY", "POCHŁANIAJĄCE", "PRZECIWGAZOWYCH"],
       "kodPrefixes": ["MASMIDI", "MP/G", "MPZAWÓR", "WKŁADY"]
     },
     {
@@ -261,7 +261,7 @@
       "slug": "rainwear",
       "titleKey": "productNames.rainwear",
       "keywords": ["PRZECIWDESZCZOWE", "KOMPLET", "PŁASZCZ"],
-      "kodPrefixes": ["KOMP/D", "KUR", "PŁASZCZ", "SPP/D", "SPRP"]
+      "kodPrefixes": ["KOMP/D", "PŁASZCZ", "SPP/D", "SPRP"]
     },
     {
       "slug": "firstAid",
