@@ -104,10 +104,10 @@ export function ProductRow({ row }: Props) {
 
   return (
     <tr className="border-b border-border hover:bg-muted/30">
-      <td className="p-2 align-middle">
+      <td className="p-2 align-middle border-r border-border/50">
         <ImageUploadCell row={row} />
       </td>
-      <td className="p-2 align-top">
+      <td className="p-2 align-top border-r border-border/50">
         {editing ? (
           <CategorySelect
             currentSlug={draft.categorySlug ?? ''}
@@ -119,7 +119,7 @@ export function ProductRow({ row }: Props) {
         )}
       </td>
       {DISPLAY_KEYS.map(({ key }) => (
-        <td key={key} className="p-2 align-top">
+        <td key={key} className="p-2 align-top border-r border-border/50">
           {editing ? (
             <Input
               value={draft[key] ?? ''}
@@ -133,14 +133,13 @@ export function ProductRow({ row }: Props) {
           )}
         </td>
       ))}
-      <td className="p-2 align-middle">
+      <td className="p-2 align-middle border-r border-border/50">
         <div className="flex items-center gap-1">
           {confirmingDelete ? (
             <>
               <Button
-                variant="destructive"
                 size="sm"
-                className="h-7 text-xs"
+                className="h-7 text-xs bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:text-white dark:hover:bg-red-700"
                 onClick={handleDeleteConfirm}
                 disabled={deleting}
               >
@@ -148,9 +147,8 @@ export function ProductRow({ row }: Props) {
                 Usuń
               </Button>
               <Button
-                variant="ghost"
                 size="sm"
-                className="h-7 text-xs"
+                className="h-7 text-xs bg-green-600 text-white hover:bg-green-700 dark:bg-green-600 dark:text-white dark:hover:bg-green-700"
                 onClick={handleDeleteCancel}
                 disabled={deleting}
               >
@@ -160,9 +158,9 @@ export function ProductRow({ row }: Props) {
             </>
           ) : (
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
-              className="h-7 text-xs text-muted-foreground hover:text-destructive"
+              className="h-7 text-xs border-red-300 text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white dark:hover:border-red-600"
               onClick={handleDeleteClick}
               disabled={editing || deleting}
               title="Usuń produkt"
