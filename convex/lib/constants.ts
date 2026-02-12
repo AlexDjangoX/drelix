@@ -6,6 +6,7 @@ export const PRODUCT_FIELD_KEYS = [
   'Kod',
   'Nazwa',
   'Opis',
+  'ProductDescription',
   'CenaNetto',
   'KodKlasyfikacji',
   'Uwagi',
