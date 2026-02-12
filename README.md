@@ -163,7 +163,7 @@ This section documents concrete SEO implementations. Expand each subsection belo
     "postalCode": "34-100",
     "addressCountry": "PL"
   },
-  "telephone": "+48123456789",
+  "telephone": "+48 725 695 933",
   "openingHours": ["Mo-Fr 08:00-16:00"]
 }
 ```

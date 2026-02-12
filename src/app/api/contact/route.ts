@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
 /** Recipient for contact form messages (business email). */
-const CONTACT_TO_EMAIL =
-  process.env.CONTACT_TO_EMAIL ?? "annabadura7@gmail.com";
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
 export async function POST(request: Request) {
-  if (!RESEND_API_KEY || !RESEND_FROM_EMAIL) {
-    console.error("[contact] Missing RESEND_API_KEY or RESEND_FROM_EMAIL");
+  if (!RESEND_API_KEY || !RESEND_FROM_EMAIL || !CONTACT_TO_EMAIL) {
+    console.error("[contact] Missing required environment variables");
     return NextResponse.json(
       { error: "Email not configured" },
       { status: 503 },
