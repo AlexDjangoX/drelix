@@ -25,6 +25,9 @@ export {
   UploadActions,
 } from "@/components/admin/CsvUploadSection";
 
+// Luna mascot (admin welcome)
+export { LunaMascot } from "@/components/admin/LunaMascot";
+
 // Other admin components
 export { CategoryLabel } from "@/components/admin/CategoryLabel";
 export { CategorySelect } from "@/components/admin/CategorySelect";

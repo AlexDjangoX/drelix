@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   CsvUploadSection,
   CatalogTable,
@@ -9,6 +10,13 @@ import {
   AdminHeader,
 } from "@/components/admin";
 import { useCsvPreview, useCatalogFilter } from "@/components/admin/hooks";
+
+// Lazy load Luna (heavy assets, admin-only). No SSR so it never appears in initial HTML or crawler response.
+const LunaMascot = dynamic(
+  () =>
+    import("@/components/admin/LunaMascot").then((m) => ({ default: m.LunaMascot })),
+  { ssr: false }
+);
 
 export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,6 +54,8 @@ export default function AdminPage() {
         loading={catalogLoading}
         onLogout={logout}
       />
+
+      <LunaMascot />
 
       {!previewSections && <CreateCategorySection />}
 
