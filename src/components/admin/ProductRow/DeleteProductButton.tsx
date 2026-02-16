@@ -73,9 +73,10 @@ export function DeleteProductButton({ kod, disabled }: Props) {
 
   return (
     <Button
+      type="button"
       variant="outline"
       size="sm"
-      className="h-7 text-xs border-red-300 text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white dark:hover:border-red-600"
+      className="h-8 text-xs border-red-300 text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 dark:border-red-700 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white dark:hover:border-red-600 dark:hover:shadow-md"
       onClick={handleDeleteClick}
       disabled={disabled}
       title="Usuń produkt"

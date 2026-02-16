@@ -26,7 +26,7 @@ export function ProductGridCard({ item, onClick }: Props) {
             {item.price ? (
               <span className="text-sm font-medium text-primary">
                 {item.price} zł{" "}
-                <span className="text-muted-foreground font-normal">netto</span>
+                <span className="text-muted-foreground font-normal">brutto</span>
                 {item.unit ? ` / ${item.unit}` : null}
               </span>
             ) : item.unit ? (

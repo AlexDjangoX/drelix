@@ -9,7 +9,13 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
-      include: ["convex/lib/**/*.ts", "src/lib/process-csv/**/*.ts"],
+      include: [
+        "convex/lib/**/*.ts",
+        "src/lib/process-csv/**/*.ts",
+        "src/lib/utils.ts",
+        "src/lib/price.ts",
+        "src/lib/sanitizeHtml.ts",
+      ],
       exclude: [
         "**/*.test.ts",
         "**/*.test.tsx",
@@ -32,6 +38,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "convex/_generated/api": path.resolve(__dirname, "./convex/_generated/api.js"),
     },
   },
 });

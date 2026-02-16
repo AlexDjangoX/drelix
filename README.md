@@ -345,11 +345,19 @@ Convex powers the entire product catalog with production-ready security, real-ti
 - Search & filter: Real-time search by product code or name
 - Audit trail: All operations logged with error tracking
 
+**Product descriptions & lightbox:**
+
+- **Rich descriptions** – Optional `Heading`, `Subheading`, and `Description` (HTML) per product. Description supports pasted content from client sites: structure (paragraphs, bold, lists) and inline styles are preserved; stored and displayed as HTML.
+- **Admin UX** – Description is edited in a contenteditable field: admins see formatted text (no raw tags). Paste from a product page (Ctrl+V) uses clipboard `text/html` so formatting is kept. HTML is sanitized on paste and on display (DOMPurify; allowlist of tags + `style`). Max length 100,000 characters.
+- **Lightbox** – Product detail overlay: image (top half), scrollable description block (only when Description is set; shows only the description content), and fixed orange strip at bottom (name + price). Description respects dark/light theme via `.theme-override-rich` (overrides pasted inline colors).
+- **Form data** – Edit modal loads product by Kod via `getProductItemByKod` so the form always shows latest DB data (including Description). Full technical review: `docs/PRODUCT-DESCRIPTION-LIGHTBOX-IMPLEMENTATION.md`.
+
 **Data Model:**
 
 ```
 products (table)
   - Kod, Nazwa, Opis, CenaNetto, JednostkaMiary, StawkaVAT
+  - ProductDescription, Heading, Subheading, Description (optional; Description may contain HTML)
   - categorySlug (indexed), imageStorageId, thumbnailStorageId
   - indexes: by_kod, by_category
 
@@ -638,6 +646,16 @@ Complete security audit and hardening of Convex backend:
 </details>
 
 <details>
+<summary><strong>Product Descriptions & Lightbox (Feb 2026)</strong></summary>
+
+- **Rich product descriptions** – Products support optional `Heading`, `Subheading`, and `Description`. Description can contain HTML (paragraphs, bold, lists, inline colors) pasted from client product pages.
+- **Admin:** Contenteditable Description field shows formatted text; paste uses clipboard `text/html` so structure is preserved. Sanitization via DOMPurify (allowlist tags + `style`). Description max 100,000 characters.
+- **Lightbox:** Image (top half), scrollable description block (only the description content; no subheading/price there), orange strip at bottom (name + price). Description block respects dark/light theme (`.theme-override-rich` overrides pasted colors).
+- **Edit form:** Modal loads product with `getProductItemByKod` so form always has latest DB data. Full implementation doc: `docs/PRODUCT-DESCRIPTION-LIGHTBOX-IMPLEMENTATION.md`.
+
+</details>
+
+<details>
 <summary><strong>Catalog Management & Admin UX (Feb 2026)</strong></summary>
 
 **Critical Bug Fix:**
@@ -741,6 +759,7 @@ Complete security audit and hardening of Convex backend:
 | Add product category           | `src/lib/catalog/catalogCategories.ts`, `src/components/products/productConfig.ts` |
 | Change crawl policy            | `src/lib/seo/robotsContent.ts`                                                     |
 | View sitemap URLs              | `/sitemap.xml` or `src/app/sitemap.ts`                                             |
+| Product description / lightbox | `docs/PRODUCT-DESCRIPTION-LIGHTBOX-IMPLEMENTATION.md`, `src/lib/sanitizeHtml.ts`, `src/components/products/ProductLightbox/LightboxContent.tsx` |
 
 </details>
 
@@ -759,6 +778,7 @@ Complete security audit and hardening of Convex backend:
 
 **Version History:**
 
+- **Feb 2026:** Rich product descriptions & lightbox – Optional Heading/Subheading/Description (HTML), admin contenteditable with paste-from-webpage (clipboard HTML), DOMPurify sanitization, lightbox (image / description / orange strip), theme override for dark/light mode, `getProductItemByKod` for fresh edit form data. Implementation doc: `docs/PRODUCT-DESCRIPTION-LIGHTBOX-IMPLEMENTATION.md`.
 - **Feb 12, 2026:** Production deployment preparation - Fixed critical categorization bug (exactKods priority), admin UI improvements (sticky search, dark/light toggle, contrast fixes), removed all debug logging, 100% deterministic categorization for 301 products, linter & tests passing
 - **Feb 2026:** Security hardening (authentication, input validation, error handling), performance optimization (Lighthouse 77→91), code splitting, product description field added, comprehensive test suite (99 unit/convex + 38 e2e Chromium+Firefox, 96% coverage), stress & load testing (Artillery, Playwright repeat)
 - **Initial:** SEO architecture, structured data, local business setup

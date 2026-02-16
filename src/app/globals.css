@@ -123,6 +123,21 @@
 }
 
 @layer utilities {
+  /**
+   * Force rich content (e.g. product description) to use theme text/background
+   * so dark/light mode works. Overrides pasted inline color/background with !important.
+   */
+  .theme-override-rich,
+  .theme-override-rich * {
+    color: hsl(var(--foreground)) !important;
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  .theme-override-rich *::before,
+  .theme-override-rich *::after {
+    background-color: transparent !important;
+  }
+
   .text-gradient {
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-primary);

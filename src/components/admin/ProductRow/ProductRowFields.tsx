@@ -18,20 +18,30 @@ export function ProductRowFields({
 }: Props) {
   return (
     <>
-      {DISPLAY_KEYS.map(({ key }) => (
-        <td key={key} className="p-2 align-top border-r border-border/50">
-          {editing ? (
-            <Input
-              value={draft[key] ?? ""}
-              onChange={(e) => onFieldChange(key, e.target.value)}
-              className="h-8 text-sm"
-              disabled={saving}
-            />
-          ) : (
-            <span className="text-sm">{row[key] ?? "—"}</span>
-          )}
-        </td>
-      ))}
+      {DISPLAY_KEYS.map(({ key }) => {
+        const isPriceWithUnit = key === "CenaNetto";
+        const source = editing ? draft : row;
+        const displayValue = isPriceWithUnit
+          ? (source.CenaNetto ?? "—") + (source.JednostkaMiary ? " / " + source.JednostkaMiary : "")
+          : source[key] ?? "—";
+        return (
+          <td
+            key={key}
+            className="p-2 align-middle border-r border-border/50 text-center"
+          >
+            {editing && !isPriceWithUnit ? (
+              <Input
+                value={draft[key] ?? ""}
+                onChange={(e) => onFieldChange(key, e.target.value)}
+                className="h-8 text-sm"
+                disabled={saving}
+              />
+            ) : (
+              <span className="text-sm">{displayValue}</span>
+            )}
+          </td>
+        );
+      })}
     </>
   );
 }

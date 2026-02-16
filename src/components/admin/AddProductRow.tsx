@@ -70,7 +70,7 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
     setRow(EMPTY_ROW);
   };
 
-  const colCount = 2 + DISPLAY_KEYS.length + 2; // Photo, Category, DISPLAY_KEYS, Delete, Actions
+  const colCount = 1 + DISPLAY_KEYS.length + 1; // Photo, DISPLAY_KEYS, Actions
 
   if (!expanded) {
     return (

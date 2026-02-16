@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProductCardImage } from "@/components/products/ProductCardImage";
 import type { CatalogRow } from "@/lib/types";
+import { computeBruttoPrice } from "@/lib/price";
 import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
 
 type Props = { row: CatalogRow; index: number };
@@ -47,9 +48,13 @@ export function ProductCard({ row, index }: Props) {
             <div className="mt-2 flex items-baseline gap-2 flex-wrap">
               {row.CenaNetto ? (
                 <span className="text-sm font-medium text-primary">
-                  {row.CenaNetto} zł{" "}
+                  {computeBruttoPrice(
+                    row.CenaNetto,
+                    row.StawkaVAT ?? "",
+                  ) || row.CenaNetto}{" "}
+                  zł{" "}
                   <span className="text-muted-foreground font-normal">
-                    netto
+                    brutto
                   </span>
                 </span>
               ) : null}

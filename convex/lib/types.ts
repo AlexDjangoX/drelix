@@ -14,6 +14,9 @@ export type ProductInsert = {
   Uwagi: string;
   OstatniaCenaZakupu: string;
   OstatniaDataZakupu: string;
+  Heading?: string;
+  Subheading?: string;
+  Description?: string;
   categorySlug: string;
   imageStorageId?: string;
   thumbnailStorageId?: string;
@@ -47,6 +50,9 @@ export type ProductUpdateResult = {
   Uwagi: string;
   OstatniaCenaZakupu: string;
   OstatniaDataZakupu: string;
+  Heading?: string;
+  Subheading?: string;
+  Description?: string;
   categorySlug: string;
   imageStorageId?: string;
   thumbnailStorageId?: string;

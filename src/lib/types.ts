@@ -37,14 +37,16 @@ export type ProductItem = {
   name: string;
   price?: string;
   unit?: string;
+  /** Display in lightbox (overrides name when set). */
+  heading?: string;
+  subheading?: string;
+  description?: string;
 };
 
 /** Admin product table column config (label + field key). */
 export const DISPLAY_KEYS = [
   { label: "Kod", key: "Kod" },
   { label: "Nazwa", key: "Nazwa" },
-  { label: "Product Description", key: "ProductDescription" },
-  { label: "Cena netto", key: "CenaNetto" },
-  { label: "Jednostka miary", key: "JednostkaMiary" },
+  { label: "Cena / jedn. miary", key: "CenaNetto" },
   { label: "Stawka VAT", key: "StawkaVAT" },
 ] as const;

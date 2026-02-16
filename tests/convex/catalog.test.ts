@@ -311,6 +311,95 @@ describe("catalog mutations with seeded data", () => {
     ).rejects.toThrow("cannot be empty");
   });
 
+  it("updateProduct accepts payload shaped like Edit Product form", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "cat-a",
+      displayName: "Category A",
+    });
+    await t.mutation(api.catalog.createCategory, {
+      slug: "cat-b",
+      displayName: "Category B",
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: "cat-a",
+      row: {
+        Rodzaj: "T",
+        JednostkaMiary: "szt",
+        StawkaVAT: "23",
+        Kod: "FORM-001",
+        Nazwa: "Original",
+        Opis: "",
+        ProductDescription: "",
+        CenaNetto: "10.00",
+        KodKlasyfikacji: "X",
+        Uwagi: "",
+        OstatniaCenaZakupu: "9",
+        OstatniaDataZakupu: "2024-01-01",
+      },
+    });
+    const updates: Record<string, string> = {
+      Nazwa: "Updated name",
+      ProductDescription: "Short product desc",
+      CenaNetto: "33.33",
+      JednostkaMiary: "kg",
+      StawkaVAT: "8",
+      categorySlug: "cat-b",
+      Heading: "Custom heading",
+      Subheading: "Custom sub",
+      Description: "<p>Rich <strong>HTML</strong> description</p>",
+    };
+    const result = await t.mutation(api.catalog.updateProduct, {
+      kod: "FORM-001",
+      updates,
+    });
+    expect(result.Nazwa).toBe(updates.Nazwa);
+    expect(result.ProductDescription).toBe(updates.ProductDescription);
+    expect(result.CenaNetto).toBe(updates.CenaNetto);
+    expect(result.JednostkaMiary).toBe(updates.JednostkaMiary);
+    expect(result.StawkaVAT).toBe(updates.StawkaVAT);
+    expect(result.categorySlug).toBe(updates.categorySlug);
+    expect(result.Heading).toBe(updates.Heading);
+    expect(result.Subheading).toBe(updates.Subheading);
+    expect(result.Description).toBe(updates.Description);
+  });
+
+  it("updateProduct ignores keys not in ALLOWED_UPDATE_KEYS", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "test",
+      displayName: "Test",
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: "test",
+      row: {
+        Rodzaj: "T",
+        JednostkaMiary: "szt",
+        StawkaVAT: "23",
+        Kod: "IGNORE-001",
+        Nazwa: "Original",
+        Opis: "",
+        ProductDescription: "",
+        CenaNetto: "10.00",
+        KodKlasyfikacji: "X",
+        Uwagi: "",
+        OstatniaCenaZakupu: "9",
+        OstatniaDataZakupu: "2024-01-01",
+      },
+    });
+    const result = await t.mutation(api.catalog.updateProduct, {
+      kod: "IGNORE-001",
+      updates: {
+        Nazwa: "Updated",
+        NotAnAllowedKey: "ignored",
+        AlsoNotAllowed: "ignored",
+      },
+    });
+    expect(result.Nazwa).toBe("Updated");
+    expect((result as Record<string, unknown>)["NotAnAllowedKey"]).toBeUndefined();
+    expect((result as Record<string, unknown>)["AlsoNotAllowed"]).toBeUndefined();
+  });
+
   it("updateProduct with empty updates returns unchanged product", async () => {
     const t = convexTest(schema, modules);
     await t.mutation(api.catalog.createCategory, {

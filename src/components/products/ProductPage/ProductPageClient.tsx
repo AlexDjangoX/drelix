@@ -10,6 +10,7 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { ProductLightbox } from "@/components/products/ProductLightbox";
 import { productConfig } from "@/components/products/productConfig";
 import type { ProductItem } from "@/lib/types";
+import { computeBruttoPrice } from "@/lib/price";
 import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { api } from "convex/_generated/api";
@@ -53,14 +54,21 @@ export function ProductPageClient({ slug }: Props) {
 
   const items: ProductItem[] = useMemo(() => {
     if (!sectionFromConvex) return [];
-    return sectionFromConvex.items.map((row) => ({
-      id: row[COD] ?? "",
-      src: row.thumbnailUrl || row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
-      largeSrc: row.imageUrl || row.thumbnailUrl || PLACEHOLDER_PRODUCT_IMAGE,
-      name: row.Nazwa ?? "",
-      price: row.CenaNetto ?? "",
-      unit: row.JednostkaMiary ?? "",
-    }));
+    return sectionFromConvex.items.map((row) => {
+      const netto = row.CenaNetto ?? "";
+      const brutto = computeBruttoPrice(netto, row.StawkaVAT ?? "");
+      return {
+        id: row[COD] ?? "",
+        src: row.thumbnailUrl || row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
+        largeSrc: row.imageUrl || row.thumbnailUrl || PLACEHOLDER_PRODUCT_IMAGE,
+        name: row.Nazwa ?? "",
+        price: brutto || netto,
+        unit: row.JednostkaMiary ?? "",
+        heading: row.Heading?.trim() || undefined,
+        subheading: row.Subheading?.trim() || undefined,
+        description: row.Description?.trim() || undefined,
+      };
+    });
   }, [sectionFromConvex]);
 
   const openLightbox = useCallback(

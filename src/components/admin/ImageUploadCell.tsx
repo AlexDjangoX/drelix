@@ -175,14 +175,14 @@ export function ImageUploadCell({ row }: Props) {
           const file = e.dataTransfer.files?.[0];
           if (file) handleUpload(file);
         }}
-        className={`relative w-16 h-16 shrink-0 rounded border-2 border-dashed flex items-center justify-center overflow-hidden transition-colors ${
+        className={`relative w-48 h-48 shrink-0 rounded border-2 border-dashed flex items-center justify-center overflow-hidden transition-colors ${
           dragOver
             ? "border-primary bg-primary/10"
             : "border-muted-foreground/30"
         }`}
       >
         {uploading || deleting ? (
-          <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+          <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
         ) : (
           <Image src={displayThumb} alt={nazwa} fill className="object-cover" />
         )}

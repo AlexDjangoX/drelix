@@ -1,4 +1,4 @@
-/** Product field keys (single source of truth). Kartoteki CSV columns. */
+/** Product field keys (single source of truth). Kartoteki CSV columns + display fields. */
 export const PRODUCT_FIELD_KEYS = [
   "Rodzaj",
   "JednostkaMiary",
@@ -12,6 +12,9 @@ export const PRODUCT_FIELD_KEYS = [
   "Uwagi",
   "OstatniaCenaZakupu",
   "OstatniaDataZakupu",
+  "Heading",
+  "Subheading",
+  "Description",
 ] as const;
 
 export type ProductFieldKey = (typeof PRODUCT_FIELD_KEYS)[number];

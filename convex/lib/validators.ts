@@ -14,6 +14,10 @@ export const productFieldValidators = {
   Uwagi: v.string(),
   OstatniaCenaZakupu: v.string(),
   OstatniaDataZakupu: v.string(),
+  /** Display fields for product page (optional). */
+  Heading: v.optional(v.string()),
+  Subheading: v.optional(v.string()),
+  Description: v.optional(v.string()),
 };
 
 /** Single product row from CSV or "Add product" form. */

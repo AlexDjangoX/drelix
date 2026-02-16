@@ -68,6 +68,20 @@ export const listCategorySlugs = query({
   },
 });
 
+/** Get one product as catalog item by Kod (for admin edit form so form always has latest DB data). */
+export const getProductItemByKod = query({
+  args: { kod: v.string() },
+  handler: async (ctx, { kod }) => {
+    if (!kod.trim()) return null;
+    const product = await ctx.db
+      .query("products")
+      .withIndex("by_kod", (q) => q.eq("Kod", kod.trim()))
+      .unique();
+    if (!product) return null;
+    return productToItem(ctx, product);
+  },
+});
+
 /** Get one category's products (for /products/[slug] when migrated from placeholder). */
 export const getCatalogSection = query({
   args: { slug: v.string() },

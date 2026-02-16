@@ -13,7 +13,12 @@ tests/
 │   ├── authHelpers.test.ts
 │   ├── catalogCategorize.test.ts
 │   ├── errorMessages.test.ts
-│   └── helpers-storage.test.ts
+│   ├── helpers-storage.test.ts
+│   ├── price.test.ts           # Brutto price computation
+│   ├── sanitizeHtml.test.ts    # Product description HTML sanitization & XSS
+│   ├── editProductSchema.test.ts  # Edit Product form validation (Zod)
+│   ├── editProductFormBackendContract.test.ts  # Form update keys ⊆ ALLOWED_UPDATE_KEYS
+│   └── EditProductModal.test.tsx               # Form wiring: zod blocks submit when Nazwa empty
 ├── convex/               # Convex function tests (convex-test mock)
 │   ├── auth.test.ts
 │   ├── catalog.test.ts
@@ -70,7 +75,7 @@ Convex tests use `convex-test` (mock backend) because Convex functions require `
 
 ## Unit Tests
 
-Unit tests cover pure logic with **no mocks** (67 tests):
+Unit tests cover pure logic with **no mocks**:
 
 - `convexAuth` (25 tests): sanitizeString, validateSlug, validateRateLimitKey, requireAdmin, isAdmin - comprehensive edge cases and validation
 - `convexHelpers` (14 tests): sortCategories, sortItemsByNazwa, toProductInsert, filterAllowedUpdates, productToUpdateResult - data transformation and system field stripping
@@ -78,12 +83,17 @@ Unit tests cover pure logic with **no mocks** (67 tests):
 - `catalogCategorize` (6 tests): categorizeCatalog - grouping, exclusions, exact KOD matching
 - `errorMessages` (12 tests): PUBLIC_ERRORS, ADMIN_ERRORS, sanitizeErrorForPublic, logError - error sanitization and logging
 - `helpers-storage` (5 tests): deleteProductImages - error recovery, partial failures, Promise.allSettled resilience
+- `price` (6 tests): computeBruttoPrice - netto + VAT to brutto, comma decimals, invalid input, formatting
+- `sanitizeHtml` (23 tests): sanitizeProductDescriptionHtml, isHtml - XSS stripping (script, events, javascript:), allowed tags/style, plain text→HTML (paragraphs, lists, **bold**), escaping, edge cases
+- `editProductSchema` (22 tests): Edit Product form Zod schema - required fields (Kod, Nazwa, categorySlug), max lengths (500/50/100/100k), optional fields, type safety
+- `editProductFormBackendContract` (2 tests): Every key the Edit Product form sends to updateProduct is in Convex ALLOWED_UPDATE_KEYS; form does not send Kod
+- `EditProductModal` (2 tests, component): useForm + zodResolver – validation blocks submit when Nazwa is empty (mutation not called, error message shown); no error before submit when valid
 
 ## Convex Integration Tests
 
 Convex tests (32 tests) use `convex-test` mock backend:
 
-- **Catalog mutations** (22 tests): CRUD operations, error cases, duplicate handling, cascade protection, Opis field support, validation errors, empty updates, slug normalization
+- **Catalog mutations** (24 tests): CRUD operations, error cases, duplicate handling, cascade protection, Opis field support, validation errors, empty updates, slug normalization; **updateProduct accepts payload shaped like Edit Product form** (all form keys applied); **updateProduct ignores keys not in ALLOWED_UPDATE_KEYS**
 - **Auth mutations** (6 tests): Rate limiting, lockout after 5 attempts, validation errors, key format checks, clear attempts
 - **Integration workflows** (4 tests): Full admin workflow, catalog replacement, multi-product sorting, category ordering
 
@@ -95,7 +105,7 @@ E2E tests (38 tests: 19 specs × Chromium + Firefox) use Playwright for real bro
 - **Home page** (7 tests): Layout, meta tags, products section, navbar, scroll progress, language toggle, hero section
 - **Products catalog** (6 tests): Page title, categories grid (with empty state handling), category cards, navigation, breadcrumbs
 
-## Coverage (137 Tests Total)
+## Coverage (156+ Tests Total)
 
 **Production Security Code Coverage (Non-Duplicate Files):**
 

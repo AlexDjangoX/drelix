@@ -1,60 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { Pencil, Save, X, Loader2 } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 type Props = {
-  editing: boolean;
-  saving: boolean;
-  error: string | null;
   onEdit: () => void;
-  onSave: () => void;
-  onCancel: () => void;
 };
 
-export function ProductRowActions({
-  editing,
-  saving,
-  error,
-  onEdit,
-  onSave,
-  onCancel,
-}: Props) {
+export function ProductRowActions({ onEdit }: Props) {
   return (
-    <td className="p-2 align-top text-right">
-      {error && (
-        <span className="text-xs text-destructive mr-2" role="alert">
-          {error}
-        </span>
-      )}
-      {editing ? (
-        <span className="flex gap-1 justify-end">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={onCancel}
-            disabled={saving}
-            aria-label="Cancel"
-          >
-            <X className="w-4 h-4" />
-          </Button>
-          <Button
-            size="sm"
-            onClick={onSave}
-            disabled={saving}
-            className="gap-1"
-          >
-            {saving ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            Save
-          </Button>
-        </span>
-      ) : (
-        <Button size="sm" variant="ghost" onClick={onEdit} aria-label="Edit">
-          <Pencil className="w-4 h-4" />
-        </Button>
-      )}
-    </td>
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      className="h-8 text-xs border-green-300 text-green-600 hover:bg-green-600 hover:text-white hover:border-green-600 hover:shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 dark:border-green-600 dark:text-green-400 dark:hover:bg-green-600 dark:hover:text-white dark:hover:border-green-600 dark:hover:shadow-md"
+      onClick={onEdit}
+      title="Edytuj produkt"
+    >
+      <Pencil className="w-3.5 h-3.5 mr-1" />
+      Edytuj
+    </Button>
   );
 }

@@ -8,9 +8,15 @@ type Props = {
   currentSlug: string;
   onSelect: (slug: string) => void;
   disabled?: boolean;
+  id?: string;
 };
 
-export function CategorySelect({ currentSlug, onSelect, disabled }: Props) {
+export function CategorySelect({
+  currentSlug,
+  onSelect,
+  disabled,
+  id,
+}: Props) {
   const categories = useQuery(api.catalog.listCategories);
   const { t } = useLanguage();
 
@@ -37,6 +43,7 @@ export function CategorySelect({ currentSlug, onSelect, disabled }: Props) {
 
   return (
     <select
+      id={id}
       value={currentSlug}
       onChange={(e) => onSelect(e.target.value)}
       disabled={disabled}
