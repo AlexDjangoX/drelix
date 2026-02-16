@@ -20,6 +20,7 @@ export type ProductInsert = {
   categorySlug: string;
   imageStorageId?: string;
   thumbnailStorageId?: string;
+  imageEntries?: ProductImageEntry[];
 };
 
 /** Product document from Convex. */
@@ -56,12 +57,20 @@ export type ProductUpdateResult = {
   categorySlug: string;
   imageStorageId?: string;
   thumbnailStorageId?: string;
+  imageEntries?: ProductImageEntry[];
+};
+
+/** Single image entry (large + optional thumbnail). */
+export type ProductImageEntry = {
+  imageStorageId: string;
+  thumbnailStorageId?: string;
 };
 
 /** Image storage IDs preserved during catalog replace. */
 export type ProductImageIds = {
   imageStorageId?: string;
   thumbnailStorageId?: string;
+  imageEntries?: ProductImageEntry[];
 };
 
 /** Standard success response for mutations. */

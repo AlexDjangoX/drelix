@@ -9,7 +9,7 @@ import { useLanguage } from "@/context/language";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { ProductLightbox } from "@/components/products/ProductLightbox";
 import { productConfig } from "@/components/products/productConfig";
-import type { ProductItem } from "@/lib/types";
+import type { ProductItem, ProductImageUrl } from "@/lib/types";
 import { computeBruttoPrice } from "@/lib/price";
 import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
 import { useQuery } from "convex/react";
@@ -50,17 +50,44 @@ export function ProductPageClient({ slug }: Props) {
     titleKey,
     slug,
   );
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [lightboxProductIndex, setLightboxProductIndex] = useState<
+    number | null
+  >(null);
+  const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
 
   const items: ProductItem[] = useMemo(() => {
     if (!sectionFromConvex) return [];
     return sectionFromConvex.items.map((row) => {
       const netto = row.CenaNetto ?? "";
       const brutto = computeBruttoPrice(netto, row.StawkaVAT ?? "");
+      let images: ProductItem["images"];
+      try {
+        const parsed =
+          typeof row.imagesJson === "string" && row.imagesJson
+            ? (JSON.parse(row.imagesJson) as ProductImageUrl[])
+            : [];
+        if (Array.isArray(parsed) && parsed.length > 0)
+          images = parsed;
+      } catch {
+        images = undefined;
+      }
+      const firstUrl =
+        images?.[0]?.thumbnailUrl ||
+        images?.[0]?.imageUrl ||
+        row.thumbnailUrl ||
+        row.imageUrl ||
+        PLACEHOLDER_PRODUCT_IMAGE;
+      const firstLarge =
+        images?.[0]?.imageUrl ||
+        images?.[0]?.thumbnailUrl ||
+        row.imageUrl ||
+        row.thumbnailUrl ||
+        PLACEHOLDER_PRODUCT_IMAGE;
       return {
         id: row[COD] ?? "",
-        src: row.thumbnailUrl || row.imageUrl || PLACEHOLDER_PRODUCT_IMAGE,
-        largeSrc: row.imageUrl || row.thumbnailUrl || PLACEHOLDER_PRODUCT_IMAGE,
+        src: firstUrl,
+        largeSrc: firstLarge,
+        images,
         name: row.Nazwa ?? "",
         price: brutto || netto,
         unit: row.JednostkaMiary ?? "",
@@ -72,20 +99,49 @@ export function ProductPageClient({ slug }: Props) {
   }, [sectionFromConvex]);
 
   const openLightbox = useCallback(
-    (index: number) => setLightboxIndex(index),
+    (productIndex: number, imageIndex = 0) => {
+      setLightboxProductIndex(productIndex);
+      setLightboxImageIndex(imageIndex);
+    },
     [],
   );
-  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const closeLightbox = useCallback(() => {
+    setLightboxProductIndex(null);
+    setLightboxImageIndex(0);
+  }, []);
 
-  const goPrev = useCallback(() => {
-    setLightboxIndex((i) =>
-      i === null ? null : (i - 1 + items.length) % items.length,
-    );
-  }, [items.length]);
+  /** Navigate to previous product only. Resets to first image of that product. */
+  const goPrevProduct = useCallback(() => {
+    if (lightboxProductIndex === null || lightboxProductIndex <= 0) return;
+    setLightboxProductIndex((i) => i! - 1);
+    setLightboxImageIndex(0);
+  }, [lightboxProductIndex]);
 
-  const goNext = useCallback(() => {
-    setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length));
-  }, [items.length]);
+  /** Navigate to next product only. Resets to first image of that product. */
+  const goNextProduct = useCallback(() => {
+    if (lightboxProductIndex === null || lightboxProductIndex >= items.length - 1)
+      return;
+    setLightboxProductIndex((i) => i! + 1);
+    setLightboxImageIndex(0);
+  }, [lightboxProductIndex, items.length]);
+
+  /** Navigate to previous image within the current product only. */
+  const goPrevImage = useCallback(() => {
+    if (lightboxProductIndex === null) return;
+    setLightboxImageIndex((i) => Math.max(0, i - 1));
+  }, [lightboxProductIndex]);
+
+  /** Navigate to next image within the current product only. */
+  const goNextImage = useCallback(() => {
+    if (lightboxProductIndex === null) return;
+    const item = items[lightboxProductIndex];
+    const imageCount = item?.images?.length ?? 1;
+    setLightboxImageIndex((i) => Math.min(imageCount - 1, i + 1));
+  }, [items, lightboxProductIndex]);
+
+  const goToImage = useCallback((index: number) => {
+    setLightboxImageIndex(Math.max(0, index));
+  }, []);
 
   if (sectionFromConvex === undefined) {
     return (
@@ -132,13 +188,17 @@ export function ProductPageClient({ slug }: Props) {
       </main>
       <Footer />
 
-      {lightboxIndex !== null && (
+      {lightboxProductIndex !== null && (
         <ProductLightbox
           items={items}
-          currentIndex={lightboxIndex}
+          currentProductIndex={lightboxProductIndex}
+          currentImageIndex={lightboxImageIndex}
           onClose={closeLightbox}
-          onPrev={goPrev}
-          onNext={goNext}
+          onPrevProduct={goPrevProduct}
+          onNextProduct={goNextProduct}
+          onPrevImage={goPrevImage}
+          onNextImage={goNextImage}
+          onGoToImage={goToImage}
         />
       )}
     </div>

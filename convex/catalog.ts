@@ -5,7 +5,11 @@ import {
   sectionValidator,
   categorySeedValidator,
 } from "./lib/validators";
-import type { CatalogSection, MutationSuccess } from "./lib/types";
+import type {
+  CatalogSection,
+  MutationSuccess,
+  ProductImageIds,
+} from "./lib/types";
 import {
   CUSTOM_CATEGORY_TITLE_KEY,
   CATALOG_MEMORY_WARNING_THRESHOLD,
@@ -16,6 +20,7 @@ import {
   getProductByKod,
   productToItem,
   deleteProductImages,
+  getProductImageEntries,
   toProductInsert,
   filterAllowedUpdates,
   productToUpdateResult,
@@ -145,7 +150,113 @@ export const generateUploadUrl = mutation(async (ctx) => {
   return await ctx.storage.generateUploadUrl();
 });
 
-/** Update a product's image storage IDs (large + optional thumbnail). (Admin only) */
+const imageEntryValidator = v.object({
+  imageStorageId: v.string(),
+  thumbnailStorageId: v.optional(v.string()),
+});
+
+/** Set all images for a product. Replaces existing; deletes from storage any IDs no longer in the list. (Admin only) */
+export const setProductImages = mutation({
+  args: {
+    kod: v.string(),
+    images: v.array(imageEntryValidator),
+  },
+  handler: async (ctx, { kod, images }) => {
+    await requireAdmin(ctx);
+    const validatedKod = sanitizeString(kod, 100, "Product code");
+    const product = await getProductByKod(ctx, validatedKod);
+    const currentEntries = getProductImageEntries(product);
+    const newIds = new Set<string>();
+    for (const img of images) {
+      newIds.add(sanitizeString(img.imageStorageId, 500, "Storage ID"));
+      if (img.thumbnailStorageId)
+        newIds.add(
+          sanitizeString(img.thumbnailStorageId, 500, "Thumbnail storage ID"),
+        );
+    }
+    const toDelete: string[] = [];
+    for (const e of currentEntries) {
+      if (!newIds.has(e.imageStorageId)) toDelete.push(e.imageStorageId);
+      if (e.thumbnailStorageId && !newIds.has(e.thumbnailStorageId))
+        toDelete.push(e.thumbnailStorageId);
+    }
+    if (!currentEntries.length && product.imageStorageId)
+      toDelete.push(product.imageStorageId);
+    if (!currentEntries.length && product.thumbnailStorageId)
+      toDelete.push(product.thumbnailStorageId);
+    await Promise.allSettled(toDelete.map((id) => ctx.storage.delete(id)));
+    const imageEntries = images.map((img) => ({
+      imageStorageId: sanitizeString(img.imageStorageId, 500, "Storage ID"),
+      thumbnailStorageId: img.thumbnailStorageId
+        ? sanitizeString(img.thumbnailStorageId, 500, "Thumbnail storage ID")
+        : undefined,
+    }));
+    await ctx.db.patch(product._id, {
+      imageEntries,
+      imageStorageId: undefined,
+      thumbnailStorageId: undefined,
+    });
+    return { ok: true } as MutationSuccess;
+  },
+});
+
+/** Append one image to a product. (Admin only) */
+export const addProductImage = mutation({
+  args: {
+    kod: v.string(),
+    storageId: v.string(),
+    thumbnailStorageId: v.optional(v.string()),
+  },
+  handler: async (ctx, { kod, storageId, thumbnailStorageId }) => {
+    await requireAdmin(ctx);
+    const validatedKod = sanitizeString(kod, 100, "Product code");
+    const validatedStorageId = sanitizeString(storageId, 500, "Storage ID");
+    const product = await getProductByKod(ctx, validatedKod);
+    const entries = getProductImageEntries(product);
+    const newEntry = {
+      imageStorageId: validatedStorageId,
+      thumbnailStorageId:
+        thumbnailStorageId !== undefined
+          ? sanitizeString(thumbnailStorageId, 500, "Thumbnail storage ID")
+          : undefined,
+    };
+    const imageEntries = [...entries, newEntry];
+    await ctx.db.patch(product._id, {
+      imageEntries,
+      imageStorageId: undefined,
+      thumbnailStorageId: undefined,
+    });
+    return { ok: true } as MutationSuccess;
+  },
+});
+
+/** Remove one image at index from a product and delete it from storage. (Admin only) */
+export const removeProductImage = mutation({
+  args: { kod: v.string(), index: v.number() },
+  handler: async (ctx, { kod, index }) => {
+    await requireAdmin(ctx);
+    const validatedKod = sanitizeString(kod, 100, "Product code");
+    const product = await getProductByKod(ctx, validatedKod);
+    const entries = getProductImageEntries(product);
+    if (index < 0 || index >= entries.length) {
+      throw new Error(ADMIN_ERRORS.PRODUCT_NOT_FOUND(validatedKod));
+    }
+    const [removed] = entries.splice(index, 1);
+    const toDelete = [
+      removed.imageStorageId,
+      ...(removed.thumbnailStorageId ? [removed.thumbnailStorageId] : []),
+    ];
+    await Promise.allSettled(toDelete.map((id) => ctx.storage.delete(id)));
+    await ctx.db.patch(product._id, {
+      imageEntries: entries.length > 0 ? entries : [],
+      imageStorageId: undefined,
+      thumbnailStorageId: undefined,
+    });
+    return { ok: true } as MutationSuccess;
+  },
+});
+
+/** Update a product's single image (legacy). Replaces all images with this one. (Admin only) */
 export const updateProductImage = mutation({
   args: {
     kod: v.string(),
@@ -153,55 +264,42 @@ export const updateProductImage = mutation({
     thumbnailStorageId: v.optional(v.string()),
   },
   handler: async (ctx, { kod, storageId, thumbnailStorageId }) => {
-    // Require admin authentication
     await requireAdmin(ctx);
-
-    // Validate inputs
     const validatedKod = sanitizeString(kod, 100, "Product code");
     const validatedStorageId = sanitizeString(storageId, 500, "Storage ID");
-
     const product = await getProductByKod(ctx, validatedKod);
-
-    // Delete old images (with error handling)
     await deleteProductImages(ctx, product);
-
-    const patch: { imageStorageId: string; thumbnailStorageId?: string } = {
-      imageStorageId: validatedStorageId,
-    };
-
-    if (thumbnailStorageId !== undefined) {
-      patch.thumbnailStorageId = sanitizeString(
-        thumbnailStorageId,
-        500,
-        "Thumbnail storage ID",
-      );
-    }
-
-    await ctx.db.patch(product._id, patch);
+    const imageEntries = [
+      {
+        imageStorageId: validatedStorageId,
+        thumbnailStorageId:
+          thumbnailStorageId !== undefined
+            ? sanitizeString(thumbnailStorageId, 500, "Thumbnail storage ID")
+            : undefined,
+      },
+    ];
+    await ctx.db.patch(product._id, {
+      imageEntries,
+      imageStorageId: undefined,
+      thumbnailStorageId: undefined,
+    });
     return { ok: true } as MutationSuccess;
   },
 });
 
-/** Remove a product's images (large + thumbnail) from storage and clear IDs. (Admin only) */
+/** Remove all images for a product from storage and clear IDs. (Admin only) */
 export const clearProductImage = mutation({
   args: { kod: v.string() },
   handler: async (ctx, { kod }) => {
-    // Require admin authentication
     await requireAdmin(ctx);
-
-    // Validate kod input
     const validatedKod = sanitizeString(kod, 100, "Product code");
-
     const product = await getProductByKod(ctx, validatedKod);
-
-    // Delete images with error handling
     await deleteProductImages(ctx, product);
-
     await ctx.db.patch(product._id, {
+      imageEntries: undefined,
       imageStorageId: undefined,
       thumbnailStorageId: undefined,
     });
-
     return { ok: true } as MutationSuccess;
   },
 });
@@ -386,14 +484,14 @@ export const replaceCatalogFromSections = mutation({
       console.warn(ADMIN_ERRORS.MEMORY_WARNING(existingProducts.length));
     }
 
-    // Preserve image storage IDs
-    const imagesByKod = new Map<
-      string,
-      { imageStorageId?: string; thumbnailStorageId?: string }
-    >();
+    // Preserve image storage IDs (imageEntries or legacy single)
+    const imagesByKod = new Map<string, ProductImageIds>();
 
     for (const p of existingProducts) {
-      if (p.imageStorageId || p.thumbnailStorageId) {
+      const entries = getProductImageEntries(p);
+      if (entries.length > 0) {
+        imagesByKod.set(p.Kod, { imageEntries: entries });
+      } else if (p.imageStorageId || p.thumbnailStorageId) {
         imagesByKod.set(p.Kod, {
           imageStorageId: p.imageStorageId,
           thumbnailStorageId: p.thumbnailStorageId,

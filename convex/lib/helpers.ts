@@ -3,6 +3,7 @@ import type {
   ProductDoc,
   ProductInsert,
   ProductImageIds,
+  ProductImageEntry,
   ProductUpdateResult,
   StorageDeletionResult,
 } from "./types";
@@ -71,29 +72,68 @@ export async function getProductByKod(
   return product;
 }
 
+/** Get all image entries for a product (imageEntries or legacy single image). */
+export function getProductImageEntries(p: ProductDoc): ProductImageEntry[] {
+  if (p.imageEntries && p.imageEntries.length > 0) {
+    return p.imageEntries;
+  }
+  if (p.imageStorageId) {
+    return [
+      {
+        imageStorageId: p.imageStorageId,
+        thumbnailStorageId: p.thumbnailStorageId,
+      },
+    ];
+  }
+  return [];
+}
+
 /** Convert product doc to item shape with image URLs. */
 export async function productToItem(
   ctx: Ctx,
   p: ProductDoc,
 ): Promise<Record<string, string>> {
-  const { imageStorageId, thumbnailStorageId, ...rest } = Object.fromEntries(
-    Object.entries(p).filter(([k]) => k !== "_id" && k !== "_creationTime"),
-  ) as Omit<ProductDoc, "_id" | "_creationTime">;
-  const [imageUrl, thumbnailUrl] = await Promise.all([
-    imageStorageId ? ctx.storage.getUrl(imageStorageId) : null,
-    thumbnailStorageId ? ctx.storage.getUrl(thumbnailStorageId) : null,
-  ]);
+  const entries = getProductImageEntries(p);
+  const { imageStorageId, thumbnailStorageId, imageEntries, ...rest } =
+    Object.fromEntries(
+      Object.entries(p).filter(([k]) => k !== "_id" && k !== "_creationTime"),
+    ) as Omit<ProductDoc, "_id" | "_creationTime">;
+
+  const resolvedEntries = entries.length > 0 ? entries : [];
+  const imageUrls = await Promise.all(
+    resolvedEntries.map(async (e) => {
+      const [imageUrl, thumbnailUrl] = await Promise.all([
+        ctx.storage.getUrl(e.imageStorageId),
+        e.thumbnailStorageId
+          ? ctx.storage.getUrl(e.thumbnailStorageId)
+          : null,
+      ]);
+      return {
+        imageUrl: imageUrl ?? "",
+        thumbnailUrl: thumbnailUrl ?? imageUrl ?? "",
+      };
+    }),
+  );
+
+  const first = imageUrls[0];
+  const imageUrl = first?.imageUrl ?? "";
+  const thumbnailUrl = first?.thumbnailUrl ?? first?.imageUrl ?? "";
+  const imagesJson =
+    imageUrls.length > 0 ? JSON.stringify(imageUrls) : "[]";
+
   return {
     ...rest,
-    imageStorageId: imageStorageId ?? "",
-    imageUrl: imageUrl ?? "",
-    thumbnailStorageId: thumbnailStorageId ?? "",
-    thumbnailUrl: thumbnailUrl ?? "",
+    imageStorageId: resolvedEntries[0]?.imageStorageId ?? "",
+    imageUrl,
+    thumbnailStorageId: resolvedEntries[0]?.thumbnailStorageId ?? "",
+    thumbnailUrl,
+    imagesJson,
   } as Record<string, string>;
 }
 
 /**
  * Delete product images from storage with error handling.
+ * Deletes all IDs from imageEntries plus legacy single image.
  * Continues on individual deletion failures (e.g., already deleted files).
  * (Mutation-only: storage.delete)
  */
@@ -101,25 +141,33 @@ export async function deleteProductImages(
   ctx: MutationCtx,
   product: ProductDoc,
 ): Promise<StorageDeletionResult> {
-  const toDelete = [product.imageStorageId, product.thumbnailStorageId].filter(
-    Boolean,
-  ) as string[];
+  const entries = getProductImageEntries(product);
+  const toDelete: string[] = [];
+  for (const e of entries) {
+    toDelete.push(e.imageStorageId);
+    if (e.thumbnailStorageId) toDelete.push(e.thumbnailStorageId);
+  }
+  // Legacy single image if not already in entries
+  if (!entries.length && product.imageStorageId)
+    toDelete.push(product.imageStorageId);
+  if (!entries.length && product.thumbnailStorageId)
+    toDelete.push(product.thumbnailStorageId);
+  const unique = [...new Set(toDelete)];
 
-  if (toDelete.length === 0) {
+  if (unique.length === 0) {
     return { deleted: 0, failed: 0 };
   }
 
   const results = await Promise.allSettled(
-    toDelete.map((id) => ctx.storage.delete(id)),
+    unique.map((id) => ctx.storage.delete(id)),
   );
 
   const deleted = results.filter((r) => r.status === "fulfilled").length;
   const failed = results.filter((r) => r.status === "rejected").length;
 
-  // Log failures for debugging but don't throw
   if (failed > 0) {
     console.warn(
-      `Failed to delete ${failed} of ${toDelete.length} storage files for product ${product.Kod}`,
+      `Failed to delete ${failed} of ${unique.length} storage files for product ${product.Kod}`,
     );
   }
 
@@ -141,10 +189,17 @@ export function toProductInsert(
     ) as Record<(typeof PRODUCT_FIELD_KEYS)[number], string>),
     categorySlug,
   };
-  if (existingImages?.imageStorageId)
-    insert.imageStorageId = existingImages.imageStorageId;
-  if (existingImages?.thumbnailStorageId)
-    insert.thumbnailStorageId = existingImages.thumbnailStorageId;
+  if (existingImages?.imageEntries?.length) {
+    insert.imageEntries = existingImages.imageEntries;
+  } else if (
+    existingImages?.imageStorageId ||
+    existingImages?.thumbnailStorageId
+  ) {
+    if (existingImages?.imageStorageId)
+      insert.imageStorageId = existingImages.imageStorageId;
+    if (existingImages?.thumbnailStorageId)
+      insert.thumbnailStorageId = existingImages.thumbnailStorageId;
+  }
   return insert;
 }
 

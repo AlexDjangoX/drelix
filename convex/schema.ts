@@ -2,12 +2,20 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 import { productFieldValidators } from "./lib/validators";
 
+/** One image slot: large + optional thumbnail storage IDs. */
+const imageEntryValidator = v.object({
+  imageStorageId: v.string(),
+  thumbnailStorageId: v.optional(v.string()),
+});
+
 /** Product row from Kartoteki (CSV) plus assigned category. */
 const productFields = {
   ...productFieldValidators,
   categorySlug: v.string(),
-  imageStorageId: v.optional(v.string()), // Large image (lightbox, hero)
-  thumbnailStorageId: v.optional(v.string()), // Small image (grids, lists)
+  imageStorageId: v.optional(v.string()), // Legacy: single large image
+  thumbnailStorageId: v.optional(v.string()), // Legacy: single thumbnail
+  /** Multiple images per product. When set, preferred over legacy single image. */
+  imageEntries: v.optional(v.array(imageEntryValidator)),
 };
 
 /** Rate limiting for admin login. Key = hashed IP, cleaned periodically. */

@@ -30,10 +30,17 @@ export type ImageVariants = {
 
 export type ProductSlug = CategorySlug;
 
+export type ProductImageUrl = {
+  imageUrl: string;
+  thumbnailUrl: string;
+};
+
 export type ProductItem = {
   id: string;
   src: string;
   largeSrc: string;
+  /** All images for this product (first used for src/largeSrc when single). */
+  images?: ProductImageUrl[];
   name: string;
   price?: string;
   unit?: string;

@@ -8,25 +8,35 @@ import { LightboxContent } from "@/components/products/ProductLightbox/LightboxC
 
 type Props = {
   items: ProductItem[];
-  currentIndex: number;
+  currentProductIndex: number;
+  currentImageIndex: number;
   onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
+  /** Outer arrows: previous/next product */
+  onPrevProduct: () => void;
+  onNextProduct: () => void;
+  /** Inner arrows + keyboard: previous/next image within current product */
+  onPrevImage: () => void;
+  onNextImage: () => void;
+  onGoToImage?: (index: number) => void;
 };
 
 export function ProductLightbox({
   items,
-  currentIndex,
+  currentProductIndex,
+  currentImageIndex,
   onClose,
-  onPrev,
-  onNext,
+  onPrevProduct,
+  onNextProduct,
+  onPrevImage,
+  onNextImage,
+  onGoToImage,
 }: Props) {
-  const currentItem = items[currentIndex];
+  const currentItem = items[currentProductIndex];
 
   const onKeydown = useEffectEvent((e: KeyboardEvent) => {
     if (e.key === "Escape") onClose();
-    if (e.key === "ArrowLeft") onPrev();
-    if (e.key === "ArrowRight") onNext();
+    if (e.key === "ArrowLeft") onPrevImage();
+    if (e.key === "ArrowRight") onNextImage();
   });
 
   useEffect(() => {
@@ -40,6 +50,13 @@ export function ProductLightbox({
       document.body.style.overflow = "";
     };
   }, []);
+
+  if (!currentItem) {
+    return null;
+  }
+
+  const isFirstProduct = currentProductIndex <= 0;
+  const isLastProduct = currentProductIndex >= items.length - 1;
 
   return (
     <div
@@ -66,18 +83,26 @@ export function ProductLightbox({
         direction="prev"
         onClick={(e) => {
           e.stopPropagation();
-          onPrev();
+          onPrevProduct();
         }}
+        disabled={isFirstProduct}
       />
 
-      <LightboxContent item={currentItem} />
+      <LightboxContent
+        item={currentItem}
+        imageIndex={currentImageIndex}
+        onPrevImage={onPrevImage}
+        onNextImage={onNextImage}
+        onGoToImage={onGoToImage}
+      />
 
       <LightboxNavButton
         direction="next"
         onClick={(e) => {
           e.stopPropagation();
-          onNext();
+          onNextProduct();
         }}
+        disabled={isLastProduct}
       />
     </div>
   );
