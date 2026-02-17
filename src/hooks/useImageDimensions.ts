@@ -1,50 +1,70 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useMemo } from 'react';
 
-export type ImageDimensions = { width: number; height: number };
+export type ImageDimensions = {
+  width: number;
+  height: number;
+};
 
-/**
- * Loads natural dimensions for a list of image URLs. Returns a map of url -> { width, height }.
- * Images without dimensions (placeholder, failed load) are omitted; use 0 for sort order.
- */
-export function useImageDimensions(urls: string[]): Record<string, ImageDimensions> {
-  const [dimensions, setDimensions] = useState<Record<string, ImageDimensions>>({});
-  const mounted = useRef(true);
+type DimensionsMap = Record<string, ImageDimensions>;
+
+export function useImageDimensions(urls: readonly string[]): DimensionsMap {
+  const [cache, setCache] = useState<DimensionsMap>({});
+  const abortRef = useRef<AbortController | null>(null);
+
+  const unique = useMemo(() => [...new Set(urls)].filter(Boolean), [urls]);
 
   useEffect(() => {
-    mounted.current = true;
-    const unique = [...new Set(urls)].filter(Boolean);
-
-    const next: Record<string, ImageDimensions> = {};
-    let pending = unique.length;
-
-    function maybeDone() {
-      pending--;
-      if (pending === 0 && mounted.current) {
-        setDimensions((prev) => ({ ...prev, ...next }));
-      }
+    if (!unique.length) {
+      queueMicrotask(() => setCache({}));
+      return;
     }
 
-    unique.forEach((url) => {
-      const img = new window.Image();
-      img.onload = () => {
-        if (mounted.current && img.naturalWidth && img.naturalHeight) {
-          next[url] = { width: img.naturalWidth, height: img.naturalHeight };
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    Promise.all(
+      unique.map(async (url) => {
+        try {
+          const res = await fetch(url, {
+            signal: controller.signal,
+            cache: 'force-cache',
+          });
+
+          const blob = await res.blob();
+          const bitmap = await createImageBitmap(blob);
+
+          return [url, { width: bitmap.width, height: bitmap.height }] as const;
+        } catch {
+          return null;
         }
-        maybeDone();
-      };
-      img.onerror = () => maybeDone();
-      img.src = url;
+      }),
+    ).then((results) => {
+      if (controller.signal.aborted) return;
+
+      const next = Object.fromEntries(
+        results.filter(Boolean) as [string, ImageDimensions][],
+      );
+
+      setCache(next); // async result only
     });
 
-    if (unique.length === 0) pending = 0;
-    if (pending === 0) setDimensions((prev) => ({ ...prev, ...next }));
+    return () => controller.abort();
+  }, [unique]);
 
-    return () => {
-      mounted.current = false;
-    };
-  }, [urls.join(",")]);
+  // 🟢 derive snapshot during render (NOT effect)
+  return useMemo(() => {
+    if (!unique.length) return {};
 
-  return dimensions;
+    const snapshot: DimensionsMap = {};
+
+    for (const url of unique) {
+      const d = cache[url];
+      if (d) snapshot[url] = d;
+    }
+
+    return snapshot;
+  }, [cache, unique]);
 }
