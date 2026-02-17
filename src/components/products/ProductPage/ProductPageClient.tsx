@@ -14,6 +14,7 @@ import { computeBruttoPrice } from "@/lib/price";
 import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { api } from "convex/_generated/api";
+import { useImageDimensions } from "@/hooks/useImageDimensions";
 
 type Props = { slug: string };
 
@@ -98,6 +99,20 @@ export function ProductPageClient({ slug }: Props) {
     });
   }, [sectionFromConvex]);
 
+  const imageUrls = useMemo(() => items.map((i) => i.src), [items]);
+  const dimensions = useImageDimensions(imageUrls);
+
+  /** Sort by image area (width × height) descending so bigger images appear first. */
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a, b) => {
+      const areaA =
+        (dimensions[a.src]?.width ?? 0) * (dimensions[a.src]?.height ?? 0);
+      const areaB =
+        (dimensions[b.src]?.width ?? 0) * (dimensions[b.src]?.height ?? 0);
+      return areaB - areaA;
+    });
+  }, [items, dimensions]);
+
   const openLightbox = useCallback(
     (productIndex: number, imageIndex = 0) => {
       setLightboxProductIndex(productIndex);
@@ -119,11 +134,11 @@ export function ProductPageClient({ slug }: Props) {
 
   /** Navigate to next product only. Resets to first image of that product. */
   const goNextProduct = useCallback(() => {
-    if (lightboxProductIndex === null || lightboxProductIndex >= items.length - 1)
+    if (lightboxProductIndex === null || lightboxProductIndex >= sortedItems.length - 1)
       return;
     setLightboxProductIndex((i) => i! + 1);
     setLightboxImageIndex(0);
-  }, [lightboxProductIndex, items.length]);
+  }, [lightboxProductIndex, sortedItems.length]);
 
   /** Navigate to previous image within the current product only. */
   const goPrevImage = useCallback(() => {
@@ -134,10 +149,10 @@ export function ProductPageClient({ slug }: Props) {
   /** Navigate to next image within the current product only. */
   const goNextImage = useCallback(() => {
     if (lightboxProductIndex === null) return;
-    const item = items[lightboxProductIndex];
+    const item = sortedItems[lightboxProductIndex];
     const imageCount = item?.images?.length ?? 1;
     setLightboxImageIndex((i) => Math.min(imageCount - 1, i + 1));
-  }, [items, lightboxProductIndex]);
+  }, [sortedItems, lightboxProductIndex]);
 
   const goToImage = useCallback((index: number) => {
     setLightboxImageIndex(Math.max(0, index));
@@ -183,14 +198,14 @@ export function ProductPageClient({ slug }: Props) {
             </p>
           </div>
 
-          <ProductGrid items={items} onItemClick={openLightbox} />
+          <ProductGrid items={sortedItems} onItemClick={openLightbox} />
         </div>
       </main>
       <Footer />
 
       {lightboxProductIndex !== null && (
         <ProductLightbox
-          items={items}
+          items={sortedItems}
           currentProductIndex={lightboxProductIndex}
           currentImageIndex={lightboxImageIndex}
           onClose={closeLightbox}
