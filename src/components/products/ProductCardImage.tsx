@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
+import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
 
 /** Min/max aspect ratio so cards stay readable (avoid extreme tall or wide). */
 const ASPECT_MIN = 0.7;
@@ -37,6 +38,7 @@ export function ProductCardImage({
   onError,
 }: ProductCardImageProps) {
   const [aspect, setAspect] = useState<number>(1);
+  const safeSrc = src?.trim() || PLACEHOLDER_PRODUCT_IMAGE;
 
   const onLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
@@ -55,7 +57,7 @@ export function ProductCardImage({
       style={{ aspectRatio: aspect }}
     >
       <Image
-        src={src}
+        src={safeSrc}
         alt={alt}
         fill
         sizes={sizes}

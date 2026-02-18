@@ -57,6 +57,20 @@ export function sortItemsByNazwa<T extends { Nazwa?: string }>(
   );
 }
 
+/** Sort subcategories by order (asc), then by displayName. */
+export function sortSubcategories<
+  T extends { order?: number; displayName: string },
+>(subs: T[]): T[] {
+  return [...subs].sort((a, b) => {
+    const orderA = a.order ?? 999;
+    const orderB = b.order ?? 999;
+    if (orderA !== orderB) return orderA - orderB;
+    return (a.displayName ?? "").localeCompare(b.displayName ?? "", undefined, {
+      sensitivity: "base",
+    });
+  });
+}
+
 /** Fetch product by Kod. Throws if not found. */
 export async function getProductByKod(
   ctx: Ctx,
@@ -179,6 +193,7 @@ export function toProductInsert(
   row: Record<string, string>,
   categorySlug: string,
   existingImages?: ProductImageIds,
+  subcategorySlug?: string,
 ): ProductInsert {
   const get = (key: (typeof PRODUCT_FIELD_KEYS)[number]) =>
     row[key] ?? row[CSV_ALT_BY_CANONICAL[key] ?? ""] ?? "";
@@ -189,6 +204,9 @@ export function toProductInsert(
     ) as Record<(typeof PRODUCT_FIELD_KEYS)[number], string>),
     categorySlug,
   };
+  const rowSub = row.subcategorySlug?.trim();
+  if (rowSub) insert.subcategorySlug = rowSub;
+  else if (subcategorySlug?.trim()) insert.subcategorySlug = subcategorySlug.trim();
   if (existingImages?.imageEntries?.length) {
     insert.imageEntries = existingImages.imageEntries;
   } else if (

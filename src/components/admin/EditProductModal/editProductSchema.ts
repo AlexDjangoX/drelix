@@ -13,6 +13,7 @@ export const editProductSchema = z.object({
   JednostkaMiary: z.string().max(50),
   StawkaVAT: z.string().max(50),
   categorySlug: z.string().min(1, "Kategoria jest wymagana").max(100),
+  subcategorySlug: z.string().max(100).optional(),
   Heading: z.string().max(MAX_STRING),
   Subheading: z.string().max(MAX_STRING),
   Description: z.string().max(MAX_DESCRIPTION),

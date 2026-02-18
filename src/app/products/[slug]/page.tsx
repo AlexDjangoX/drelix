@@ -9,5 +9,5 @@ export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const section = await fetchQuery(api.catalog.getCatalogSection, { slug });
   if (!section) notFound();
-  return <ProductPageClient slug={slug} />;
+  return <ProductPageClient slug={slug} section={section} />;
 }

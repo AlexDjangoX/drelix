@@ -21,6 +21,8 @@ export type CatalogSection = {
   titleKey: string;
   displayName?: string;
   items: CatalogRow[];
+  /** Subcategories for this category (admin and product page). */
+  subcategories?: { slug: string; displayName: string; order?: number }[];
 };
 
 export type ImageVariants = {
@@ -48,6 +50,8 @@ export type ProductItem = {
   heading?: string;
   subheading?: string;
   description?: string;
+  /** For grouping on category page (from subcategories table). */
+  subcategorySlug?: string;
 };
 
 /** Admin product table column config (label + field key). */

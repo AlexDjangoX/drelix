@@ -31,6 +31,7 @@ export const sectionValidator = v.object({
     v.object({
       ...productFieldValidators,
       categorySlug: v.optional(v.string()),
+      subcategorySlug: v.optional(v.string()),
     }),
   ),
 });
@@ -39,4 +40,12 @@ export const sectionValidator = v.object({
 export const categorySeedValidator = v.object({
   slug: v.string(),
   titleKey: v.string(),
+});
+
+/** Subcategory create/update args. */
+export const subcategoryValidator = v.object({
+  categorySlug: v.string(),
+  slug: v.string(),
+  displayName: v.string(),
+  order: v.optional(v.number()),
 });

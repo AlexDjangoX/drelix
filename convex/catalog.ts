@@ -1,4 +1,5 @@
 import { mutation, query } from "./_generated/server";
+import type { MutationCtx } from "./_generated/server";
 import { v } from "convex/values";
 import {
   productRowValidator,
@@ -17,6 +18,7 @@ import {
 import {
   sortCategories,
   sortItemsByNazwa,
+  sortSubcategories,
   getProductByKod,
   productToItem,
   deleteProductImages,
@@ -26,7 +28,12 @@ import {
   productToUpdateResult,
 } from "./lib/helpers";
 import { requireAdmin, sanitizeString, validateSlug } from "./lib/convexAuth";
+import { slugifyDisplayName, shortRandomId } from "./lib/slugify";
 import { ADMIN_ERRORS } from "./lib/errorMessages";
+
+const MAX_SUBCATEGORY_SLUG_LENGTH = 100;
+const UNIQUE_SUFFIX_LENGTH = 5;
+const MAX_SLUG_GENERATION_ATTEMPTS = 10;
 
 // --- Queries ---
 
@@ -46,11 +53,19 @@ export const listCatalogSections = query({
       const items = await Promise.all(
         products.map((p) => productToItem(ctx, p)),
       );
+      const subs = await ctx.db
+        .query("subcategories")
+        .withIndex("by_category", (q) => q.eq("categorySlug", cat.slug))
+        .collect();
+      const subcategories = sortSubcategories(
+        subs.map((s) => ({ slug: s.slug, displayName: s.displayName, order: s.order })),
+      );
       sections.push({
         slug: cat.slug,
         titleKey: cat.titleKey,
         displayName: cat.displayName,
         items: sortItemsByNazwa(items),
+        subcategories,
       });
     }
     return sections;
@@ -87,6 +102,24 @@ export const getProductItemByKod = query({
   },
 });
 
+/** List subcategories for a category (for admin dropdown and product page headings). */
+export const listSubcategories = query({
+  args: { categorySlug: v.string() },
+  handler: async (ctx, { categorySlug }) => {
+    const subs = await ctx.db
+      .query("subcategories")
+      .withIndex("by_category", (q) => q.eq("categorySlug", categorySlug))
+      .collect();
+    return sortSubcategories(
+      subs.map((s) => ({
+        slug: s.slug,
+        displayName: s.displayName,
+        order: s.order,
+      })),
+    );
+  },
+});
+
 /** Get one category's products (for /products/[slug] when migrated from placeholder). */
 export const getCatalogSection = query({
   args: { slug: v.string() },
@@ -101,11 +134,19 @@ export const getCatalogSection = query({
       .withIndex("by_category", (q) => q.eq("categorySlug", slug))
       .collect();
     const items = await Promise.all(products.map((p) => productToItem(ctx, p)));
+    const subs = await ctx.db
+      .query("subcategories")
+      .withIndex("by_category", (q) => q.eq("categorySlug", slug))
+      .collect();
+    const subcategories = sortSubcategories(
+      subs.map((s) => ({ slug: s.slug, displayName: s.displayName, order: s.order })),
+    );
     return {
       slug: cat.slug,
       titleKey: cat.titleKey,
       displayName: cat.displayName,
       items: sortItemsByNazwa(items),
+      subcategories,
     };
   },
 });
@@ -394,13 +435,214 @@ export const deleteCategory = mutation({
   },
 });
 
+/** Generate a unique subcategory slug from display name (slugify + random suffix on collision). */
+async function generateUniqueSubcategorySlug(
+  ctx: MutationCtx,
+  categorySlug: string,
+  displayName: string,
+): Promise<string> {
+  const base = slugifyDisplayName(displayName);
+  const maxBaseLength = MAX_SUBCATEGORY_SLUG_LENGTH - 1 - UNIQUE_SUFFIX_LENGTH; // leave room for "-" + 5 chars
+  const baseSlug = base.slice(0, maxBaseLength).replace(/-+$/, "") || "sub";
+
+  const candidate = validateSlug(baseSlug, MAX_SUBCATEGORY_SLUG_LENGTH);
+  const existing = await ctx.db
+    .query("subcategories")
+    .withIndex("by_category_slug", (q) =>
+      q.eq("categorySlug", categorySlug).eq("slug", candidate),
+    )
+    .unique();
+  if (!existing) return candidate;
+
+  for (let i = 0; i < MAX_SLUG_GENERATION_ATTEMPTS; i++) {
+    const suffix = shortRandomId();
+    const slug = `${baseSlug}-${suffix}`;
+    const validated = validateSlug(slug, MAX_SUBCATEGORY_SLUG_LENGTH);
+    const again = await ctx.db
+      .query("subcategories")
+      .withIndex("by_category_slug", (q) =>
+        q.eq("categorySlug", categorySlug).eq("slug", validated),
+      )
+      .unique();
+    if (!again) return validated;
+  }
+  throw new Error("Could not generate unique subcategory slug after retries");
+}
+
+/** Create a subcategory (admin only). Slug unique within category. If slug omitted, auto-generated from displayName. */
+export const createSubcategory = mutation({
+  args: {
+    categorySlug: v.string(),
+    slug: v.optional(v.string()),
+    displayName: v.string(),
+    order: v.optional(v.number()),
+  },
+  handler: async (ctx, { categorySlug, slug: slugArg, displayName, order }) => {
+    await requireAdmin(ctx);
+    const validatedCategorySlug = validateSlug(categorySlug);
+    const validatedDisplayName = sanitizeString(displayName, 200, "Display name");
+
+    const category = await ctx.db
+      .query("categories")
+      .withIndex("by_slug", (q) => q.eq("slug", validatedCategorySlug))
+      .unique();
+    if (!category) {
+      throw new Error(ADMIN_ERRORS.CATEGORY_NOT_FOUND(validatedCategorySlug));
+    }
+
+    const validatedSlug =
+      slugArg !== undefined && slugArg.trim() !== ""
+        ? validateSlug(slugArg.trim(), MAX_SUBCATEGORY_SLUG_LENGTH)
+        : await generateUniqueSubcategorySlug(
+            ctx,
+            validatedCategorySlug,
+            validatedDisplayName,
+          );
+
+    const existing = await ctx.db
+      .query("subcategories")
+      .withIndex("by_category_slug", (q) =>
+        q.eq("categorySlug", validatedCategorySlug).eq("slug", validatedSlug),
+      )
+      .unique();
+    if (existing) {
+      throw new Error(
+        ADMIN_ERRORS.SUBCATEGORY_EXISTS(validatedSlug, validatedCategorySlug),
+      );
+    }
+
+    await ctx.db.insert("subcategories", {
+      categorySlug: validatedCategorySlug,
+      slug: validatedSlug,
+      displayName: validatedDisplayName,
+      order: order ?? undefined,
+      createdAt: Date.now(),
+    });
+    return { ok: true, slug: validatedSlug } as MutationSuccess;
+  },
+});
+
+/** Update a subcategory (admin only). */
+export const updateSubcategory = mutation({
+  args: {
+    categorySlug: v.string(),
+    slug: v.string(),
+    updates: v.object({
+      displayName: v.optional(v.string()),
+      order: v.optional(v.number()),
+    }),
+  },
+  handler: async (ctx, { categorySlug, slug, updates }) => {
+    await requireAdmin(ctx);
+    const validatedCategorySlug = validateSlug(categorySlug);
+    const validatedSlug = validateSlug(slug);
+
+    const sub = await ctx.db
+      .query("subcategories")
+      .withIndex("by_category_slug", (q) =>
+        q.eq("categorySlug", validatedCategorySlug).eq("slug", validatedSlug),
+      )
+      .unique();
+    if (!sub) {
+      throw new Error(
+        ADMIN_ERRORS.SUBCATEGORY_NOT_FOUND(validatedSlug, validatedCategorySlug),
+      );
+    }
+
+    const patch: { displayName?: string; order?: number } = {};
+    if (updates.displayName !== undefined)
+      patch.displayName = sanitizeString(updates.displayName, 200, "Display name");
+    if (updates.order !== undefined) patch.order = updates.order;
+    if (Object.keys(patch).length > 0) await ctx.db.patch(sub._id, patch);
+    return { ok: true, slug: validatedSlug } as MutationSuccess;
+  },
+});
+
+/** Delete a subcategory (admin only). Only when no products use it. */
+export const deleteSubcategory = mutation({
+  args: { categorySlug: v.string(), slug: v.string() },
+  handler: async (ctx, { categorySlug, slug }) => {
+    await requireAdmin(ctx);
+    const validatedCategorySlug = validateSlug(categorySlug);
+    const validatedSlug = validateSlug(slug);
+
+    const sub = await ctx.db
+      .query("subcategories")
+      .withIndex("by_category_slug", (q) =>
+        q.eq("categorySlug", validatedCategorySlug).eq("slug", validatedSlug),
+      )
+      .unique();
+    if (!sub) {
+      throw new Error(
+        ADMIN_ERRORS.SUBCATEGORY_NOT_FOUND(validatedSlug, validatedCategorySlug),
+      );
+    }
+
+    const products = await ctx.db
+      .query("products")
+      .withIndex("by_category", (q) => q.eq("categorySlug", validatedCategorySlug))
+      .collect();
+    const count = products.filter(
+      (p) => p.subcategorySlug === validatedSlug,
+    ).length;
+    if (count > 0) {
+      throw new Error(ADMIN_ERRORS.SUBCATEGORY_HAS_PRODUCTS(validatedSlug, count));
+    }
+
+    await ctx.db.delete(sub._id);
+    return { ok: true, slug: validatedSlug } as MutationSuccess;
+  },
+});
+
+/** Seed default gloves subcategories (admin only). Idempotent: skips existing. */
+const GLOVES_SUBCATEGORIES = [
+  { slug: "podgumowane", displayName: "Podgumowane", order: 1 },
+  { slug: "gumowe", displayName: "Gumowe", order: 2 },
+  { slug: "skorzane-i-wzmocnione-skora", displayName: "Skórzane i wzmocnione skórą", order: 3 },
+  { slug: "bawelniane", displayName: "Bawełniane", order: 4 },
+  { slug: "ocieplane", displayName: "Ocieplane", order: 5 },
+] as const;
+
+export const seedGlovesSubcategories = mutation({
+  args: {},
+  handler: async (ctx) => {
+    await requireAdmin(ctx);
+    const category = await ctx.db
+      .query("categories")
+      .withIndex("by_slug", (q) => q.eq("slug", "gloves"))
+      .unique();
+    if (!category) return { ok: true, created: 0 };
+    let created = 0;
+    for (const { slug, displayName, order } of GLOVES_SUBCATEGORIES) {
+      const existing = await ctx.db
+        .query("subcategories")
+        .withIndex("by_category_slug", (q) =>
+          q.eq("categorySlug", "gloves").eq("slug", slug),
+        )
+        .unique();
+      if (!existing) {
+        await ctx.db.insert("subcategories", {
+          categorySlug: "gloves",
+          slug,
+          displayName,
+          order,
+          createdAt: Date.now(),
+        });
+        created++;
+      }
+    }
+    return { ok: true, created } as MutationSuccess;
+  },
+});
+
 /** Create one product (admin only). */
 export const createProduct = mutation({
   args: {
     categorySlug: v.string(),
     row: productRowValidator,
+    subcategorySlug: v.optional(v.string()),
   },
-  handler: async (ctx, { categorySlug, row }) => {
+  handler: async (ctx, { categorySlug, row, subcategorySlug }) => {
     // Require admin authentication
     await requireAdmin(ctx);
 
@@ -415,6 +657,21 @@ export const createProduct = mutation({
 
     if (!category) {
       throw new Error(ADMIN_ERRORS.CATEGORY_NOT_FOUND(validatedCategorySlug));
+    }
+
+    const rawSub = subcategorySlug?.trim();
+    if (rawSub) {
+      const sub = await ctx.db
+        .query("subcategories")
+        .withIndex("by_category_slug", (q) =>
+          q.eq("categorySlug", validatedCategorySlug).eq("slug", rawSub),
+        )
+        .unique();
+      if (!sub) {
+        throw new Error(
+          ADMIN_ERRORS.SUBCATEGORY_NOT_FOUND(rawSub, validatedCategorySlug),
+        );
+      }
     }
 
     // Validate product code
@@ -433,7 +690,12 @@ export const createProduct = mutation({
 
     await ctx.db.insert(
       "products",
-      toProductInsert(row as Record<string, string>, validatedCategorySlug),
+      toProductInsert(
+        row as Record<string, string>,
+        validatedCategorySlug,
+        undefined,
+        rawSub ?? undefined,
+      ),
     );
 
     return { ok: true, kod: validatedKod } as MutationSuccess;

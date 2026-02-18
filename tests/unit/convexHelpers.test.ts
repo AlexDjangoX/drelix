@@ -6,6 +6,7 @@ import { describe, it, expect } from "vitest";
 import {
   sortCategories,
   sortItemsByNazwa,
+  sortSubcategories,
   toProductInsert,
   filterAllowedUpdates,
 } from "../../convex/lib/helpers";
@@ -60,6 +61,32 @@ describe("sortItemsByNazwa", () => {
   });
 });
 
+describe("sortSubcategories", () => {
+  it("sorts by order ascending then by displayName", () => {
+    const subs = [
+      { slug: "c", displayName: "C", order: 3 },
+      { slug: "a", displayName: "A", order: 1 },
+      { slug: "b", displayName: "B", order: 2 },
+    ];
+    expect(sortSubcategories(subs)).toEqual([
+      { slug: "a", displayName: "A", order: 1 },
+      { slug: "b", displayName: "B", order: 2 },
+      { slug: "c", displayName: "C", order: 3 },
+    ]);
+  });
+
+  it("treats missing order as 999", () => {
+    const subs = [
+      { slug: "z", displayName: "Z" },
+      { slug: "a", displayName: "A", order: 1 },
+    ];
+    expect(sortSubcategories(subs)).toEqual([
+      { slug: "a", displayName: "A", order: 1 },
+      { slug: "z", displayName: "Z" },
+    ]);
+  });
+});
+
 describe("toProductInsert", () => {
   const baseRow: Record<string, string> = {
     Rodzaj: "T",
@@ -99,6 +126,19 @@ describe("toProductInsert", () => {
     });
     expect(result.imageStorageId).toBe("img-123");
     expect(result.thumbnailStorageId).toBe("thumb-456");
+  });
+
+  it("includes subcategorySlug from row when present", () => {
+    const result = toProductInsert(
+      { ...baseRow, subcategorySlug: "gumowe" },
+      "gloves",
+    );
+    expect(result.subcategorySlug).toBe("gumowe");
+  });
+
+  it("includes subcategorySlug from fourth argument when row has none", () => {
+    const result = toProductInsert(baseRow, "gloves", undefined, "bawelniane");
+    expect(result.subcategorySlug).toBe("bawelniane");
   });
 });
 

@@ -18,6 +18,7 @@ import type * as lib_errorMessages from "../lib/errorMessages.js";
 import type * as lib_helpers from "../lib/helpers.js";
 import type * as lib_index from "../lib/index.js";
 import type * as lib_serverLogger from "../lib/serverLogger.js";
+import type * as lib_slugify from "../lib/slugify.js";
 import type * as lib_types from "../lib/types.js";
 import type * as lib_validators from "../lib/validators.js";
 
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   "lib/helpers": typeof lib_helpers;
   "lib/index": typeof lib_index;
   "lib/serverLogger": typeof lib_serverLogger;
+  "lib/slugify": typeof lib_slugify;
   "lib/types": typeof lib_types;
   "lib/validators": typeof lib_validators;
 }>;

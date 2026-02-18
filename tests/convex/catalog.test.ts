@@ -464,3 +464,245 @@ describe("catalog mutations with seeded data", () => {
     ).rejects.toThrow("cannot be empty");
   });
 });
+
+describe("subcategories", () => {
+  it("listSubcategories returns empty when category has none", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    const subs = await t.query(api.catalog.listSubcategories, {
+      categorySlug: "gloves",
+    });
+    expect(subs).toEqual([]);
+  });
+
+  it("createSubcategory then listSubcategories returns the subcategory", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      slug: "gumowe",
+      displayName: "Gumowe",
+      order: 1,
+    });
+    const subs = await t.query(api.catalog.listSubcategories, {
+      categorySlug: "gloves",
+    });
+    expect(subs).toHaveLength(1);
+    expect(subs[0].slug).toBe("gumowe");
+    expect(subs[0].displayName).toBe("Gumowe");
+  });
+
+  it("createSubcategory without slug auto-generates unique slug from displayName", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    const result = await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      displayName: "Gumowe",
+    });
+    expect((result as { slug: string }).slug).toBe("gumowe");
+    const subs = await t.query(api.catalog.listSubcategories, {
+      categorySlug: "gloves",
+    });
+    expect(subs).toHaveLength(1);
+    expect(subs[0].slug).toBe("gumowe");
+    expect(subs[0].displayName).toBe("Gumowe");
+  });
+
+  it("createSubcategory without slug adds random suffix when displayName would collide", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      displayName: "Gumowe",
+    });
+    const result = await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      displayName: "Gumowe",
+    });
+    const slug = (result as { slug: string }).slug;
+    expect(slug).toMatch(/^gumowe-[a-z0-9]{5}$/);
+    expect(slug).not.toBe("gumowe");
+    const subs = await t.query(api.catalog.listSubcategories, {
+      categorySlug: "gloves",
+    });
+    expect(subs).toHaveLength(2);
+    const slugs = subs.map((s) => s.slug);
+    expect(slugs).toContain("gumowe");
+    expect(slugs).toContain(slug);
+  });
+
+  it("createSubcategory throws when slug already exists in category", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      slug: "gumowe",
+      displayName: "Gumowe",
+    });
+    await expect(
+      t.mutation(api.catalog.createSubcategory, {
+        categorySlug: "gloves",
+        slug: "gumowe",
+        displayName: "Other",
+      }),
+    ).rejects.toThrow("already exists");
+  });
+
+  it("createProduct with subcategorySlug stores and getCatalogSection returns subcategories", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      slug: "gumowe",
+      displayName: "Gumowe",
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: "gloves",
+      row: {
+        Rodzaj: "T",
+        JednostkaMiary: "szt",
+        StawkaVAT: "23",
+        Kod: "G-001",
+        Nazwa: "Nitrile Gloves",
+        Opis: "",
+        ProductDescription: "",
+        CenaNetto: "10",
+        KodKlasyfikacji: "X",
+        Uwagi: "",
+        OstatniaCenaZakupu: "9",
+        OstatniaDataZakupu: "2024-01-01",
+      },
+      subcategorySlug: "gumowe",
+    });
+    const section = await t.query(api.catalog.getCatalogSection, {
+      slug: "gloves",
+    });
+    expect(section).not.toBeNull();
+    expect(section!.subcategories).toHaveLength(1);
+    expect(section!.items).toHaveLength(1);
+    expect(section!.items[0].subcategorySlug).toBe("gumowe");
+  });
+
+  it("createProduct throws when subcategorySlug not in category", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    await expect(
+      t.mutation(api.catalog.createProduct, {
+        categorySlug: "gloves",
+        row: {
+          Rodzaj: "T",
+          JednostkaMiary: "szt",
+          StawkaVAT: "23",
+          Kod: "G-002",
+          Nazwa: "Product",
+          Opis: "",
+          ProductDescription: "",
+          CenaNetto: "10",
+          KodKlasyfikacji: "X",
+          Uwagi: "",
+          OstatniaCenaZakupu: "9",
+          OstatniaDataZakupu: "2024-01-01",
+        },
+        subcategorySlug: "nonexistent",
+      }),
+    ).rejects.toThrow("Subcategory");
+  });
+
+  it("deleteSubcategory succeeds when no products use it", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      slug: "gumowe",
+      displayName: "Gumowe",
+    });
+    await t.mutation(api.catalog.deleteSubcategory, {
+      categorySlug: "gloves",
+      slug: "gumowe",
+    });
+    const subs = await t.query(api.catalog.listSubcategories, {
+      categorySlug: "gloves",
+    });
+    expect(subs).toEqual([]);
+  });
+
+  it("deleteSubcategory throws when products use it", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    await t.mutation(api.catalog.createSubcategory, {
+      categorySlug: "gloves",
+      slug: "gumowe",
+      displayName: "Gumowe",
+    });
+    await t.mutation(api.catalog.createProduct, {
+      categorySlug: "gloves",
+      row: {
+        Rodzaj: "T",
+        JednostkaMiary: "szt",
+        StawkaVAT: "23",
+        Kod: "G-003",
+        Nazwa: "Product",
+        Opis: "",
+        ProductDescription: "",
+        CenaNetto: "10",
+        KodKlasyfikacji: "X",
+        Uwagi: "",
+        OstatniaCenaZakupu: "9",
+        OstatniaDataZakupu: "2024-01-01",
+      },
+      subcategorySlug: "gumowe",
+    });
+    await expect(
+      t.mutation(api.catalog.deleteSubcategory, {
+        categorySlug: "gloves",
+        slug: "gumowe",
+      }),
+    ).rejects.toThrow("used by");
+  });
+
+  it("seedGlovesSubcategories creates default subcategories", async () => {
+    const t = convexTest(schema, modules);
+    await t.mutation(api.catalog.createCategory, {
+      slug: "gloves",
+      displayName: "Gloves",
+    });
+    const result = await t.mutation(api.catalog.seedGlovesSubcategories, {});
+    expect((result as { created: number }).created).toBe(5);
+    const subs = await t.query(api.catalog.listSubcategories, {
+      categorySlug: "gloves",
+    });
+    expect(subs).toHaveLength(5);
+    const slugs = subs.map((s) => s.slug);
+    expect(slugs).toContain("podgumowane");
+    expect(slugs).toContain("gumowe");
+    expect(slugs).toContain("bawelniane");
+    expect(slugs).toContain("ocieplane");
+  });
+});

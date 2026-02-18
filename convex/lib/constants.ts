@@ -23,6 +23,7 @@ export type ProductFieldKey = (typeof PRODUCT_FIELD_KEYS)[number];
 export const ALLOWED_UPDATE_KEYS = new Set([
   ...PRODUCT_FIELD_KEYS,
   "categorySlug",
+  "subcategorySlug",
   "imageStorageId",
   "thumbnailStorageId",
 ]);

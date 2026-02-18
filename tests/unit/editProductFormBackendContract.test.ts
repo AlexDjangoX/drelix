@@ -12,6 +12,7 @@ const FORM_UPDATE_KEYS = [
   "JednostkaMiary",
   "ProductDescription",
   "categorySlug",
+  "subcategorySlug",
   "Heading",
   "Subheading",
   "Description",

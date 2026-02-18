@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/form";
 import { ImageUploadCell } from "@/components/admin/ImageUploadCell";
 import { CategorySelect } from "@/components/admin/CategorySelect";
+import { SubcategorySelect } from "@/components/admin/SubcategorySelect";
 import { editProductSchema, type EditProductFormValues } from "./editProductSchema";
 import type { CatalogRow } from "@/lib/types";
 import { DISPLAY_KEYS } from "@/lib/types";
@@ -43,6 +44,7 @@ const FORM_KEYS = [
   "JednostkaMiary",
   "ProductDescription",
   "categorySlug",
+  "subcategorySlug",
   "Heading",
   "Subheading",
   "Description",
@@ -57,6 +59,7 @@ function rowToDefaultValues(row: CatalogRow): EditProductFormValues {
     JednostkaMiary: row["JednostkaMiary"] ?? "",
     StawkaVAT: row["StawkaVAT"] ?? "",
     categorySlug: row["categorySlug"] ?? "",
+    subcategorySlug: row["subcategorySlug"] ?? "",
     Heading: row["Heading"] ?? "",
     Subheading: row["Subheading"] ?? "",
     Description: row["Description"] ?? "",
@@ -94,7 +97,12 @@ export function EditProductModal({
     for (const key of FORM_KEYS) {
       if (key === "Kod") continue;
       const val = data[key as keyof EditProductFormValues];
-      const current = key === "categorySlug" ? sourceRow.categorySlug : sourceRow[key];
+      const current =
+        key === "categorySlug"
+          ? sourceRow.categorySlug
+          : key === "subcategorySlug"
+            ? sourceRow.subcategorySlug
+            : sourceRow[key];
       if (String(val ?? "") !== String(current ?? "")) {
         updates[key] = String(val ?? "");
       }
@@ -183,6 +191,28 @@ export function EditProductModal({
                     <FormControl>
                       <CategorySelect
                         currentSlug={field.value}
+                        onSelect={(slug) => {
+                          field.onChange(slug);
+                          form.setValue("subcategorySlug", "");
+                        }}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="subcategorySlug"
+                render={({ field }) => (
+                  <FormItem data-testid="edit-product-subcategory-field">
+                    <FormLabel>Podkategoria</FormLabel>
+                    <FormControl>
+                      <SubcategorySelect
+                        id="edit-product-subcategory"
+                        categorySlug={form.watch("categorySlug")}
+                        currentSlug={field.value ?? ""}
                         onSelect={field.onChange}
                         disabled={isSubmitting}
                       />

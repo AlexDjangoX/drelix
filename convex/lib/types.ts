@@ -18,6 +18,7 @@ export type ProductInsert = {
   Subheading?: string;
   Description?: string;
   categorySlug: string;
+  subcategorySlug?: string;
   imageStorageId?: string;
   thumbnailStorageId?: string;
   imageEntries?: ProductImageEntry[];
@@ -26,12 +27,17 @@ export type ProductInsert = {
 /** Product document from Convex. */
 export type ProductDoc = Doc<"products">;
 
+/** Subcategory document (slug unique per category). */
+export type SubcategoryDoc = Doc<"subcategories">;
+
 /** Catalog section with items (for UI and CSV replace). */
 export type CatalogSection = {
   slug: string;
   titleKey: string;
   displayName?: string;
   items: Record<string, string>[];
+  /** Subcategories for this category (for grouping and subheadings). */
+  subcategories: { slug: string; displayName: string; order?: number }[];
 };
 
 /** Product item with image URLs (for display). */
@@ -55,6 +61,7 @@ export type ProductUpdateResult = {
   Subheading?: string;
   Description?: string;
   categorySlug: string;
+  subcategorySlug?: string;
   imageStorageId?: string;
   thumbnailStorageId?: string;
   imageEntries?: ProductImageEntry[];

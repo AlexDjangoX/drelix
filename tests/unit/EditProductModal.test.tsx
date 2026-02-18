@@ -26,6 +26,7 @@ const mockRow: Record<string, string> = {
   JednostkaMiary: "szt",
   StawkaVAT: "23",
   categorySlug: "first-aid",
+  subcategorySlug: "",
   Heading: "",
   Subheading: "",
   Description: "",
@@ -75,4 +76,27 @@ describe("EditProductModal form wiring", () => {
     expect(dialog).toBeInTheDocument();
     expect(screen.queryByText(/nazwa jest wymagana/i)).not.toBeInTheDocument();
   });
+
+  it("renders Podkategoria field and subcategory select", () => {
+    mockUseQuery.mockImplementation((_query: unknown, args: unknown) => {
+      if (args === "skip") return undefined;
+      if (typeof args === "object" && args !== null && "kod" in args)
+        return mockRow;
+      if (typeof args === "object" && args !== null && "categorySlug" in args)
+        return [{ slug: "sub-a", displayName: "Sub A", order: 1 }];
+      return [{ slug: "first-aid", titleKey: "x", displayName: "First aid" }];
+    });
+    render(
+      <EditProductModal
+        row={mockRow}
+        open={true}
+        onOpenChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByText("Podkategoria")).toBeInTheDocument();
+    const subcategoryField = screen.getByTestId("edit-product-subcategory-field");
+    expect(subcategoryField).toBeInTheDocument();
+    expect(subcategoryField.querySelector("[data-testid='subcategory-select']")).toBeInTheDocument();
+  });
+
 });

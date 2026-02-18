@@ -9,9 +9,13 @@ export type ImageDimensions = {
 
 type DimensionsMap = Record<string, ImageDimensions>;
 
+/**
+ * Load image dimensions using Image() + onload so cross-origin URLs work
+ * (fetch + createImageBitmap often fails with CORS for storage/CDN images).
+ */
 export function useImageDimensions(urls: readonly string[]): DimensionsMap {
   const [cache, setCache] = useState<DimensionsMap>({});
-  const abortRef = useRef<AbortController | null>(null);
+  const cancelledRef = useRef(false);
 
   const unique = useMemo(() => [...new Set(urls)].filter(Boolean), [urls]);
 
@@ -21,50 +25,32 @@ export function useImageDimensions(urls: readonly string[]): DimensionsMap {
       return;
     }
 
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
+    cancelledRef.current = false;
 
-    Promise.all(
-      unique.map(async (url) => {
-        try {
-          const res = await fetch(url, {
-            signal: controller.signal,
-            cache: 'force-cache',
-          });
-
-          const blob = await res.blob();
-          const bitmap = await createImageBitmap(blob);
-
-          return [url, { width: bitmap.width, height: bitmap.height }] as const;
-        } catch {
-          return null;
-        }
-      }),
-    ).then((results) => {
-      if (controller.signal.aborted) return;
-
-      const next = Object.fromEntries(
-        results.filter(Boolean) as [string, ImageDimensions][],
-      );
-
-      setCache(next); // async result only
+    unique.forEach((url) => {
+      const img = new Image();
+      img.onload = () => {
+        if (cancelledRef.current) return;
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+        setCache((prev) => ({ ...prev, [url]: { width, height } }));
+      };
+      img.onerror = () => {};
+      img.src = url;
     });
 
-    return () => controller.abort();
+    return () => {
+      cancelledRef.current = true;
+    };
   }, [unique]);
 
-  // 🟢 derive snapshot during render (NOT effect)
   return useMemo(() => {
     if (!unique.length) return {};
-
     const snapshot: DimensionsMap = {};
-
     for (const url of unique) {
       const d = cache[url];
       if (d) snapshot[url] = d;
     }
-
     return snapshot;
   }, [cache, unique]);
 }

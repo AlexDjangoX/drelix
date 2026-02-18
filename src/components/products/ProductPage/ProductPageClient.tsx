@@ -1,219 +1,273 @@
-"use client";
+'use client';
 
-import { useState, useCallback, useMemo } from "react";
-import Link from "next/link";
-import { Loader2 } from "lucide-react";
-import { Navbar, Footer } from "@/components";
-import { AnimateText, TwoToneHeading } from "@/components";
-import { useLanguage } from "@/context/language";
-import { ProductGrid } from "@/components/products/ProductGrid";
-import { ProductLightbox } from "@/components/products/ProductLightbox";
-import { productConfig } from "@/components/products/productConfig";
-import type { ProductItem, ProductImageUrl } from "@/lib/types";
-import { computeBruttoPrice } from "@/lib/price";
-import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
-import { useQuery } from "convex/react";
-import { api } from "convex/_generated/api";
-import { useImageDimensions } from "@/hooks/useImageDimensions";
+import { useState, useCallback, useMemo } from 'react';
+import Link from 'next/link';
+import { ChevronUp } from 'lucide-react';
+import { Navbar, Footer, AnimateText, TwoToneHeading } from '@/components';
+import { useLanguage } from '@/context/language';
+import { ProductGrid } from '@/components/products/ProductGrid';
+import { ProductLightbox } from '@/components/products/ProductLightbox';
+import {
+  ProductSectionNav,
+  sectionId,
+} from '@/components/products/ProductPage/ProductSectionNav';
+import { productConfig } from '@/components/products/productConfig';
+import type { CatalogSection, ProductItem, ProductImageUrl } from '@/lib/types';
+import { computeBruttoPrice } from '@/lib/price';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
+import { useImageDimensions } from '@/hooks/useImageDimensions';
 
-type Props = { slug: string };
+type Props = { slug: string; section: CatalogSection };
 
-const COD = "Kod";
+const COD = 'Kod';
 
 function resolveTitle(
   t: Record<string, unknown>,
   titleKey: string,
   slug: string,
 ): string {
-  const keys = titleKey.split(".");
-  let current: unknown = t;
-  for (const key of keys) {
-    current =
-      current != null && typeof current === "object"
-        ? (current as Record<string, unknown>)[key]
-        : undefined;
-  }
-  const text = typeof current === "string" ? current : "";
-  return text.trim() || slug;
+  return (titleKey.split('.').reduce<unknown>((acc, k) => {
+    return acc && typeof acc === 'object'
+      ? (acc as Record<string, unknown>)[k]
+      : undefined;
+  }, t) ?? slug) as string;
 }
 
-export function ProductPageClient({ slug }: Props) {
+export function ProductPageClient({ slug, section }: Props) {
   const { t } = useLanguage();
-  const sectionFromConvex = useQuery(api.catalog.getCatalogSection, { slug });
   const config = productConfig[slug as keyof typeof productConfig];
-  const displayTitle = sectionFromConvex?.displayName;
-  const titleKey =
-    config?.titleKey ??
-    sectionFromConvex?.titleKey ??
-    "products.catalogCustomCategory";
-  const resolvedTitle = resolveTitle(
-    t as unknown as Record<string, unknown>,
-    titleKey,
-    slug,
+
+  const resolvedTitle = useMemo(
+    () =>
+      resolveTitle(
+        t as unknown as Record<string, unknown>,
+        config?.titleKey ??
+          section.titleKey ??
+          'products.catalogCustomCategory',
+        slug,
+      ),
+    [t, config?.titleKey, section.titleKey, slug],
   );
-  const [lightboxProductIndex, setLightboxProductIndex] = useState<
-    number | null
-  >(null);
-  const [lightboxImageIndex, setLightboxImageIndex] = useState(0);
+
+  const displayTitle = section.displayName;
 
   const items: ProductItem[] = useMemo(() => {
-    if (!sectionFromConvex) return [];
-    return sectionFromConvex.items.map((row) => {
-      const netto = row.CenaNetto ?? "";
-      const brutto = computeBruttoPrice(netto, row.StawkaVAT ?? "");
-      let images: ProductItem["images"];
-      try {
-        const parsed =
-          typeof row.imagesJson === "string" && row.imagesJson
-            ? (JSON.parse(row.imagesJson) as ProductImageUrl[])
-            : [];
-        if (Array.isArray(parsed) && parsed.length > 0)
-          images = parsed;
-      } catch {
-        images = undefined;
+    return section.items.map((row) => {
+      let parsedImages: ProductImageUrl[] | undefined;
+
+      if (row.imagesJson) {
+        try {
+          parsedImages = JSON.parse(row.imagesJson);
+        } catch {}
       }
-      const firstUrl =
-        images?.[0]?.thumbnailUrl ||
-        images?.[0]?.imageUrl ||
+
+      const src =
+        parsedImages?.[0]?.thumbnailUrl ||
+        parsedImages?.[0]?.imageUrl ||
         row.thumbnailUrl ||
         row.imageUrl ||
         PLACEHOLDER_PRODUCT_IMAGE;
-      const firstLarge =
-        images?.[0]?.imageUrl ||
-        images?.[0]?.thumbnailUrl ||
+
+      const largeSrc =
+        parsedImages?.[0]?.imageUrl ||
+        parsedImages?.[0]?.thumbnailUrl ||
         row.imageUrl ||
         row.thumbnailUrl ||
         PLACEHOLDER_PRODUCT_IMAGE;
+
+      const netto = row.CenaNetto ?? '';
+      const brutto = computeBruttoPrice(netto, row.StawkaVAT ?? '');
+
       return {
-        id: row[COD] ?? "",
-        src: firstUrl,
-        largeSrc: firstLarge,
-        images,
-        name: row.Nazwa ?? "",
+        id: row[COD] ?? '',
+        src,
+        largeSrc,
+        images: parsedImages,
+        name: row.Nazwa ?? '',
         price: brutto || netto,
-        unit: row.JednostkaMiary ?? "",
+        unit: row.JednostkaMiary ?? '',
         heading: row.Heading?.trim() || undefined,
         subheading: row.Subheading?.trim() || undefined,
         description: row.Description?.trim() || undefined,
+        subcategorySlug: row.subcategorySlug?.trim() || undefined,
       };
     });
-  }, [sectionFromConvex]);
+  }, [section]);
 
-  const imageUrls = useMemo(() => items.map((i) => i.src), [items]);
-  const dimensions = useImageDimensions(imageUrls);
+  const dimensionUrls = useMemo(
+    () => items.map((i) => i.largeSrc || i.src),
+    [items],
+  );
 
-  /** Sort by image area (width × height) descending so bigger images appear first. */
-  const sortedItems = useMemo(() => {
-    return [...items].sort((a, b) => {
-      const areaA =
-        (dimensions[a.src]?.width ?? 0) * (dimensions[a.src]?.height ?? 0);
-      const areaB =
-        (dimensions[b.src]?.width ?? 0) * (dimensions[b.src]?.height ?? 0);
-      return areaB - areaA;
+  const dimensions = useImageDimensions(dimensionUrls);
+
+  const subcategoryNames = useMemo(() => {
+    const m = new Map<string, string>();
+    section.subcategories?.forEach((s) => {
+      m.set(s.slug, s.displayName);
     });
-  }, [items, dimensions]);
+    return m;
+  }, [section.subcategories]);
 
-  const openLightbox = useCallback(
-    (productIndex: number, imageIndex = 0) => {
-      setLightboxProductIndex(productIndex);
-      setLightboxImageIndex(imageIndex);
-    },
+  const { groups, flat } = useMemo(() => {
+    const map = new Map<string, ProductItem[]>();
+
+    for (const item of items) {
+      const key = item.subcategorySlug ?? '';
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(item);
+    }
+
+    const orderedKeys = [
+      ...(section.subcategories?.map((s) => s.slug) ?? []).filter((k) =>
+        map.has(k),
+      ),
+      ...(map.has('') ? [''] : []),
+    ];
+
+    let offset = 0;
+
+    const groups = orderedKeys.map((key) => {
+      const sorted = [...(map.get(key) ?? [])].sort((a, b) => {
+        const hA = dimensions[a.largeSrc || a.src]?.height ?? 0;
+        const hB = dimensions[b.largeSrc || b.src]?.height ?? 0;
+        return hB - hA;
+      });
+
+      const startIndex = offset;
+      offset += sorted.length;
+
+      return {
+        key,
+        title: key ? (subcategoryNames.get(key) ?? key) : '',
+        items: sorted,
+        startIndex,
+      };
+    });
+
+    const flat = groups.flatMap((g) => g.items);
+
+    return { groups, flat };
+  }, [items, section.subcategories, subcategoryNames, dimensions]);
+
+  const [lightbox, setLightbox] = useState<{
+    product: number;
+    image: number;
+  } | null>(null);
+
+  const open = useCallback(
+    (p: number, i = 0) => setLightbox({ product: p, image: i }),
     [],
   );
-  const closeLightbox = useCallback(() => {
-    setLightboxProductIndex(null);
-    setLightboxImageIndex(0);
-  }, []);
 
-  /** Navigate to previous product only. Resets to first image of that product. */
-  const goPrevProduct = useCallback(() => {
-    if (lightboxProductIndex === null || lightboxProductIndex <= 0) return;
-    setLightboxProductIndex((i) => i! - 1);
-    setLightboxImageIndex(0);
-  }, [lightboxProductIndex]);
+  const close = useCallback(() => setLightbox(null), []);
 
-  /** Navigate to next product only. Resets to first image of that product. */
-  const goNextProduct = useCallback(() => {
-    if (lightboxProductIndex === null || lightboxProductIndex >= sortedItems.length - 1)
-      return;
-    setLightboxProductIndex((i) => i! + 1);
-    setLightboxImageIndex(0);
-  }, [lightboxProductIndex, sortedItems.length]);
-
-  /** Navigate to previous image within the current product only. */
-  const goPrevImage = useCallback(() => {
-    if (lightboxProductIndex === null) return;
-    setLightboxImageIndex((i) => Math.max(0, i - 1));
-  }, [lightboxProductIndex]);
-
-  /** Navigate to next image within the current product only. */
-  const goNextImage = useCallback(() => {
-    if (lightboxProductIndex === null) return;
-    const item = sortedItems[lightboxProductIndex];
-    const imageCount = item?.images?.length ?? 1;
-    setLightboxImageIndex((i) => Math.min(imageCount - 1, i + 1));
-  }, [sortedItems, lightboxProductIndex]);
-
-  const goToImage = useCallback((index: number) => {
-    setLightboxImageIndex(Math.max(0, index));
-  }, []);
-
-  if (sectionFromConvex === undefined) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2
-          className="w-10 h-10 animate-spin text-muted-foreground"
-          aria-hidden
-        />
-      </div>
+  const prevProduct = useCallback(() => {
+    setLightbox((s) =>
+      s && s.product > 0 ? { product: s.product - 1, image: 0 } : s,
     );
-  }
+  }, []);
 
-  if (sectionFromConvex === null) {
-    return null;
-  }
+  const nextProduct = useCallback(() => {
+    setLightbox((s) =>
+      s && s.product < flat.length - 1
+        ? { product: s.product + 1, image: 0 }
+        : s,
+    );
+  }, [flat.length]);
+
+  const prevImage = useCallback(() => {
+    setLightbox((s) => (s ? { ...s, image: Math.max(0, s.image - 1) } : s));
+  }, []);
+
+  const nextImage = useCallback(() => {
+    setLightbox((s) => {
+      if (!s) return s;
+      const count = flat[s.product]?.images?.length ?? 1;
+      return {
+        ...s,
+        image: Math.min(count - 1, s.image + 1),
+      };
+    });
+  }, [flat]);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+
       <main className="pt-24 pb-16 md:pt-28 md:pb-24">
-        <div className="container mx-auto px-4">
-          <div className="mb-8 flex items-center gap-4 text-sm text-muted-foreground">
-            <Link
-              href="/#products"
-              className="hover:text-primary transition-colors"
-            >
-              ← <AnimateText k="products.title" />
-            </Link>
-          </div>
-          <div className="text-center mb-12">
-            <TwoToneHeading
-              as="h1"
-              className="text-3xl md:text-5xl font-black mb-4"
-            >
+        <div className="container mx-auto px-4 space-y-6">
+          <Link
+            href="/#products"
+            className="text-sm text-muted-foreground hover:text-primary"
+          >
+            ← <AnimateText k="products.title" />
+          </Link>
+
+          <div
+            id="product-page-top"
+            className="text-center space-y-6 scroll-mt-24"
+          >
+            <TwoToneHeading as="h1" className="text-5xl font-black">
               {displayTitle ?? resolvedTitle}
             </TwoToneHeading>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+
+            <p className="text-lg text-muted-foreground">
               <AnimateText k="products.subtitle" />
             </p>
+            <ProductSectionNav
+              items={groups
+                .filter((g) => g.title)
+                .map((g) => ({ key: g.key, title: g.title }))}
+            />
           </div>
 
-          <ProductGrid items={sortedItems} onItemClick={openLightbox} />
+          {groups.map((g) => (
+            <section
+              key={g.key || '_'}
+              id={sectionId(g.key)}
+              className="scroll-mt-24"
+            >
+              {g.title && (
+                <div className="flex items-center justify-between gap-2 border-b pb-2 mb-4">
+                  <h2 className="text-xl font-semibold text-primary">{g.title}</h2>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document
+                        .getElementById('product-page-top')
+                        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                    className="shrink-0 rounded p-1.5 cursor-pointer text-muted-foreground/70 hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                    aria-label="Wróć do góry"
+                    title="Wróć do góry"
+                  >
+                    <ChevronUp className="size-4" />
+                  </button>
+                </div>
+              )}
+              <ProductGrid
+                items={g.items}
+                onItemClick={(i) => open(g.startIndex + i)}
+              />
+            </section>
+          ))}
         </div>
       </main>
+
       <Footer />
 
-      {lightboxProductIndex !== null && (
+      {lightbox && (
         <ProductLightbox
-          items={sortedItems}
-          currentProductIndex={lightboxProductIndex}
-          currentImageIndex={lightboxImageIndex}
-          onClose={closeLightbox}
-          onPrevProduct={goPrevProduct}
-          onNextProduct={goNextProduct}
-          onPrevImage={goPrevImage}
-          onNextImage={goNextImage}
-          onGoToImage={goToImage}
+          items={flat}
+          currentProductIndex={lightbox.product}
+          currentImageIndex={lightbox.image}
+          onClose={close}
+          onPrevProduct={prevProduct}
+          onNextProduct={nextProduct}
+          onPrevImage={prevImage}
+          onNextImage={nextImage}
+          onGoToImage={(i) => setLightbox((s) => (s ? { ...s, image: i } : s))}
         />
       )}
     </div>

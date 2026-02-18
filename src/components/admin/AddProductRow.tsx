@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { DISPLAY_KEYS } from "@/lib/types";
+import { SubcategorySelect } from "@/components/admin/SubcategorySelect";
 
 const EMPTY_ROW = {
   Rodzaj: "",
@@ -32,6 +33,7 @@ type Props = {
 export function AddProductRow({ categorySlug, disabled }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [row, setRow] = useState(EMPTY_ROW);
+  const [subcategorySlug, setSubcategorySlug] = useState("");
   const [saving, setSaving] = useState(false);
   const createProduct = useMutation(api.catalog.createProduct);
 
@@ -53,9 +55,11 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
           Kod: kod,
           Nazwa: nazwa,
         },
+        subcategorySlug: subcategorySlug.trim() || undefined,
       });
       toast.success("Produkt został dodany", { id: toastId });
       setRow(EMPTY_ROW);
+      setSubcategorySlug("");
       setExpanded(false);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Błąd dodawania";
@@ -68,6 +72,7 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
   const handleCancel = () => {
     setExpanded(false);
     setRow(EMPTY_ROW);
+    setSubcategorySlug("");
   };
 
   const colCount = 1 + DISPLAY_KEYS.length + 1; // Photo, DISPLAY_KEYS, Actions
@@ -82,6 +87,7 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
             size="sm"
             onClick={() => setExpanded(true)}
             disabled={disabled}
+            data-testid="add-product-row-expand"
             className="gap-2 text-muted-foreground hover:text-foreground"
           >
             <Plus className="w-4 h-4" />
@@ -95,14 +101,27 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
   return (
     <tr className="border-b border-border bg-muted/30">
       <td colSpan={colCount} className="p-2">
-        <form onSubmit={handleSubmit} className="space-y-2">
+        <form data-testid="add-product-row-form" onSubmit={handleSubmit} className="space-y-2">
           <div className="flex flex-wrap gap-2 items-end">
+            <div className="min-w-32" data-testid="add-product-row-subcategory-wrap">
+              <label className="text-[10px] text-muted-foreground block mb-0.5">
+                Podkategoria
+              </label>
+              <SubcategorySelect
+                categorySlug={categorySlug}
+                currentSlug={subcategorySlug}
+                onSelect={setSubcategorySlug}
+                disabled={saving}
+                id="add-product-subcategory"
+              />
+            </div>
             {DISPLAY_KEYS.map(({ key }) => (
               <div key={key} className="min-w-24">
                 <label className="text-[10px] text-muted-foreground block mb-0.5">
                   {key}
                 </label>
                 <Input
+                  data-testid={`add-product-row-input-${key}`}
                   value={row[key as keyof typeof row] ?? ""}
                   onChange={(e) =>
                     setRow((r) => ({ ...r, [key]: e.target.value }))
@@ -117,6 +136,7 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
                 type="submit"
                 size="sm"
                 disabled={saving}
+                data-testid="add-product-row-submit"
                 className="gap-1 h-7"
               >
                 {saving ? (
@@ -132,6 +152,7 @@ export function AddProductRow({ categorySlug, disabled }: Props) {
                 size="sm"
                 onClick={handleCancel}
                 disabled={saving}
+                data-testid="add-product-row-cancel"
                 className="h-7"
               >
                 Anuluj

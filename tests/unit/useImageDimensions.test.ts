@@ -1,35 +1,56 @@
 /**
- * Tests for useImageDimensions: loading, deduping, abort, snapshot, empty urls.
+ * Tests for useImageDimensions: loading, deduping, snapshot, empty urls.
+ * Hook uses Image() + onload (not fetch) so cross-origin URLs work.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useImageDimensions } from "@/hooks/useImageDimensions";
 
-const mockCreateImageBitmap = vi.fn();
-const mockFetch = vi.fn();
+const urlToDimensions: Record<string, { width: number; height: number }> = {};
+const errorUrls = new Set<string>();
 
-function blobWithSize(width: number, height: number): Blob {
-  return new Blob([], { type: "image/png" });
-}
+let MockImage: ReturnType<typeof vi.fn>;
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mockCreateImageBitmap.mockImplementation((_blob: Blob) =>
-    Promise.resolve({
-      width: 100,
-      height: 200,
-      close: () => {},
-    } as unknown as ImageBitmap),
-  );
-  mockFetch.mockImplementation((url: string) =>
-    Promise.resolve(
-      new Response(blobWithSize(100, 200), {
-        headers: { "Content-Type": "image/png" },
-      }),
-    ),
-  );
-  global.fetch = mockFetch;
-  global.createImageBitmap = mockCreateImageBitmap;
+  Object.keys(urlToDimensions).forEach((k) => delete urlToDimensions[k]);
+  errorUrls.clear();
+
+  MockImage = vi.fn().mockImplementation(function (this: {
+    onload: () => void;
+    onerror: () => void;
+    _src: string;
+    naturalWidth: number;
+    naturalHeight: number;
+  }) {
+    this.onload = () => {};
+    this.onerror = () => {};
+    this._src = "";
+    this.naturalWidth = 100;
+    this.naturalHeight = 200;
+    Object.defineProperty(this, "src", {
+      set(value: string) {
+        this._src = value;
+        const dims = urlToDimensions[value] ?? { width: 100, height: 200 };
+        const fail = errorUrls.has(value);
+        queueMicrotask(() => {
+          if (fail) this.onerror();
+          else {
+            this.naturalWidth = dims.width;
+            this.naturalHeight = dims.height;
+            this.onload();
+          }
+        });
+      },
+      get() {
+        return this._src;
+      },
+      configurable: true,
+    });
+    return this;
+  });
+
+  global.Image = MockImage as unknown as typeof Image;
 });
 
 afterEach(() => {
@@ -39,14 +60,15 @@ afterEach(() => {
 describe("useImageDimensions", () => {
   it("returns empty object when urls is empty array", () => {
     const { result } = renderHook(() => useImageDimensions([]));
-    // useMemo returns {} when unique.length is 0; queueMicrotask(setCache) may trigger one act warning
+    // useMemo returns {} when unique.length is 0; effect may queue setCache({}) (act warning ok)
     expect(result.current).toEqual({});
   });
 
   it("returns empty object when urls is empty and clears cache after microtask", async () => {
+    const url = "https://example.com/a.png";
     const { result, rerender } = renderHook(
       ({ urls }: { urls: readonly string[] }) => useImageDimensions(urls),
-      { initialProps: { urls: ["https://example.com/a.png"] } },
+      { initialProps: { urls: [url] } },
     );
     await waitFor(() => {
       expect(Object.keys(result.current).length).toBeGreaterThan(0);
@@ -77,7 +99,7 @@ describe("useImageDimensions", () => {
     await waitFor(() => {
       expect(result.current[url]).toBeDefined();
     });
-    expect(mockFetch).toHaveBeenCalledTimes(1);
+    expect(MockImage).toHaveBeenCalledTimes(1);
     expect(result.current[url]).toEqual({ width: 100, height: 200 });
   });
 
@@ -93,21 +115,11 @@ describe("useImageDimensions", () => {
   });
 
   it("returns dimensions for multiple URLs", async () => {
-    const urls = [
-      "https://example.com/a.png",
-      "https://example.com/b.png",
-    ] as const;
-    mockCreateImageBitmap
-      .mockResolvedValueOnce({
-        width: 10,
-        height: 20,
-        close: () => {},
-      } as unknown as ImageBitmap)
-      .mockResolvedValueOnce({
-        width: 30,
-        height: 40,
-        close: () => {},
-      } as unknown as ImageBitmap);
+    const urlA = "https://example.com/a.png";
+    const urlB = "https://example.com/b.png";
+    urlToDimensions[urlA] = { width: 10, height: 20 };
+    urlToDimensions[urlB] = { width: 30, height: 40 };
+    const urls = [urlA, urlB] as const;
     const { result } = renderHook(() => useImageDimensions(urls));
     await waitFor(() => {
       expect(result.current[urls[0]]).toEqual({ width: 10, height: 20 });
@@ -115,18 +127,10 @@ describe("useImageDimensions", () => {
     });
   });
 
-  it("omits URL when fetch fails", async () => {
+  it("omits URL when load fails", async () => {
     const good = "https://example.com/good.png";
     const bad = "https://example.com/bad.png";
-    mockFetch.mockImplementation((url: string) =>
-      url === bad
-        ? Promise.reject(new Error("Network error"))
-        : Promise.resolve(
-            new Response(blobWithSize(1, 1), {
-              headers: { "Content-Type": "image/png" },
-            }),
-          ),
-    );
+    errorUrls.add(bad);
     const { result } = renderHook(() =>
       useImageDimensions([good, bad]),
     );
@@ -139,7 +143,7 @@ describe("useImageDimensions", () => {
 
   it("omits URL when createImageBitmap fails", async () => {
     const url = "https://example.com/fail-decode.png";
-    mockCreateImageBitmap.mockRejectedValueOnce(new Error("decode error"));
+    errorUrls.add(url);
     const { result } = renderHook(() => useImageDimensions([url]));
     await waitFor(
       () => {
@@ -167,33 +171,29 @@ describe("useImageDimensions", () => {
     expect(result.current[urlB]).toBeUndefined();
   });
 
-  it("aborts previous request when urls change", async () => {
+  it("starts loading new URL when urls change", async () => {
     const url1 = "https://example.com/1.png";
     const url2 = "https://example.com/2.png";
-    const { rerender } = renderHook(
+    urlToDimensions[url2] = { width: 50, height: 60 };
+    const { result, rerender } = renderHook(
       ({ urls }: { urls: readonly string[] }) => useImageDimensions(urls),
       { initialProps: { urls: [url1] } },
     );
     rerender({ urls: [url2] });
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith(
-        url2,
-        expect.objectContaining({ signal: expect.any(AbortSignal) }),
-      );
+      expect(result.current[url2]).toEqual({ width: 50, height: 60 });
     });
   });
 
-  it("uses AbortController signal in fetch", async () => {
+  it("creates Image and sets src for each URL", async () => {
     const url = "https://example.com/signal.png";
     renderHook(() => useImageDimensions([url]));
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith(
-        url,
-        expect.objectContaining({
-          signal: expect.any(AbortSignal),
-          cache: "force-cache",
-        }),
-      );
+      expect(MockImage).toHaveBeenCalled();
     });
+    const instance = (MockImage as ReturnType<typeof vi.fn>).mock.results[0]
+      ?.value;
+    expect(instance).toBeDefined();
+    expect(instance.src).toBe(url);
   });
 });

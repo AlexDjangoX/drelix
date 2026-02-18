@@ -1,6 +1,7 @@
 import { CategorySectionTitle } from "@/components/admin/CategorySectionTitle";
 import { ProductRow } from "@/components/admin/ProductRow";
 import { AddProductRow } from "@/components/admin/AddProductRow";
+import { SubcategoryManager } from "@/components/admin/SubcategoryManager";
 import { CatalogTableColumns } from "@/components/admin/CatalogTable/CatalogTableColumns";
 import { DeleteCategoryButton } from "@/components/admin/CatalogTable/DeleteCategoryButton";
 import type { CatalogSection, CatalogRow } from "@/lib/types";
@@ -25,6 +26,9 @@ export function CategorySection({ section, isPreview, loading }: Props) {
           )}
         </div>
       </div>
+      {!isPreview && (
+        <SubcategoryManager categorySlug={section.slug} disabled={loading} />
+      )}
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <CatalogTableColumns />

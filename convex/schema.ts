@@ -12,6 +12,8 @@ const imageEntryValidator = v.object({
 const productFields = {
   ...productFieldValidators,
   categorySlug: v.string(),
+  /** Optional subcategory within the category (references subcategories table by slug). */
+  subcategorySlug: v.optional(v.string()),
   imageStorageId: v.optional(v.string()), // Legacy: single large image
   thumbnailStorageId: v.optional(v.string()), // Legacy: single thumbnail
   /** Multiple images per product. When set, preferred over legacy single image. */
@@ -40,4 +42,15 @@ export default defineSchema({
     displayName: v.optional(v.string()), // Custom name for admin-created categories
     createdAt: v.optional(v.number()), // Timestamp; admin-created categories get this, sorted to top
   }).index("by_slug", ["slug"]),
+
+  /** Subcategories within a category (e.g. gloves → podgumowane, gumowe). Slug unique per category. */
+  subcategories: defineTable({
+    categorySlug: v.string(),
+    slug: v.string(),
+    displayName: v.string(),
+    order: v.optional(v.number()), // For dropdown and section order
+    createdAt: v.optional(v.number()),
+  })
+    .index("by_category", ["categorySlug"])
+    .index("by_category_slug", ["categorySlug", "slug"]),
 });

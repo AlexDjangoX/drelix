@@ -21,6 +21,12 @@ export const ADMIN_ERRORS = {
   CATEGORY_EXISTS: (slug: string) => `Category already exists: ${slug}`,
   CATEGORY_HAS_PRODUCTS: (slug: string, count: number) =>
     `Cannot delete category "${slug}": it contains ${count} product(s)`,
+  SUBCATEGORY_NOT_FOUND: (slug: string, categorySlug: string) =>
+    `Subcategory "${slug}" not found in category "${categorySlug}"`,
+  SUBCATEGORY_EXISTS: (slug: string, categorySlug: string) =>
+    `Subcategory "${slug}" already exists in category "${categorySlug}"`,
+  SUBCATEGORY_HAS_PRODUCTS: (slug: string, count: number) =>
+    `Cannot delete subcategory "${slug}": it is used by ${count} product(s)`,
   INVALID_SLUG:
     "Slug must contain only lowercase letters, numbers, hyphens, and underscores",
   SLUG_TOO_LONG: (max: number) =>
