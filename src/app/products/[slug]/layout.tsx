@@ -9,10 +9,18 @@ const siteUrl = getCanonicalBaseUrl();
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  const slugs = await fetchQuery(api.catalog.listCategorySlugs);
-  return slugs.map((slug) => ({ slug }));
-}
+/**
+ * While building: force-dynamic so new images/catalog changes show in production
+ * without redeploying. When the site is ready for the customer, remove this
+ * and uncomment generateStaticParams below for better SEO (static pre-render).
+ */
+export const dynamic = "force-dynamic";
+
+// Uncomment when site is ready for customer (better SEO):
+// export async function generateStaticParams() {
+//   const slugs = await fetchQuery(api.catalog.listCategorySlugs);
+//   return slugs.map((slug) => ({ slug }));
+// }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
