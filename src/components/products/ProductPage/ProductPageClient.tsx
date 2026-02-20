@@ -3,6 +3,8 @@
 import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { ChevronUp } from 'lucide-react';
+import { useQuery } from 'convex/react';
+import { api } from 'convex/_generated/api';
 import { Navbar, Footer, AnimateText, TwoToneHeading } from '@/components';
 import { useLanguage } from '@/context/language';
 import { ProductGrid } from '@/components/products/ProductGrid';
@@ -32,7 +34,11 @@ function resolveTitle(
   }, t) ?? slug) as string;
 }
 
-export function ProductPageClient({ slug, section }: Props) {
+export function ProductPageClient({ slug, section: initialSection }: Props) {
+  const liveSection = useQuery(api.catalog.getCatalogSection, { slug });
+  // Use live Convex data once the subscription hydrates; fall back to the SSR
+  // prop on first paint so the page renders immediately without a loading flash.
+  const section = liveSection ?? initialSection;
   const { t } = useLanguage();
   const config = productConfig[slug as keyof typeof productConfig];
 
