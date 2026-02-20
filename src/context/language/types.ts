@@ -31,6 +31,7 @@ export interface Translations {
   products: {
     title: string;
     subtitle: string;
+    loading: string;
     viewAll: string;
     catalogTitle: string;
     catalogSubtitle: string;

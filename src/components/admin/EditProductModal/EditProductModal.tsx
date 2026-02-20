@@ -62,7 +62,7 @@ function rowToDefaultValues(row: CatalogRow): EditProductFormValues {
     subcategorySlug: row["subcategorySlug"] ?? "",
     Heading: row["Heading"] ?? "",
     Subheading: row["Subheading"] ?? "",
-    Description: row["Description"] ?? "",
+    Description: row["Description"] ?? row["Opis"] ?? "",
   };
 }
 

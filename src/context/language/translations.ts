@@ -33,6 +33,7 @@ export const translations: Record<Language, Translations> = {
     products: {
       title: "Nasze produkty",
       subtitle: "Szeroki wybór odzieży ochronnej i roboczej dla każdej branży",
+      loading: "Ładowanie…",
       viewAll: "Zobacz wszystkie",
       catalogTitle: "Katalog produktów",
       catalogSubtitle: "Pełna oferta sklepu – odzież robocza i ochronna, BHP.",
@@ -163,6 +164,7 @@ export const translations: Record<Language, Translations> = {
       title: "Our Products",
       subtitle:
         "Wide selection of protective and work clothing for every industry",
+      loading: "Loading…",
       viewAll: "View All",
       catalogTitle: "Product catalog",
       catalogSubtitle: "Full store offer – work and protective clothing, PPE.",

@@ -67,7 +67,10 @@ export function ProductLightbox({
         paddingTop: "max(1rem, env(safe-area-inset-top))",
         paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
       }}
-      onClick={onClose}
+      onClick={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
       role="dialog"
       aria-modal="true"
       aria-label="Podgląd zdjęcia"
@@ -82,6 +85,7 @@ export function ProductLightbox({
       <LightboxNavButton
         direction="prev"
         onClick={(e) => {
+          e.preventDefault();
           e.stopPropagation();
           onPrevProduct();
         }}
@@ -99,6 +103,7 @@ export function ProductLightbox({
       <LightboxNavButton
         direction="next"
         onClick={(e) => {
+          e.preventDefault();
           e.stopPropagation();
           onNextProduct();
         }}

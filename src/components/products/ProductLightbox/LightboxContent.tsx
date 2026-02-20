@@ -56,13 +56,12 @@ export function LightboxContent({
         className="relative flex flex-col max-w-full h-full bg-background rounded-xl overflow-hidden shadow-xl"
         style={{ height: CONTENT_HEIGHT }}
       >
-        {/* Top: image — dynamic single image by safeIndex; key forces re-render when image changes */}
+        {/* Top: image — same img element, update src only (no key) to avoid remount/refetch on every change */}
         <div className="shrink-0 h-1/2 min-h-0 flex items-center justify-center bg-muted/30 relative">
           {largeSrc ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                key={`${item.id}-${safeIndex}`}
                 src={largeSrc}
                 alt={
                   hasMultiple
@@ -79,8 +78,9 @@ export function LightboxContent({
                   <button
                     type="button"
                     onClick={(e) => {
-                      if (isFirstImage) return;
+                      e.preventDefault();
                       e.stopPropagation();
+                      if (isFirstImage) return;
                       onPrevImage();
                     }}
                     disabled={isFirstImage}
@@ -94,8 +94,9 @@ export function LightboxContent({
                   <button
                     type="button"
                     onClick={(e) => {
-                      if (isLastImage) return;
+                      e.preventDefault();
                       e.stopPropagation();
+                      if (isLastImage) return;
                       onNextImage();
                     }}
                     disabled={isLastImage}
@@ -119,6 +120,7 @@ export function LightboxContent({
                         aria-selected={i === safeIndex}
                         aria-label={`Zdjęcie ${i + 1} z ${imageCount}`}
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           onGoToImage?.(i);
                         }}

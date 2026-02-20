@@ -28,7 +28,7 @@ export const ALLOWED_UPDATE_KEYS = new Set([
   "thumbnailStorageId",
 ]);
 
-/** Canonical key → alternate CSV column name (with spaces) for fallback lookup. */
+/** Canonical key → alternate CSV column name (with spaces / locale) for fallback lookup. */
 export const CSV_ALT_BY_CANONICAL: Partial<Record<ProductFieldKey, string>> = {
   JednostkaMiary: "Jednostka miary",
   StawkaVAT: "Stawka VAT",
@@ -36,10 +36,18 @@ export const CSV_ALT_BY_CANONICAL: Partial<Record<ProductFieldKey, string>> = {
   KodKlasyfikacji: "Kod klasyfikacji",
   OstatniaCenaZakupu: "Ostatnia cena zakupu",
   OstatniaDataZakupu: "Ostatnia data zakupu",
+  /** CSV/Kartoteki often uses "Opis" for long description; map to Description for display. */
+  Description: "Opis",
 };
 
 /** Title key for admin-created categories. */
 export const CUSTOM_CATEGORY_TITLE_KEY = "products.catalogCustomCategory";
+
+/**
+ * Catalog order (single source of truth for wording):
+ * subcategory (by order) → first image height (tallest first) → Nazwa.
+ * Used by getCatalogSection, listCatalogSections, and admin "Update catalog order".
+ */
 
 // --- Auth rate limiting ---
 

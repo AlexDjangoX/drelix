@@ -53,4 +53,11 @@ export default defineSchema({
   })
     .index("by_category", ["categorySlug"])
     .index("by_category_slug", ["categorySlug", "slug"]),
+
+  /** Cache of image dimensions by storage ID. Populated via admin "Update catalog order"; used for catalog order (tallest first). */
+  imageDimensions: defineTable({
+    storageId: v.string(),
+    width: v.number(),
+    height: v.number(),
+  }).index("by_storageId", ["storageId"]),
 });

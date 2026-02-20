@@ -41,15 +41,11 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      {
-        source: "/products/:slug",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
+      // NOTE: Do NOT set Cache-Control here for /products/:slug.
+      // These pages use ISR (revalidate=60 in layout.tsx). Setting a manual
+      // Cache-Control header (especially "immutable") would override ISR and
+      // cause browsers/CDNs to cache stale content for up to a year, hiding
+      // admin-added products and images from users.
     ];
   },
 };

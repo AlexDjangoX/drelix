@@ -57,6 +57,77 @@ export function sortItemsByNazwa<T extends { Nazwa?: string }>(
   );
 }
 
+/** Sort items by subcategory order (slugs) then by Nazwa. Use for product pages so client can group without re-sorting. */
+export function sortItemsBySubcategoryThenNazwa<
+  T extends { Nazwa?: string; subcategorySlug?: string },
+>(items: T[], subcategorySlugs: string[]): T[] {
+  const orderMap = new Map(subcategorySlugs.map((slug, i) => [slug, i]));
+  return [...items].sort((a, b) => {
+    const keyA = a.subcategorySlug ?? "";
+    const keyB = b.subcategorySlug ?? "";
+    const orderA = orderMap.get(keyA) ?? 999;
+    const orderB = orderMap.get(keyB) ?? 999;
+    if (orderA !== orderB) return orderA - orderB;
+    return (a.Nazwa ?? "").localeCompare(b.Nazwa ?? "", undefined, {
+      sensitivity: "base",
+    });
+  });
+}
+
+/**
+ * Catalog order: subcategory order → portrait ratio (height/width, descending) → Nazwa.
+ *
+ * Sorting by portrait ratio (height÷width) rather than raw pixel height is correct because:
+ * - THUMBNAIL_MAX caps the longest side at 640px, so nearly all portrait images end up with
+ *   height=640 regardless of subject — raw height no longer differentiates them.
+ * - The card container renders at the image's natural aspect ratio, so a narrow image
+ *   (e.g. 480×640, ratio≈1.33) displays as a taller card than a square (640×640, ratio=1.00).
+ * - Sorting by portrait ratio descending therefore puts the visually tallest cards first.
+ */
+export function sortProductsBySubcategoryThenHeightThenNazwa(
+  products: ProductDoc[],
+  subcategorySlugs: string[],
+  dimsByStorageId: Record<string, { width: number; height: number }>,
+): ProductDoc[] {
+  const orderMap = new Map(subcategorySlugs.map((slug, i) => [slug, i]));
+
+  // Portrait ratio = height / width.  Higher ratio → narrower image → taller card.
+  const portraitRatioOf = (p: ProductDoc): number => {
+    const e = getProductImageEntries(p)[0];
+    const sid = e?.thumbnailStorageId ?? e?.imageStorageId;
+    if (!sid) return 0;
+    const dim = dimsByStorageId[sid];
+    if (!dim?.width) return 0;
+    return dim.height / dim.width;
+  };
+
+  const ratioMap = new Map(products.map((p) => [p._id, portraitRatioOf(p)]));
+  const ratios = [...ratioMap.values()];
+  const minR = ratios.length ? Math.min(...ratios) : 0;
+  const maxR = ratios.length ? Math.max(...ratios) : 0;
+  console.log(
+    "[sortProductsBySubcategoryThenHeightThenNazwa] products=%d portraitRatio range=[%s..%s] distinct=%d",
+    products.length,
+    minR.toFixed(3),
+    maxR.toFixed(3),
+    new Set(ratios.map((r) => r.toFixed(3))).size,
+  );
+
+  return [...products].sort((a, b) => {
+    const keyA = a.subcategorySlug ?? "";
+    const keyB = b.subcategorySlug ?? "";
+    const orderA = orderMap.get(keyA) ?? 999;
+    const orderB = orderMap.get(keyB) ?? 999;
+    if (orderA !== orderB) return orderA - orderB;
+    const ratioA = ratioMap.get(a._id) ?? 0;
+    const ratioB = ratioMap.get(b._id) ?? 0;
+    if (ratioA !== ratioB) return ratioB - ratioA; // highest portrait ratio first
+    return (a.Nazwa ?? "").localeCompare(b.Nazwa ?? "", undefined, {
+      sensitivity: "base",
+    });
+  });
+}
+
 /** Sort subcategories by order (asc), then by displayName. */
 export function sortSubcategories<
   T extends { order?: number; displayName: string },
@@ -114,7 +185,8 @@ export async function productToItem(
     ) as Omit<ProductDoc, "_id" | "_creationTime">;
 
   const resolvedEntries = entries.length > 0 ? entries : [];
-  const imageUrls = await Promise.all(
+  // getUrl can return null if file is missing or URL cannot be generated (e.g. wrong deployment).
+  const rawImageUrls = await Promise.all(
     resolvedEntries.map(async (e) => {
       const [imageUrl, thumbnailUrl] = await Promise.all([
         ctx.storage.getUrl(e.imageStorageId),
@@ -128,6 +200,10 @@ export async function productToItem(
       };
     }),
   );
+  // Only include entries with at least one valid URL so client does not try to load empty strings.
+  const imageUrls = rawImageUrls.filter(
+    (u) => (u.imageUrl?.trim?.()?.length ?? 0) > 0 || (u.thumbnailUrl?.trim?.()?.length ?? 0) > 0,
+  );
 
   const first = imageUrls[0];
   const imageUrl = first?.imageUrl ?? "";
@@ -135,8 +211,15 @@ export async function productToItem(
   const imagesJson =
     imageUrls.length > 0 ? JSON.stringify(imageUrls) : "[]";
 
+  // Normalize display description: client expects "Description"; DB may have only "Opis" (CSV column).
+  const description =
+    (rest.Description as string | undefined)?.trim() ||
+    (rest.Opis as string | undefined)?.trim() ||
+    "";
+
   return {
     ...rest,
+    Description: description,
     imageStorageId: resolvedEntries[0]?.imageStorageId ?? "",
     imageUrl,
     thumbnailStorageId: resolvedEntries[0]?.thumbnailStorageId ?? "",

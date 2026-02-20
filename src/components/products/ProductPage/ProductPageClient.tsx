@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronUp } from 'lucide-react';
 import { Navbar, Footer, AnimateText, TwoToneHeading } from '@/components';
@@ -15,7 +15,6 @@ import { productConfig } from '@/components/products/productConfig';
 import type { CatalogSection, ProductItem, ProductImageUrl } from '@/lib/types';
 import { computeBruttoPrice } from '@/lib/price';
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
-import { useImageDimensions } from '@/hooks/useImageDimensions';
 
 type Props = { slug: string; section: CatalogSection };
 
@@ -50,6 +49,18 @@ export function ProductPageClient({ slug, section }: Props) {
   );
 
   const displayTitle = section.displayName;
+
+  // Log order received from server (compare with Convex [getCatalogSection] "order after sort")
+  useEffect(() => {
+    const orderReceived = section.items.map((row, index) => ({
+      index,
+      Nazwa: (row as { Nazwa?: string }).Nazwa ?? '',
+      Kod: (row as { Kod?: string }).Kod ?? '',
+      subcategorySlug: (row as { subcategorySlug?: string }).subcategorySlug ?? '',
+      imageStorageId: (row as { imageStorageId?: string }).imageStorageId ?? '',
+    }));
+    console.log('[ProductPageClient] section.slug=%s items count=%d order as received from server:', slug, section.items.length, orderReceived);
+  }, [slug, section]);
 
   const items: ProductItem[] = useMemo(() => {
     return section.items.map((row) => {
@@ -88,18 +99,11 @@ export function ProductPageClient({ slug, section }: Props) {
         unit: row.JednostkaMiary ?? '',
         heading: row.Heading?.trim() || undefined,
         subheading: row.Subheading?.trim() || undefined,
-        description: row.Description?.trim() || undefined,
+        description: (row.Description ?? row.Opis)?.trim() || undefined,
         subcategorySlug: row.subcategorySlug?.trim() || undefined,
       };
     });
   }, [section]);
-
-  const dimensionUrls = useMemo(
-    () => items.map((i) => i.largeSrc || i.src),
-    [items],
-  );
-
-  const dimensions = useImageDimensions(dimensionUrls);
 
   const subcategoryNames = useMemo(() => {
     const m = new Map<string, string>();
@@ -109,46 +113,38 @@ export function ProductPageClient({ slug, section }: Props) {
     return m;
   }, [section.subcategories]);
 
+  // Server returns items in catalog order: subcategory → image height (tallest first) → Nazwa. Group preserving that order.
   const { groups, flat } = useMemo(() => {
-    const map = new Map<string, ProductItem[]>();
-
+    const subSlugs = section.subcategories?.map((s) => s.slug) ?? [];
+    const orderedKeys = [
+      ...subSlugs.filter((slug) =>
+        items.some((i) => (i.subcategorySlug ?? '') === slug),
+      ),
+      ...(items.some((i) => !(i.subcategorySlug?.trim())) ? [''] : []),
+    ];
+    const map = new Map<string, ProductItem[]>(
+      orderedKeys.map((k) => [k, []]),
+    );
     for (const item of items) {
       const key = item.subcategorySlug ?? '';
-      if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(item);
+      if (map.has(key)) map.get(key)!.push(item);
     }
 
-    const orderedKeys = [
-      ...(section.subcategories?.map((s) => s.slug) ?? []).filter((k) =>
-        map.has(k),
-      ),
-      ...(map.has('') ? [''] : []),
-    ];
-
     let offset = 0;
-
     const groups = orderedKeys.map((key) => {
-      const sorted = [...(map.get(key) ?? [])].sort((a, b) => {
-        const hA = dimensions[a.largeSrc || a.src]?.height ?? 0;
-        const hB = dimensions[b.largeSrc || b.src]?.height ?? 0;
-        return hB - hA;
-      });
-
+      const groupItems = map.get(key) ?? [];
       const startIndex = offset;
-      offset += sorted.length;
-
+      offset += groupItems.length;
       return {
         key,
         title: key ? (subcategoryNames.get(key) ?? key) : '',
-        items: sorted,
+        items: groupItems,
         startIndex,
       };
     });
 
-    const flat = groups.flatMap((g) => g.items);
-
-    return { groups, flat };
-  }, [items, section.subcategories, subcategoryNames, dimensions]);
+    return { groups, flat: groups.flatMap((g) => g.items) };
+  }, [items, section.subcategories, subcategoryNames]);
 
   const [lightbox, setLightbox] = useState<{
     product: number;

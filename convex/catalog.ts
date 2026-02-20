@@ -18,6 +18,8 @@ import {
 import {
   sortCategories,
   sortItemsByNazwa,
+  sortItemsBySubcategoryThenNazwa,
+  sortProductsBySubcategoryThenHeightThenNazwa,
   sortSubcategories,
   getProductByKod,
   productToItem,
@@ -37,7 +39,7 @@ const MAX_SLUG_GENERATION_ATTEMPTS = 10;
 
 // --- Queries ---
 
-/** List catalog grouped by category (for admin and public). Includes empty categories. */
+/** List catalog grouped by category (for admin and public). Catalog order: subcategory → image height (tallest first) → Nazwa. */
 export const listCatalogSections = query({
   args: {},
   handler: async (ctx) => {
@@ -50,9 +52,6 @@ export const listCatalogSections = query({
         .query("products")
         .withIndex("by_category", (q) => q.eq("categorySlug", cat.slug))
         .collect();
-      const items = await Promise.all(
-        products.map((p) => productToItem(ctx, p)),
-      );
       const subs = await ctx.db
         .query("subcategories")
         .withIndex("by_category", (q) => q.eq("categorySlug", cat.slug))
@@ -60,11 +59,34 @@ export const listCatalogSections = query({
       const subcategories = sortSubcategories(
         subs.map((s) => ({ slug: s.slug, displayName: s.displayName, order: s.order })),
       );
+      const subSlugs = subcategories.map((s) => s.slug);
+
+      const storageIds = products
+        .map((p) => {
+          const e = getProductImageEntries(p)[0];
+          return e?.thumbnailStorageId ?? e?.imageStorageId;
+        })
+        .filter((id): id is string => Boolean(id));
+      const dimsByStorageId: Record<string, { width: number; height: number }> = {};
+      for (const id of [...new Set(storageIds)]) {
+        const row = await ctx.db
+          .query("imageDimensions")
+          .withIndex("by_storageId", (q) => q.eq("storageId", id))
+          .unique();
+        if (row) dimsByStorageId[id] = { width: row.width, height: row.height };
+      }
+
+      const sorted = sortProductsBySubcategoryThenHeightThenNazwa(
+        products,
+        subSlugs,
+        dimsByStorageId,
+      );
+      const items = await Promise.all(sorted.map((p) => productToItem(ctx, p)));
       sections.push({
         slug: cat.slug,
         titleKey: cat.titleKey,
         displayName: cat.displayName,
-        items: sortItemsByNazwa(items),
+        items,
         subcategories,
       });
     }
@@ -120,10 +142,49 @@ export const listSubcategories = query({
   },
 });
 
-/** Get one category's products (for /products/[slug] when migrated from placeholder). */
+/** Get dimensions for many storage IDs (catalog order: tallest first). */
+export const getImageDimensionsBatch = query({
+  args: { storageIds: v.array(v.string()) },
+  handler: async (ctx, { storageIds }) => {
+    const unique = [...new Set(storageIds)].filter(Boolean);
+    const out: Record<string, { width: number; height: number }> = {};
+    for (const id of unique) {
+      const row = await ctx.db
+        .query("imageDimensions")
+        .withIndex("by_storageId", (q) => q.eq("storageId", id))
+        .unique();
+      if (row) out[id] = { width: row.width, height: row.height };
+    }
+    return out;
+  },
+});
+
+/** Set or overwrite dimensions for one image (storage ID). Used only by admin "Update catalog order" API route. */
+export const setImageDimensions = mutation({
+  args: {
+    storageId: v.string(),
+    width: v.number(),
+    height: v.number(),
+  },
+  handler: async (ctx, { storageId, height, width }) => {
+    const existing = await ctx.db
+      .query("imageDimensions")
+      .withIndex("by_storageId", (q) => q.eq("storageId", storageId))
+      .unique();
+    const data = { storageId, width, height };
+    if (existing) {
+      await ctx.db.patch(existing._id, data);
+    } else {
+      await ctx.db.insert("imageDimensions", data);
+    }
+    return { ok: true } as MutationSuccess;
+  },
+});
+
+/** Get one category's products (for /products/[slug]). Catalog order: subcategory → image height (tallest first) → Nazwa. */
 export const getCatalogSection = query({
-  args: { slug: v.string() },
-  handler: async (ctx, { slug }) => {
+  args: { slug: v.string(), debug: v.optional(v.boolean()) },
+  handler: async (ctx, { slug, debug: debugFlag }) => {
     const cat = await ctx.db
       .query("categories")
       .withIndex("by_slug", (q) => q.eq("slug", slug))
@@ -133,7 +194,6 @@ export const getCatalogSection = query({
       .query("products")
       .withIndex("by_category", (q) => q.eq("categorySlug", slug))
       .collect();
-    const items = await Promise.all(products.map((p) => productToItem(ctx, p)));
     const subs = await ctx.db
       .query("subcategories")
       .withIndex("by_category", (q) => q.eq("categorySlug", slug))
@@ -141,13 +201,97 @@ export const getCatalogSection = query({
     const subcategories = sortSubcategories(
       subs.map((s) => ({ slug: s.slug, displayName: s.displayName, order: s.order })),
     );
-    return {
+    const subSlugs = subcategories.map((s) => s.slug);
+
+    // --- LOG: raw products and first-image storage IDs (thumbnail preferred for sort) ---
+    const productData = products.map((p) => {
+      const e = getProductImageEntries(p)[0];
+      const sortStorageId = e?.thumbnailStorageId ?? e?.imageStorageId ?? null;
+      return {
+        _id: p._id,
+        Kod: p.Kod,
+        Nazwa: p.Nazwa,
+        subcategorySlug: p.subcategorySlug ?? "",
+        sortStorageId,
+      };
+    });
+    console.log("[getCatalogSection] slug=%s productCount=%d", slug, products.length);
+    console.log("[getCatalogSection] products (correlation with imageDimensions by firstImageStorageId):", JSON.stringify(productData, null, 2));
+
+    const storageIds = products
+      .map((p) => {
+        const e = getProductImageEntries(p)[0];
+        return e?.thumbnailStorageId ?? e?.imageStorageId;
+      })
+      .filter((id): id is string => Boolean(id));
+    const dimsByStorageId: Record<string, { width: number; height: number }> = {};
+    for (const id of [...new Set(storageIds)]) {
+      const row = await ctx.db
+        .query("imageDimensions")
+        .withIndex("by_storageId", (q) => q.eq("storageId", id))
+        .unique();
+      if (row) dimsByStorageId[id] = { width: row.width, height: row.height };
+    }
+
+    // --- LOG: imageDimensions lookup (portrait ratio = height/width drives sort) ---
+    console.log("[getCatalogSection] imageDimensions lookup: unique storageIds=%d", Object.keys(dimsByStorageId).length);
+
+    // --- LOG: per-product dims (correlation) ---
+    const correlation = products.map((p) => {
+      const e = getProductImageEntries(p)[0];
+      const sid = e?.thumbnailStorageId ?? e?.imageStorageId;
+      const dim = sid ? dimsByStorageId[sid] ?? null : null;
+      const portraitRatio = dim?.width ? +(dim.height / dim.width).toFixed(3) : null;
+      return { Nazwa: p.Nazwa, Kod: p.Kod, storageId: sid ?? null, width: dim?.width ?? null, height: dim?.height ?? null, portraitRatio };
+    });
+    console.log("[getCatalogSection] product <-> imageDimensions correlation:", JSON.stringify(correlation, null, 2));
+
+    const sorted = sortProductsBySubcategoryThenHeightThenNazwa(
+      products,
+      subSlugs,
+      dimsByStorageId,
+    );
+
+    // --- LOG: order after sort (highest portrait ratio first within subcategory) ---
+    const orderAfterSort = sorted.map((p, idx) => {
+      const e = getProductImageEntries(p)[0];
+      const sid = e?.thumbnailStorageId ?? e?.imageStorageId;
+      const dim = sid ? dimsByStorageId[sid] : undefined;
+      const portraitRatio = dim?.width ? +(dim.height / dim.width).toFixed(3) : 0;
+      return { index: idx, Nazwa: p.Nazwa, subcategorySlug: p.subcategorySlug ?? "", portraitRatio, width: dim?.width ?? null, height: dim?.height ?? null, storageId: sid ?? null };
+    });
+    console.log("[getCatalogSection] order after sort:", JSON.stringify(orderAfterSort, null, 2));
+
+    const items = await Promise.all(sorted.map((p) => productToItem(ctx, p)));
+    const sectionPayload = {
       slug: cat.slug,
       titleKey: cat.titleKey,
       displayName: cat.displayName,
-      items: sortItemsByNazwa(items),
+      items,
       subcategories,
     };
+    if (debugFlag) {
+      const ratiosUsed = sorted.map((p) => {
+        const e = getProductImageEntries(p)[0];
+        const sid = e?.thumbnailStorageId ?? e?.imageStorageId;
+        const dim = sid ? dimsByStorageId[sid] : undefined;
+        return dim?.width ? dim.height / dim.width : 0;
+      });
+      (sectionPayload as Record<string, unknown>).__debug = {
+        slug,
+        productCount: products.length,
+        uniqueStorageIdsWithDimensions: Object.keys(dimsByStorageId).length,
+        productData,
+        dimsByStorageId,
+        correlation,
+        orderAfterSort,
+        portraitRatioRange:
+          ratiosUsed.length
+            ? { min: +Math.min(...ratiosUsed).toFixed(3), max: +Math.max(...ratiosUsed).toFixed(3), distinct: new Set(ratiosUsed.map((r) => r.toFixed(3))).size }
+            : null,
+      };
+    }
+    return sectionPayload;
   },
 });
 

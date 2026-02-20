@@ -8,7 +8,11 @@ export function LightboxCloseButton({ onClick }: Props) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClick(e);
+      }}
       className="absolute z-10 flex min-w-11 min-h-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white transition-colors cursor-pointer"
       style={{
         top: "max(1rem, env(safe-area-inset-top))",
