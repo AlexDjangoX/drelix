@@ -22,7 +22,8 @@
     "test:e2e:stress": "playwright test --workers=4 --repeat-each=5",
     "test:load": "artillery run stress/load.yml",
     "test:load:prod": "artillery run stress/load.yml -e prod",
-    "test:load:report": "artillery run stress/load.yml --output stress/report.json"
+    "test:load:report": "artillery run stress/load.yml --output stress/report.json",
+    "backup": "node scripts/backup.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
