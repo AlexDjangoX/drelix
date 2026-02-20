@@ -78,8 +78,6 @@ export function ImageUploadCell({ row }: Props) {
       return state.filter((_, i) => i !== action.index);
     },
   );
-  const hasImages = optimisticImages.length > 0;
-
   useEffect(() => {
     return () => {
       if (optimisticBlobUrlRef.current) {

@@ -88,7 +88,7 @@ export function EditProductModal({
   useEffect(() => {
     if (!open) return;
     form.reset(rowToDefaultValues(sourceRow));
-  }, [open, productItem, row, form]);
+  }, [open, sourceRow, form]);
 
   const isSubmitting = form.formState.isSubmitting;
 
