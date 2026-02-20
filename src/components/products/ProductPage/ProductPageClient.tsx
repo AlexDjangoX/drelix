@@ -219,22 +219,20 @@ export function ProductPageClient({ slug, section }: Props) {
               className="scroll-mt-36"
             >
               {g.title && (
-                <div className="flex items-center justify-between gap-2 border-b border-primary pb-2 mb-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    document
+                      .getElementById('product-page-top')
+                      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="group w-full flex items-center justify-between gap-2 border-b border-primary pb-2 mb-4 text-left cursor-pointer rounded-sm hover:bg-primary/5 active:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                  aria-label={`${g.title}, Wróć do góry`}
+                  title="Wróć do góry"
+                >
                   <h2 className="text-xl font-semibold text-primary">{g.title}</h2>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      document
-                        .getElementById('product-page-top')
-                        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }}
-                    className="shrink-0 rounded p-1.5 cursor-pointer text-primary hover:bg-primary/10 hover:scale-110 transition-colors transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
-                    aria-label="Wróć do góry"
-                    title="Wróć do góry"
-                  >
-                    <ChevronUp className="size-4" />
-                  </button>
-                </div>
+                  <ChevronUp className="size-4 shrink-0 text-primary transition-transform group-hover:scale-110" />
+                </button>
               )}
               <ProductGrid
                 items={g.items}

@@ -74,27 +74,25 @@ export function ProductsCatalogContent({ sections, totalCount }: Props) {
               className="mb-16 scroll-mt-36"
               aria-labelledby={`section-${section.slug}`}
             >
-              <div className="flex items-center justify-between gap-2 border-b border-primary pb-2 mb-4">
+              <button
+                type="button"
+                onClick={() => {
+                  document
+                    .getElementById(CATALOG_PAGE_TOP_ID)
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="group w-full flex items-center justify-between gap-2 border-b border-primary pb-2 mb-4 text-left cursor-pointer rounded-sm hover:bg-primary/5 active:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                aria-label={`${getTitle(section)}, Wróć do góry`}
+                title="Wróć do góry"
+              >
                 <h2
                   id={`section-${section.slug}`}
                   className="text-xl font-semibold text-primary"
                 >
                   {getTitle(section)}
                 </h2>
-                <button
-                  type="button"
-                  onClick={() => {
-                    document
-                      .getElementById(CATALOG_PAGE_TOP_ID)
-                      ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                  }}
-                  className="shrink-0 rounded p-1.5 cursor-pointer text-primary hover:bg-primary/10 hover:scale-110 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
-                  aria-label="Wróć do góry"
-                  title="Wróć do góry"
-                >
-                  <ChevronUp className="size-4" />
-                </button>
-              </div>
+                <ChevronUp className="size-4 shrink-0 text-primary transition-transform group-hover:scale-110" />
+              </button>
               <p className="text-sm text-muted-foreground mb-6">
                 {section.items.length} <AnimateText k="products.catalogCount" />
               </p>
