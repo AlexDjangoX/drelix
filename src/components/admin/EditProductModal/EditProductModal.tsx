@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogCloseButton,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -130,6 +131,9 @@ export function EditProductModal({
         <DialogCloseButton />
         <DialogHeader>
           <DialogTitle>Edytuj produkt</DialogTitle>
+          <DialogDescription>
+            Formularz edycji danych produktu: zdjęcia, kategoria, ceny i opisy.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">

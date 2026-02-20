@@ -16,10 +16,24 @@ export default function LanguageSelector() {
     setRotationCount(rotationCount + 1);
   };
 
+  const ariaLabel =
+    language === "pl"
+      ? "Wybierz język (obecnie polski). Przełącz na angielski."
+      : "Select language (currently English). Switch to Polish.";
+
   return (
     <motion.div
-      className="relative flex h-8 min-w-20.5 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 shadow-inner shadow-slate-500/65 transition-all duration-300 dark:bg-gray-900 dark:shadow-slate-600"
+      role="button"
+      tabIndex={0}
+      aria-label={ariaLabel}
+      className="relative flex h-8 min-w-20.5 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-200 shadow-inner shadow-slate-500/65 transition-all duration-300 dark:bg-gray-900 dark:shadow-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       onClick={toggleLanguage}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleLanguage();
+        }
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ scale: 1.05 }}

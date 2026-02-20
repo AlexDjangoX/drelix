@@ -12,7 +12,12 @@ export function ProductsCatalogContent({ sections, totalCount }: Props) {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-24 pb-16 md:pt-28 md:pb-24">
+      <main
+        id="main-content"
+        className="pt-24 pb-16 md:pt-28 md:pb-24"
+        role="main"
+        aria-label="Katalog produktów"
+      >
         <div className="container mx-auto px-4">
           <div className="mb-8 flex items-center gap-4 text-sm text-muted-foreground">
             <Link

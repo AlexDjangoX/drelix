@@ -2,7 +2,8 @@ import Image from "next/image";
 import { LARGE_QUALITY } from "@/lib/image/constants";
 
 const HERO_IMAGE_SRC = "/images/hero.jpg";
-const HERO_IMAGE_ALT = "Hero image for the homepage";
+const HERO_IMAGE_ALT =
+  "Drelix – odzież robocza i ochronna w Wadowicach, tło sekcji powitalnej";
 
 export function HeroBackground() {
   return (

@@ -268,6 +268,7 @@ export function ImageUploadCell({ row }: Props) {
             <input
               type="file"
               accept="image/*"
+              aria-label="Dodaj zdjęcie produktu"
               className="absolute inset-0 opacity-0 cursor-pointer"
               onChange={(e) => {
                 const file = e.target.files?.[0];
