@@ -232,11 +232,16 @@ For each file: run checklists A → B → C → D → E → F → G (and H if ne
 
 ## Audit Trail Index
 
-**Audited to date:** Phase 1–2 complete (inventory + automated). Per-file review started: Admin (EditProductModal, ImageUploadCell).
+**Audited to date:** Full audit complete (2025-02-20). All 54 client files and 6 custom hooks reviewed in §1–§6.
 
 | Route / Feature | Entry (page or root) | Section | Notes |
 | --------------- | -------------------- | ------- | ----- |
 | Inventory + automated | — | §1 | Phase 1 inventory (see `docs/audit/INVENTORY.md`), Phase 2 ESLint + grep |
+| Admin | `src/app/admin/page.tsx` | §2 | 22 files; 2 fixes in §1; 1 deferred (form.watch) |
+| Products | `src/app/products/[slug]`, catalog | §3 | 11 files; useImageDimensions, ProductLightbox, ProductPageClient |
+| Hero / Landing | Layout + home | §4 | 13 files; ContactSection, ContactMap, DarkToggle, LanguageContext |
+| Navbar | Layout | §5 | 7 files; useNavbarScroll |
+| Context, UI, Hooks | — | §6 | LanguageContext, ConvexClientProvider, form, label, dialog, sonner, useImageDimensions |
 
 ---
 
@@ -280,7 +285,134 @@ For each file: run checklists A → B → C → D → E → F → G (and H if ne
 - **D (Cleanup):** Grep + spot check — listeners, timer, observer have cleanup.
 - **E (State vs derived):** Deferred to per-file review.
 - **F (useMemo/useCallback):** Deferred to per-file review.
-- **G (Custom hooks):** Deferred to per-file review.
+- **G (Custom hooks):** Per-file review complete in §2–§6.
+
+---
+
+## §2. Admin Audit
+
+### Scope
+
+- **Entry:** `src/app/admin/page.tsx` (client) → AdminPage.
+- **Client subtree:** EditProductModal, DescriptionRichField, ImageUploadCell, SubcategoryManager, AddProductRow, SubcategorySelect, CategorySelect, CatalogTable, DeleteCategoryButton, CsvUploadSection, CreateCategorySection, ProductRow, DeleteProductButton, CategoryLabel, CategorySectionTitle, LoginSubmitButton, LoginForm, AdminLoginSection, LunaMascot, useCsvPreview, useCatalogFilter (22 files).
+
+### Findings Fixed
+
+_(See §1: EditProductModal C1, ImageUploadCell unused var.)_
+
+### Findings Noted (no change / deferred)
+
+| File | Checklist | Note |
+|------|-----------|------|
+| EditProductModal.tsx | B3 / F | form.reset in effect when open/sourceRow changes. Alternative: `key={kod}` on form to remount; left as-is (common form pattern). form.watch() incompatible-library deferred. |
+| DescriptionRichField.tsx | B/D | Effect syncs contentEditable DOM with `value` prop; no cleanup needed for innerHTML. C4: ref read in effect body but effect is [value] only — correct (we sync when value changes). |
+| ContactMap (Hero) | C4 | ref.current read in effect with []; if ref not yet set, observer not attached (edge case); intentional mount-only. Low. |
+
+### Checklist summary
+
+- **A:** Pass (all files). Early returns in SubcategoryManager, SubcategorySelect, CategorySelect, DeleteProductButton, DeleteCategoryButton, ProductsCatalogClient after all hooks.
+- **B:** Pass. Effects: EditProductModal (form reset — sync when open/source changes), DescriptionRichField (DOM sync), ImageUploadCell (blob URL cleanup), LunaMascot (timer + confetti), AdminLoginSection/ContactSection (action state → toast/redirect), ContactMap (IntersectionObserver), DarkToggle (mounted), LanguageContext (hydrate from localStorage).
+- **C:** Pass (EditProductModal fixed in §1). useNavbarScroll uses useEffectEvent so [] is correct.
+- **D:** Pass. Listeners, timer, observer, blob URL, body overflow all cleaned up.
+- **E:** Pass. No redundant state; derived data via useMemo where used (useCatalogFilter, ProductPageClient, etc.).
+- **F:** Pass. useCallback/useMemo used appropriately; form.watch() deferred.
+- **G:** useCsvPreview, useCatalogFilter — hooks at top level, correct deps, return object (callers don’t rely on referential equality).
+
+---
+
+## §3. Products Audit
+
+### Scope
+
+- **Entry:** `src/app/products/[slug]` (layout + page), Products catalog route.
+- **Client subtree:** ProductSectionNav, ProductPageClient, ProductCardImage, ProductCard, ProductLightbox, ProductSectionCategoryGrid, ProductSection, ProductSectionHeader, ProductSectionCategoryCard, ProductsCatalogClient, ProductsCatalogContent, useImageDimensions.
+
+### Findings Fixed
+
+_None (beyond §1)._
+
+### Findings Noted (no change / deferred)
+
+| File | Checklist | Note |
+|------|-----------|------|
+| useImageDimensions.ts | D | Effect creates Image() per URL; cleanup sets cancelledRef so in-flight onloads don’t set state. No explicit Image revoke (N/A). G: correct deps [unique], return useMemo with [cache, unique]. |
+| ProductLightbox.tsx | C | keydown effect deps [] — onKeydown from useEffectEvent, correct. |
+
+### Checklist summary
+
+- **A–G:** Pass. ProductPageClient: nextImage/prevProduct deps (flat, flat.length) correct. ProductCardImage: aspect from onLoad (event), not effect. ProductCard: imgError state for placeholder fallback.
+
+---
+
+## §4. Hero / Landing Audit
+
+### Scope
+
+- **Entry:** Layout + home page (client sections).
+- **Client subtree:** ContactSection, ContactForm, ContactMap, ContactSubmitButton, WhyUsSection, WhyUsHeader, WhyUsFeatureGrid, WhyUsFeatureCard, HeroSection, AnimateText, LanguageSelector, TwoToneHeading, DarkToggle.
+
+### Findings Fixed
+
+_None._
+
+### Findings Noted (no change / deferred)
+
+| File | Checklist | Note |
+|------|-----------|------|
+| ContactSection.tsx / AdminLoginSection.tsx | B | useEffect(state → onStateChange) reacts to useActionState result (toast, redirect). Valid “when state updates, run side effect.” |
+| LanguageContext.tsx | B | Mount effect: setLanguageState(getStoredLanguage()) — hydrate from localStorage. |
+| DarkToggle.tsx | B | queueMicrotask(setMounted(true)) to avoid hydration mismatch with next-themes. |
+
+### Checklist summary
+
+- **A–G:** Pass. ContactForm uses key={state?.success ? "submitted" : "form"} for reset. No custom hooks in this section.
+
+---
+
+## §5. Navbar Audit
+
+### Scope
+
+- **Entry:** Layout (navbar).
+- **Client subtree:** useNavbarScroll, Navbar, NavbarScrollProgress, NavLink, NavbarMobileMenu, NavbarMenuButton, NavbarDesktopLinks.
+
+### Findings Fixed
+
+_None._
+
+### Findings Noted (no change / deferred)
+
+| File | Checklist | Note |
+|------|-----------|------|
+| useNavbarScroll.ts | C | Effect deps []; onScroll is useEffectEvent so always sees latest isHome. Listener not re-attached when isHome changes; handler still gets current isHome. Correct. |
+
+### Checklist summary
+
+- **A–G:** Pass. useNavbarScroll: scroll listener + cleanup. Navbar: handleNavClick useCallback([]). No early returns before hooks.
+
+---
+
+## §6. Context, UI, Standalone Hooks Audit
+
+### Scope
+
+- **Entry:** Root providers and shared UI.
+- **Client subtree:** LanguageContext (LanguageProvider, useLanguage), ConvexClientProvider, form.tsx (useFormField), label.tsx, dialog.tsx, sonner.tsx, useImageDimensions.
+
+### Findings Fixed
+
+_None._
+
+### Findings Noted (no change / deferred)
+
+| File | Checklist | Note |
+|------|-----------|------|
+| form.tsx | G | useFormField: useContext ×2, useFormContext; used only inside Form components. Pass. |
+| useLanguage | A2 | useContext then `if (context === undefined) throw` — hook runs before conditional; pass. |
+
+### Checklist summary
+
+- **A–G:** Pass. ConvexClientProvider has no hooks. label, dialog, sonner are thin client wrappers. useImageDimensions audited in §3.
 
 ---
 
