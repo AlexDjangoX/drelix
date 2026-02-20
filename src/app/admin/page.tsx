@@ -98,7 +98,7 @@ export default function AdminPage() {
       <section className="mb-8 rounded-lg border bg-card p-4">
         <h2 className="mb-2 text-lg font-medium">Catalog order</h2>
         <p className="mb-3 text-sm text-muted-foreground">
-          Catalog order: subcategory → image height (tallest first) → Nazwa. Store image dimensions (thumbnails) so the backend can apply this order. Run after adding or changing product images, or after switching to thumbnail-based sort.
+          Catalog order: subcategory → image height (tallest first) → Nazwa. New uploads set dimensions automatically. Use this button only to backfill dimensions for existing images (e.g. uploaded before that change).
         </p>
         <button
           type="button"

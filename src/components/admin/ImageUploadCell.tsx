@@ -62,6 +62,7 @@ export function ImageUploadCell({ row }: Props) {
   const optimisticBlobUrlRef = useRef<string | null>(null);
   const generateUploadUrl = useMutation(api.catalog.generateUploadUrl);
   const addProductImage = useMutation(api.catalog.addProductImage);
+  const setImageDimensions = useMutation(api.catalog.setImageDimensions);
   const removeProductImage = useMutation(api.catalog.removeProductImage);
   const clearProductImage = useMutation(api.catalog.clearProductImage);
 
@@ -112,7 +113,7 @@ export function ImageUploadCell({ row }: Props) {
         return;
       }
       const { thumbnail, large } = (await processRes.json()) as {
-        thumbnail: { base64: string; filename: string };
+        thumbnail: { base64: string; filename: string; width: number; height: number };
         large: { base64: string; filename: string };
       };
       const thumbnailBlob = base64ToBlob(thumbnail.base64, "image/webp");
@@ -148,6 +149,17 @@ export function ImageUploadCell({ row }: Props) {
         storageId,
         thumbnailStorageId,
       });
+      if (
+        thumbnailStorageId &&
+        thumbnail.width > 0 &&
+        thumbnail.height > 0
+      ) {
+        await setImageDimensions({
+          storageId: thumbnailStorageId,
+          width: thumbnail.width,
+          height: thumbnail.height,
+        });
+      }
       toast.success("Zdjęcie zostało dodane", { id: toastId });
     } catch (e) {
       console.error("Upload failed", e);

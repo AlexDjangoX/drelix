@@ -26,7 +26,7 @@ export type CatalogSection = {
 };
 
 export type ImageVariants = {
-  thumbnail: { base64: string; filename: string };
+  thumbnail: { base64: string; filename: string; width: number; height: number };
   large: { base64: string; filename: string };
 };
 

@@ -159,7 +159,7 @@ export const getImageDimensionsBatch = query({
   },
 });
 
-/** Set or overwrite dimensions for one image (storage ID). Used only by admin "Update catalog order" API route. */
+/** Set or overwrite dimensions for one image (storage ID). Called on upload (admin) and by "Update catalog order" batch. */
 export const setImageDimensions = mutation({
   args: {
     storageId: v.string(),
@@ -167,6 +167,7 @@ export const setImageDimensions = mutation({
     height: v.number(),
   },
   handler: async (ctx, { storageId, height, width }) => {
+    await requireAdmin(ctx);
     const existing = await ctx.db
       .query("imageDimensions")
       .withIndex("by_storageId", (q) => q.eq("storageId", storageId))
