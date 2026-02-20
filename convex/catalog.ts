@@ -203,7 +203,6 @@ export const getCatalogSection = query({
     );
     const subSlugs = subcategories.map((s) => s.slug);
 
-    // --- LOG: raw products and first-image storage IDs (thumbnail preferred for sort) ---
     const productData = products.map((p) => {
       const e = getProductImageEntries(p)[0];
       const sortStorageId = e?.thumbnailStorageId ?? e?.imageStorageId ?? null;
@@ -215,8 +214,6 @@ export const getCatalogSection = query({
         sortStorageId,
       };
     });
-    console.log("[getCatalogSection] slug=%s productCount=%d", slug, products.length);
-    console.log("[getCatalogSection] products (correlation with imageDimensions by firstImageStorageId):", JSON.stringify(productData, null, 2));
 
     const storageIds = products
       .map((p) => {
@@ -233,26 +230,12 @@ export const getCatalogSection = query({
       if (row) dimsByStorageId[id] = { width: row.width, height: row.height };
     }
 
-    // --- LOG: imageDimensions lookup (portrait ratio = height/width drives sort) ---
-    console.log("[getCatalogSection] imageDimensions lookup: unique storageIds=%d", Object.keys(dimsByStorageId).length);
-
-    // --- LOG: per-product dims (correlation) ---
-    const correlation = products.map((p) => {
-      const e = getProductImageEntries(p)[0];
-      const sid = e?.thumbnailStorageId ?? e?.imageStorageId;
-      const dim = sid ? dimsByStorageId[sid] ?? null : null;
-      const portraitRatio = dim?.width ? +(dim.height / dim.width).toFixed(3) : null;
-      return { Nazwa: p.Nazwa, Kod: p.Kod, storageId: sid ?? null, width: dim?.width ?? null, height: dim?.height ?? null, portraitRatio };
-    });
-    console.log("[getCatalogSection] product <-> imageDimensions correlation:", JSON.stringify(correlation, null, 2));
-
     const sorted = sortProductsBySubcategoryThenHeightThenNazwa(
       products,
       subSlugs,
       dimsByStorageId,
     );
 
-    // --- LOG: order after sort (highest portrait ratio first within subcategory) ---
     const orderAfterSort = sorted.map((p, idx) => {
       const e = getProductImageEntries(p)[0];
       const sid = e?.thumbnailStorageId ?? e?.imageStorageId;
@@ -260,7 +243,6 @@ export const getCatalogSection = query({
       const portraitRatio = dim?.width ? +(dim.height / dim.width).toFixed(3) : 0;
       return { index: idx, Nazwa: p.Nazwa, subcategorySlug: p.subcategorySlug ?? "", portraitRatio, width: dim?.width ?? null, height: dim?.height ?? null, storageId: sid ?? null };
     });
-    console.log("[getCatalogSection] order after sort:", JSON.stringify(orderAfterSort, null, 2));
 
     const items = await Promise.all(sorted.map((p) => productToItem(ctx, p)));
     const sectionPayload = {
@@ -283,7 +265,6 @@ export const getCatalogSection = query({
         uniqueStorageIdsWithDimensions: Object.keys(dimsByStorageId).length,
         productData,
         dimsByStorageId,
-        correlation,
         orderAfterSort,
         portraitRatioRange:
           ratiosUsed.length
@@ -886,10 +867,6 @@ export const replaceCatalogFromSections = mutation({
     // Count products for memory safety warning
     const existingProducts = await ctx.db.query("products").collect();
 
-    if (existingProducts.length > CATALOG_MEMORY_WARNING_THRESHOLD) {
-      console.warn(ADMIN_ERRORS.MEMORY_WARNING(existingProducts.length));
-    }
-
     // Preserve image storage IDs (imageEntries or legacy single)
     const imagesByKod = new Map<string, ProductImageIds>();
 
@@ -1001,13 +978,6 @@ export const setCategories = mutation({
     // Check if there are custom categories that will be lost
     const existing = await ctx.db.query("categories").collect();
     const customCats = existing.filter((c) => c.displayName);
-
-    if (customCats.length > 0) {
-      console.warn(
-        `Warning: Deleting ${customCats.length} custom admin-created categories: ` +
-          customCats.map((c) => c.slug).join(", "),
-      );
-    }
 
     // Delete all existing categories
     for (const c of existing) {

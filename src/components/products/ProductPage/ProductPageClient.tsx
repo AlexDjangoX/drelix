@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { ChevronUp } from 'lucide-react';
 import { Navbar, Footer, AnimateText, TwoToneHeading } from '@/components';
@@ -49,18 +49,6 @@ export function ProductPageClient({ slug, section }: Props) {
   );
 
   const displayTitle = section.displayName;
-
-  // Log order received from server (compare with Convex [getCatalogSection] "order after sort")
-  useEffect(() => {
-    const orderReceived = section.items.map((row, index) => ({
-      index,
-      Nazwa: (row as { Nazwa?: string }).Nazwa ?? '',
-      Kod: (row as { Kod?: string }).Kod ?? '',
-      subcategorySlug: (row as { subcategorySlug?: string }).subcategorySlug ?? '',
-      imageStorageId: (row as { imageStorageId?: string }).imageStorageId ?? '',
-    }));
-    console.log('[ProductPageClient] section.slug=%s items count=%d order as received from server:', slug, section.items.length, orderReceived);
-  }, [slug, section]);
 
   const items: ProductItem[] = useMemo(() => {
     return section.items.map((row) => {

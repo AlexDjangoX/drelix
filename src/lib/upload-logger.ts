@@ -28,8 +28,8 @@ class UploadLogger {
       if (stored) {
         this.logs = JSON.parse(stored);
       }
-    } catch (e) {
-      console.error("Failed to load existing logs:", e);
+    } catch {
+      // Ignore parse/storage errors; logs will start fresh
     }
   }
 
@@ -37,8 +37,8 @@ class UploadLogger {
     if (typeof window === "undefined") return;
     try {
       localStorage.setItem(this.storageKey, JSON.stringify(this.logs));
-    } catch (e) {
-      console.error("Failed to save logs:", e);
+    } catch {
+      // Ignore quota/storage errors
     }
   }
 
@@ -58,18 +58,6 @@ class UploadLogger {
 
     this.logs.push(entry);
     this.saveLogs();
-
-    // Also log to console with formatting
-    const prefix = `[${phase.toUpperCase()}]`;
-    const fullMessage = `${prefix} ${message}`;
-
-    if (level === "error") {
-      console.error(fullMessage, data || "");
-    } else if (level === "warning") {
-      console.warn(fullMessage, data || "");
-    } else {
-      console.log(fullMessage, data || "");
-    }
   }
 
   info(phase: LogEntry["phase"], message: string, data?: any) {

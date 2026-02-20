@@ -60,10 +60,6 @@ export async function POST(req: NextRequest) {
       const largeBuf = Buffer.from(body.large.base64, "base64");
       await writeFile(path.join(thumbDir, body.thumbnail.filename), thumbBuf);
       await writeFile(path.join(largeDir, body.large.filename), largeBuf);
-      console.log("[image] Dev: wrote to public/product-images/", {
-        thumbnail: body.thumbnail.filename,
-        large: body.large.filename,
-      });
     }
 
     return NextResponse.json(body, {

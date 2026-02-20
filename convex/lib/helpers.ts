@@ -102,16 +102,6 @@ export function sortProductsBySubcategoryThenHeightThenNazwa(
   };
 
   const ratioMap = new Map(products.map((p) => [p._id, portraitRatioOf(p)]));
-  const ratios = [...ratioMap.values()];
-  const minR = ratios.length ? Math.min(...ratios) : 0;
-  const maxR = ratios.length ? Math.max(...ratios) : 0;
-  console.log(
-    "[sortProductsBySubcategoryThenHeightThenNazwa] products=%d portraitRatio range=[%s..%s] distinct=%d",
-    products.length,
-    minR.toFixed(3),
-    maxR.toFixed(3),
-    new Set(ratios.map((r) => r.toFixed(3))).size,
-  );
 
   return [...products].sort((a, b) => {
     const keyA = a.subcategorySlug ?? "";
@@ -261,12 +251,6 @@ export async function deleteProductImages(
 
   const deleted = results.filter((r) => r.status === "fulfilled").length;
   const failed = results.filter((r) => r.status === "rejected").length;
-
-  if (failed > 0) {
-    console.warn(
-      `Failed to delete ${failed} of ${unique.length} storage files for product ${product.Kod}`,
-    );
-  }
 
   return { deleted, failed };
 }
