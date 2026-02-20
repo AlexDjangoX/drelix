@@ -16,7 +16,8 @@ type SupportedHTMLTag =
   | "div"
   | "label";
 
-function getTextByPath(t: Record<string, unknown>, path: string): string {
+/** Resolve a dot-separated translation key (e.g. "productNames.gloves") to the translated string. */
+export function getTextByPath(t: Record<string, unknown>, path: string): string {
   const value = path
     .split(".")
     .reduce<unknown>(
