@@ -14,11 +14,12 @@ export function ProductsCatalogContent({ sections, totalCount }: Props) {
       <Navbar />
       <main
         id="main-content"
-        className="pt-24 pb-16 md:pt-28 md:pb-24"
+        className="pt-36 pb-16 md:pt-40 md:pb-24"
         role="main"
         aria-label="Katalog produktów"
       >
         <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
           <div className="mb-8 flex items-center gap-4 text-sm text-muted-foreground">
             <Link
               href="/#products"
@@ -74,6 +75,7 @@ export function ProductsCatalogContent({ sections, totalCount }: Props) {
               </div>
             </section>
           ))}
+          </div>
         </div>
       </main>
       <Footer />

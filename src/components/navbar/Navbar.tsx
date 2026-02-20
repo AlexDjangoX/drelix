@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import LanguageSelector from "@/components/reusable/LanguageSelector";
 import DarkToggle from "@/components/reusable/DarkToggle";
+import { MaintenanceBanner } from "@/components/MaintenanceBanner";
 import {
   NavbarScrollProgress,
   NavbarLogo,
@@ -78,6 +79,7 @@ export default function Navbar() {
           )}
         </div>
       </nav>
+      <MaintenanceBanner />
     </>
   );
 }

@@ -193,11 +193,12 @@ export function ProductPageClient({ slug, section }: Props) {
 
       <main
         id="main-content"
-        className="pt-24 pb-16 md:pt-28 md:pb-24"
+        className="pt-36 pb-16 md:pt-40 md:pb-24"
         role="main"
         aria-label={displayTitle ?? resolvedTitle}
       >
-        <div className="container mx-auto px-4 space-y-6">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto space-y-6">
           <Link
             href="/#products"
             className="text-sm text-muted-foreground hover:text-primary"
@@ -227,10 +228,10 @@ export function ProductPageClient({ slug, section }: Props) {
             <section
               key={g.key || '_'}
               id={sectionId(g.key)}
-              className="scroll-mt-24"
+              className="scroll-mt-36"
             >
               {g.title && (
-                <div className="flex items-center justify-between gap-2 border-b pb-2 mb-4">
+                <div className="flex items-center justify-between gap-2 border-b border-primary pb-2 mb-4">
                   <h2 className="text-xl font-semibold text-primary">{g.title}</h2>
                   <button
                     type="button"
@@ -239,7 +240,7 @@ export function ProductPageClient({ slug, section }: Props) {
                         .getElementById('product-page-top')
                         ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }}
-                    className="shrink-0 rounded p-1.5 cursor-pointer text-muted-foreground/70 hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                    className="shrink-0 rounded p-1.5 cursor-pointer text-primary hover:bg-primary/10 hover:scale-110 transition-colors transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
                     aria-label="Wróć do góry"
                     title="Wróć do góry"
                   >
@@ -253,6 +254,7 @@ export function ProductPageClient({ slug, section }: Props) {
               />
             </section>
           ))}
+          </div>
         </div>
       </main>
 

@@ -23,7 +23,7 @@ export default function HeroSection() {
         <HeroDecorations />
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col container mx-auto px-4 pt-20 sm:pt-24 md:pt-28 lg:pt-32">
+      <div className="relative z-10 flex-1 flex flex-col container mx-auto px-4 pt-32 sm:pt-36 md:pt-40 lg:pt-44">
         <div className="flex-1 flex flex-col justify-center">
           <HeroContent
             reducedMotion={reducedMotion}

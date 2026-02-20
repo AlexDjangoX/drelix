@@ -26,7 +26,7 @@ export default function TermsPage() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main
-        className="pt-24 pb-16 lg:pt-28 lg:pb-24"
+        className="pt-36 pb-16 lg:pt-40 lg:pb-24"
         id="main-content"
         role="main"
       >
