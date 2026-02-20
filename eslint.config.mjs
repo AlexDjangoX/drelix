@@ -17,6 +17,7 @@ const eslintConfig = defineConfig([
     "coverage/**",
     // Debug and utility scripts (not production code)
     "debug-scripts/**",
+    "scripts/**",
     "convex/lib/serverLogger.ts",
     "src/lib/upload-logger.ts",
   ]),

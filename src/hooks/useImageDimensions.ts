@@ -17,53 +17,51 @@ export type UseImageDimensionsResult = {
 /**
  * Load image dimensions using Image() + onload so cross-origin URLs work
  * (fetch + createImageBitmap often fails with CORS for storage/CDN images).
- * Returns { dimensions, isReady }. isReady is true when all URLs have been
- * attempted (onload or onerror), so the caller can wait before rendering.
+ * Returns { dimensions, isReady }: dimensions keyed by URL (only
+ * successfully-loaded URLs appear); isReady is true once all URLs have
+ * settled (loaded or errored).
  */
 export function useImageDimensions(urls: readonly string[]): UseImageDimensionsResult {
   const [cache, setCache] = useState<DimensionsMap>({});
-  const [isReady, setIsReady] = useState(false);
+  // readyKey tracks which urlKey batch has fully settled; never set synchronously
+  // inside an effect body (only in onload/onerror callbacks) to avoid cascading renders.
+  const [readyKey, setReadyKey] = useState('');
+  const settledRef = useRef(0);
   const cancelledRef = useRef(false);
-  const resolvedCountRef = useRef(0);
 
-  // Stable key (primitive) so effect doesn't re-run when parent passes a new array reference with same URLs
+  // Stable string key so the effect doesn't re-run when the parent passes a new
+  // array reference with the same URL content.
   const urlKey =
-    urls.length === 0 ? "" : [...new Set(urls)].filter(Boolean).join("\0");
+    urls.length === 0 ? '' : [...new Set(urls)].filter(Boolean).join('\0');
+
+  // Derive unique list from urlKey (a primitive) so React Compiler can verify
+  // the dependency is correct — the memo body references only urlKey, not urls.
   const unique = useMemo(
-    () => [...new Set(urls)].filter(Boolean),
+    () => (urlKey ? urlKey.split('\0') : []),
     [urlKey],
   );
 
   useEffect(() => {
-    if (!unique.length) {
-      setCache({});
-      setIsReady(true);
-      return;
-    }
+    if (!unique.length) return;
 
     cancelledRef.current = false;
-    resolvedCountRef.current = 0;
-    setIsReady(false);
-
-    const checkAllResolved = () => {
-      if (cancelledRef.current) return;
-      resolvedCountRef.current += 1;
-      if (resolvedCountRef.current === unique.length) {
-        setIsReady(true);
-      }
-    };
+    settledRef.current = 0;
 
     unique.forEach((url) => {
       const img = new Image();
       img.onload = () => {
         if (cancelledRef.current) return;
-        const width = img.naturalWidth;
-        const height = img.naturalHeight;
-        setCache((prev) => ({ ...prev, [url]: { width, height } }));
-        checkAllResolved();
+        setCache((prev) => ({
+          ...prev,
+          [url]: { width: img.naturalWidth, height: img.naturalHeight },
+        }));
+        settledRef.current += 1;
+        if (settledRef.current >= unique.length) setReadyKey(urlKey);
       };
       img.onerror = () => {
-        checkAllResolved();
+        if (cancelledRef.current) return;
+        settledRef.current += 1;
+        if (settledRef.current >= unique.length) setReadyKey(urlKey);
       };
       img.src = url;
     });
@@ -71,8 +69,10 @@ export function useImageDimensions(urls: readonly string[]): UseImageDimensionsR
     return () => {
       cancelledRef.current = true;
     };
-  }, [unique]);
+  }, [unique, urlKey]);
 
+  // Snapshot: only return entries for the current unique URL list so stale
+  // cache entries from previous renders don't leak through.
   const dimensions = useMemo(() => {
     if (!unique.length) return {};
     const snapshot: DimensionsMap = {};
@@ -82,6 +82,8 @@ export function useImageDimensions(urls: readonly string[]): UseImageDimensionsR
     }
     return snapshot;
   }, [cache, unique]);
+
+  const isReady = unique.length === 0 || readyKey === urlKey;
 
   return { dimensions, isReady };
 }
