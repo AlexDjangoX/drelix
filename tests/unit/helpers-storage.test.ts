@@ -46,13 +46,6 @@ describe("deleteProductImages error handling", () => {
   });
 
   it("continues on storage deletion failures and logs warning", async () => {
-    const originalConsoleWarn = console.warn;
-    let warnCalled = false;
-
-    console.warn = () => {
-      warnCalled = true;
-    };
-
     const mockProduct = {
       Kod: "TEST-003",
       imageStorageId: "img-fail",
@@ -70,24 +63,12 @@ describe("deleteProductImages error handling", () => {
 
     const result = await deleteProductImages(ctx, mockProduct);
 
-    // Should have 1 successful deletion, 1 failed
+    // Should have 1 successful deletion, 1 failed (no console.warn in production)
     expect(result.deleted).toBe(1);
     expect(result.failed).toBe(1);
-
-    // Should have logged warning
-    expect(warnCalled).toBe(true);
-
-    console.warn = originalConsoleWarn;
   });
 
   it("handles all deletions failing", async () => {
-    const originalConsoleWarn = console.warn;
-    let warnCalled = false;
-
-    console.warn = () => {
-      warnCalled = true;
-    };
-
     const mockProduct = {
       Kod: "TEST-004",
       imageStorageId: "img-fail",
@@ -104,9 +85,6 @@ describe("deleteProductImages error handling", () => {
 
     expect(result.deleted).toBe(0);
     expect(result.failed).toBe(2);
-    expect(warnCalled).toBe(true);
-
-    console.warn = originalConsoleWarn;
   });
 
   it("handles partial deletion (only large image exists)", async () => {

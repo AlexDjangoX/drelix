@@ -26,7 +26,13 @@ export function useImageDimensions(urls: readonly string[]): UseImageDimensionsR
   const cancelledRef = useRef(false);
   const resolvedCountRef = useRef(0);
 
-  const unique = useMemo(() => [...new Set(urls)].filter(Boolean), [urls]);
+  // Stable key (primitive) so effect doesn't re-run when parent passes a new array reference with same URLs
+  const urlKey =
+    urls.length === 0 ? "" : [...new Set(urls)].filter(Boolean).join("\0");
+  const unique = useMemo(
+    () => [...new Set(urls)].filter(Boolean),
+    [urlKey],
+  );
 
   useEffect(() => {
     if (!unique.length) {

@@ -57,35 +57,39 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+function dims(result: { current: { dimensions: Record<string, { width: number; height: number }>; isReady: boolean } }) {
+  return result.current.dimensions;
+}
+
 describe("useImageDimensions", () => {
-  it("returns empty object when urls is empty array", () => {
+  it("returns empty dimensions when urls is empty array", () => {
     const { result } = renderHook(() => useImageDimensions([]));
-    // useMemo returns {} when unique.length is 0; effect may queue setCache({}) (act warning ok)
-    expect(result.current).toEqual({});
+    expect(result.current.dimensions).toEqual({});
+    expect(result.current.isReady).toBe(true);
   });
 
-  it("returns empty object when urls is empty and clears cache after microtask", async () => {
+  it("returns empty dimensions when urls is empty and clears cache after microtask", async () => {
     const url = "https://example.com/a.png";
     const { result, rerender } = renderHook(
       ({ urls }: { urls: readonly string[] }) => useImageDimensions(urls),
       { initialProps: { urls: [url] } },
     );
     await waitFor(() => {
-      expect(Object.keys(result.current).length).toBeGreaterThan(0);
+      expect(Object.keys(result.current.dimensions).length).toBeGreaterThan(0);
     });
     await act(async () => {
       rerender({ urls: [] });
       await Promise.resolve();
     });
-    expect(result.current).toEqual({});
+    expect(result.current.dimensions).toEqual({});
   });
 
   it("returns dimensions for a single URL after load", async () => {
     const url = "https://example.com/one.png";
     const { result } = renderHook(() => useImageDimensions([url]));
-    expect(result.current).toEqual({});
+    expect(result.current.dimensions).toEqual({});
     await waitFor(() => {
-      expect(result.current[url]).toEqual({ width: 100, height: 200 });
+      expect(dims(result)[url]).toEqual({ width: 100, height: 200 });
     });
   });
 
@@ -97,10 +101,10 @@ describe("useImageDimensions", () => {
       { initialProps: { u: urls } },
     );
     await waitFor(() => {
-      expect(result.current[url]).toBeDefined();
+      expect(dims(result)[url]).toBeDefined();
     });
     expect(MockImage).toHaveBeenCalledTimes(1);
-    expect(result.current[url]).toEqual({ width: 100, height: 200 });
+    expect(dims(result)[url]).toEqual({ width: 100, height: 200 });
   });
 
   it("filters out falsy URLs", async () => {
@@ -109,9 +113,9 @@ describe("useImageDimensions", () => {
       useImageDimensions([url, "", null, undefined] as readonly string[]),
     );
     await waitFor(() => {
-      expect(result.current[url]).toEqual({ width: 100, height: 200 });
+      expect(dims(result)[url]).toEqual({ width: 100, height: 200 });
     });
-    expect(Object.keys(result.current)).toHaveLength(1);
+    expect(Object.keys(result.current.dimensions)).toHaveLength(1);
   });
 
   it("returns dimensions for multiple URLs", async () => {
@@ -122,8 +126,8 @@ describe("useImageDimensions", () => {
     const urls = [urlA, urlB] as const;
     const { result } = renderHook(() => useImageDimensions(urls));
     await waitFor(() => {
-      expect(result.current[urls[0]]).toEqual({ width: 10, height: 20 });
-      expect(result.current[urls[1]]).toEqual({ width: 30, height: 40 });
+      expect(dims(result)[urls[0]]).toEqual({ width: 10, height: 20 });
+      expect(dims(result)[urls[1]]).toEqual({ width: 30, height: 40 });
     });
   });
 
@@ -135,19 +139,20 @@ describe("useImageDimensions", () => {
       useImageDimensions([good, bad]),
     );
     await waitFor(() => {
-      expect(result.current[good]).toBeDefined();
+      expect(dims(result)[good]).toBeDefined();
     });
-    expect(result.current[good]).toEqual({ width: 100, height: 200 });
-    expect(result.current[bad]).toBeUndefined();
+    expect(dims(result)[good]).toEqual({ width: 100, height: 200 });
+    expect(dims(result)[bad]).toBeUndefined();
   });
 
-  it("omits URL when createImageBitmap fails", async () => {
+  it("omits URL when image load fails", async () => {
     const url = "https://example.com/fail-decode.png";
     errorUrls.add(url);
     const { result } = renderHook(() => useImageDimensions([url]));
     await waitFor(
       () => {
-        expect(Object.keys(result.current)).toHaveLength(0);
+        expect(result.current.isReady).toBe(true);
+        expect(Object.keys(result.current.dimensions)).toHaveLength(0);
       },
       { timeout: 500 },
     );
@@ -161,14 +166,14 @@ describe("useImageDimensions", () => {
       { initialProps: { urls: [urlA, urlB] } },
     );
     await waitFor(() => {
-      expect(result.current[urlA]).toBeDefined();
-      expect(result.current[urlB]).toBeDefined();
+      expect(dims(result)[urlA]).toBeDefined();
+      expect(dims(result)[urlB]).toBeDefined();
     });
     await act(async () => {
       rerender({ urls: [urlA] });
     });
-    expect(result.current[urlA]).toBeDefined();
-    expect(result.current[urlB]).toBeUndefined();
+    expect(dims(result)[urlA]).toBeDefined();
+    expect(dims(result)[urlB]).toBeUndefined();
   });
 
   it("starts loading new URL when urls change", async () => {
@@ -181,7 +186,7 @@ describe("useImageDimensions", () => {
     );
     rerender({ urls: [url2] });
     await waitFor(() => {
-      expect(result.current[url2]).toEqual({ width: 50, height: 60 });
+      expect(dims(result)[url2]).toEqual({ width: 50, height: 60 });
     });
   });
 
