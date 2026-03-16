@@ -23,7 +23,8 @@
     "test:load": "artillery run stress/load.yml",
     "test:load:prod": "artillery run stress/load.yml -e prod",
     "test:load:report": "artillery run stress/load.yml --output stress/report.json",
-    "backup": "node scripts/backup.js"
+    "backup": "node scripts/backup.js",
+    "export:download": "node scripts/download-export.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -66,6 +67,7 @@
     "artillery": "^2.0.29",
     "convex-test": "^0.0.41",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.6.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "jsdom": "^25.0.0",

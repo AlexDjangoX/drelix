@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as catalog from "../catalog.js";
 import type * as crons from "../crons.js";
+import type * as export_ from "../export.js";
 import type * as lib_authHelpers from "../lib/authHelpers.js";
 import type * as lib_constants from "../lib/constants.js";
 import type * as lib_convexAuth from "../lib/convexAuth.js";
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   catalog: typeof catalog;
   crons: typeof crons;
+  export: typeof export_;
   "lib/authHelpers": typeof lib_authHelpers;
   "lib/constants": typeof lib_constants;
   "lib/convexAuth": typeof lib_convexAuth;

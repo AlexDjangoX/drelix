@@ -124,6 +124,18 @@ export const getProductItemByKod = query({
   },
 });
 
+/** List all products (raw docs) for export. Used by export action. */
+export const listAllProductsForExport = query({
+  args: {},
+  handler: async (ctx) => ctx.db.query("products").collect(),
+});
+
+/** List all subcategories for export. */
+export const listAllSubcategoriesForExport = query({
+  args: {},
+  handler: async (ctx) => ctx.db.query("subcategories").collect(),
+});
+
 /** List subcategories for a category (for admin dropdown and product page headings). */
 export const listSubcategories = query({
   args: { categorySlug: v.string() },
