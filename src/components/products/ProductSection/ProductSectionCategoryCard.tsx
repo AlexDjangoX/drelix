@@ -4,7 +4,6 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/context/language";
-import { getThumbnailPath } from "@/lib/thumbnails";
 import { ProductCardImage } from "@/components/products/ProductCardImage";
 
 function getLabel(
@@ -27,6 +26,7 @@ function getLabel(
 type Props = {
   slug: string;
   titleKey: string;
+  thumbnail: string;
   displayName?: string;
   icon: LucideIcon;
   color: string;
@@ -35,12 +35,13 @@ type Props = {
 export function ProductSectionCategoryCard({
   slug,
   titleKey,
+  thumbnail,
   displayName,
   icon: Icon,
   color,
 }: Props) {
   const { t } = useLanguage();
-  const thumbnailPath = getThumbnailPath(slug);
+  const thumbnailPath = thumbnail || null;
   const label =
     displayName ??
     getLabel(t as unknown as Record<string, unknown>, titleKey, slug);
