@@ -230,18 +230,18 @@ For each file: run checklists A → B → C → D → E → F → G (and H if ne
 
 ---
 
-## Audit Trail Index
+## Audit Trail Index.
 
 **Audited to date:** Full audit complete (2025-02-20). All 54 client files and 6 custom hooks reviewed in §1–§6.
 
-| Route / Feature | Entry (page or root) | Section | Notes |
-| --------------- | -------------------- | ------- | ----- |
-| Inventory + automated | — | §1 | Phase 1 inventory (see `docs/audit/INVENTORY.md`), Phase 2 ESLint + grep |
-| Admin | `src/app/admin/page.tsx` | §2 | 22 files; 2 fixes in §1; 1 deferred (form.watch) |
-| Products | `src/app/products/[slug]`, catalog | §3 | 11 files; useImageDimensions, ProductLightbox, ProductPageClient |
-| Hero / Landing | Layout + home | §4 | 13 files; ContactSection, ContactMap, DarkToggle, LanguageContext |
-| Navbar | Layout | §5 | 7 files; useNavbarScroll |
-| Context, UI, Hooks | — | §6 | LanguageContext, ConvexClientProvider, form, label, dialog, sonner, useImageDimensions |
+| Route / Feature       | Entry (page or root)               | Section | Notes                                                                                  |
+| --------------------- | ---------------------------------- | ------- | -------------------------------------------------------------------------------------- |
+| Inventory + automated | —                                  | §1      | Phase 1 inventory (see `docs/audit/INVENTORY.md`), Phase 2 ESLint + grep               |
+| Admin                 | `src/app/admin/page.tsx`           | §2      | 22 files; 2 fixes in §1; 1 deferred (form.watch)                                       |
+| Products              | `src/app/products/[slug]`, catalog | §3      | 11 files; useImageDimensions, ProductLightbox, ProductPageClient                       |
+| Hero / Landing        | Layout + home                      | §4      | 13 files; ContactSection, ContactMap, DarkToggle, LanguageContext                      |
+| Navbar                | Layout                             | §5      | 7 files; useNavbarScroll                                                               |
+| Context, UI, Hooks    | —                                  | §6      | LanguageContext, ConvexClientProvider, form, label, dialog, sonner, useImageDimensions |
 
 ---
 
@@ -254,16 +254,16 @@ For each file: run checklists A → B → C → D → E → F → G (and H if ne
 
 ### Findings Fixed
 
-| File | Checklist | Finding | Fix |
-|------|------------|---------|-----|
-| EditProductModal.tsx | C1 | useEffect missing dependency `sourceRow` | Added `sourceRow` to dependency array (replaced `productItem, row` for reset logic). |
-| ImageUploadCell.tsx | — | Unused variable `hasImages` | Removed unused `hasImages` declaration. |
+| File                 | Checklist | Finding                                  | Fix                                                                                  |
+| -------------------- | --------- | ---------------------------------------- | ------------------------------------------------------------------------------------ |
+| EditProductModal.tsx | C1        | useEffect missing dependency `sourceRow` | Added `sourceRow` to dependency array (replaced `productItem, row` for reset logic). |
+| ImageUploadCell.tsx  | —         | Unused variable `hasImages`              | Removed unused `hasImages` declaration.                                              |
 
 ### Findings Noted (no change / deferred)
 
-| File | Checklist | Note |
-|------|-----------|------|
-| EditProductModal.tsx | F / lib | `form.watch("categorySlug")` triggers react-hooks/incompatible-library (React Hook Form). Documented; no code change. Consider `useWatch` or lifting slug to state if memoization needed. |
+| File                 | Checklist | Note                                                                                                                                                                                      |
+| -------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| EditProductModal.tsx | F / lib   | `form.watch("categorySlug")` triggers react-hooks/incompatible-library (React Hook Form). Documented; no code change. Consider `useWatch` or lifting slug to state if memoization needed. |
 
 ### Phase 2 automated results
 
@@ -302,11 +302,11 @@ _(See §1: EditProductModal C1, ImageUploadCell unused var.)_
 
 ### Findings Noted (no change / deferred)
 
-| File | Checklist | Note |
-|------|-----------|------|
-| EditProductModal.tsx | B3 / F | form.reset in effect when open/sourceRow changes. Alternative: `key={kod}` on form to remount; left as-is (common form pattern). form.watch() incompatible-library deferred. |
-| DescriptionRichField.tsx | B/D | Effect syncs contentEditable DOM with `value` prop; no cleanup needed for innerHTML. C4: ref read in effect body but effect is [value] only — correct (we sync when value changes). |
-| ContactMap (Hero) | C4 | ref.current read in effect with []; if ref not yet set, observer not attached (edge case); intentional mount-only. Low. |
+| File                     | Checklist | Note                                                                                                                                                                                |
+| ------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| EditProductModal.tsx     | B3 / F    | form.reset in effect when open/sourceRow changes. Alternative: `key={kod}` on form to remount; left as-is (common form pattern). form.watch() incompatible-library deferred.        |
+| DescriptionRichField.tsx | B/D       | Effect syncs contentEditable DOM with `value` prop; no cleanup needed for innerHTML. C4: ref read in effect body but effect is [value] only — correct (we sync when value changes). |
+| ContactMap (Hero)        | C4        | ref.current read in effect with []; if ref not yet set, observer not attached (edge case); intentional mount-only. Low.                                                             |
 
 ### Checklist summary
 
@@ -333,10 +333,10 @@ _None (beyond §1)._
 
 ### Findings Noted (no change / deferred)
 
-| File | Checklist | Note |
-|------|-----------|------|
-| useImageDimensions.ts | D | Effect creates Image() per URL; cleanup sets cancelledRef so in-flight onloads don’t set state. No explicit Image revoke (N/A). G: correct deps [unique], return useMemo with [cache, unique]. |
-| ProductLightbox.tsx | C | keydown effect deps [] — onKeydown from useEffectEvent, correct. |
+| File                  | Checklist | Note                                                                                                                                                                                           |
+| --------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| useImageDimensions.ts | D         | Effect creates Image() per URL; cleanup sets cancelledRef so in-flight onloads don’t set state. No explicit Image revoke (N/A). G: correct deps [unique], return useMemo with [cache, unique]. |
+| ProductLightbox.tsx   | C         | keydown effect deps [] — onKeydown from useEffectEvent, correct.                                                                                                                               |
 
 ### Checklist summary
 
@@ -357,11 +357,11 @@ _None._
 
 ### Findings Noted (no change / deferred)
 
-| File | Checklist | Note |
-|------|-----------|------|
-| ContactSection.tsx / AdminLoginSection.tsx | B | useEffect(state → onStateChange) reacts to useActionState result (toast, redirect). Valid “when state updates, run side effect.” |
-| LanguageContext.tsx | B | Mount effect: setLanguageState(getStoredLanguage()) — hydrate from localStorage. |
-| DarkToggle.tsx | B | queueMicrotask(setMounted(true)) to avoid hydration mismatch with next-themes. |
+| File                                       | Checklist | Note                                                                                                                             |
+| ------------------------------------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| ContactSection.tsx / AdminLoginSection.tsx | B         | useEffect(state → onStateChange) reacts to useActionState result (toast, redirect). Valid “when state updates, run side effect.” |
+| LanguageContext.tsx                        | B         | Mount effect: setLanguageState(getStoredLanguage()) — hydrate from localStorage.                                                 |
+| DarkToggle.tsx                             | B         | queueMicrotask(setMounted(true)) to avoid hydration mismatch with next-themes.                                                   |
 
 ### Checklist summary
 
@@ -382,9 +382,9 @@ _None._
 
 ### Findings Noted (no change / deferred)
 
-| File | Checklist | Note |
-|------|-----------|------|
-| useNavbarScroll.ts | C | Effect deps []; onScroll is useEffectEvent so always sees latest isHome. Listener not re-attached when isHome changes; handler still gets current isHome. Correct. |
+| File               | Checklist | Note                                                                                                                                                               |
+| ------------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| useNavbarScroll.ts | C         | Effect deps []; onScroll is useEffectEvent so always sees latest isHome. Listener not re-attached when isHome changes; handler still gets current isHome. Correct. |
 
 ### Checklist summary
 
@@ -405,10 +405,10 @@ _None._
 
 ### Findings Noted (no change / deferred)
 
-| File | Checklist | Note |
-|------|-----------|------|
-| form.tsx | G | useFormField: useContext ×2, useFormContext; used only inside Form components. Pass. |
-| useLanguage | A2 | useContext then `if (context === undefined) throw` — hook runs before conditional; pass. |
+| File        | Checklist | Note                                                                                     |
+| ----------- | --------- | ---------------------------------------------------------------------------------------- |
+| form.tsx    | G         | useFormField: useContext ×2, useFormContext; used only inside Form components. Pass.     |
+| useLanguage | A2        | useContext then `if (context === undefined) throw` — hook runs before conditional; pass. |
 
 ### Checklist summary
 
