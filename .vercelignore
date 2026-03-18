@@ -1,3 +1,6 @@
 # Exported product images (local backup; app uses Convex URLs)
 public/product-images/large
 public/product-images/thumbnails
+
+# Backup exports (DB snapshots, product images) — not needed on Vercel
+backups

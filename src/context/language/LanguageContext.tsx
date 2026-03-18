@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   createContext,
@@ -7,14 +7,14 @@ import React, {
   useMemo,
   useState,
   type ReactNode,
-} from "react";
-import type { Language, LanguageContextValue } from "@/context/language/types";
-import { translations } from "@/context/language/translations";
+} from 'react';
+import type { Language, LanguageContextValue } from '@/context/language/types';
+import { translations } from '@/context/language/translations';
 import {
   DEFAULT_LANGUAGE,
   getStoredLanguage,
   persistLanguage,
-} from "@/context/language/storage";
+} from '@/context/language/storage';
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(
   undefined,
@@ -52,7 +52,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 export function useLanguage(): LanguageContextValue {
   const context = useContext(LanguageContext);
   if (context === undefined) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
+    throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
 }
