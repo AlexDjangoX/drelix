@@ -39,6 +39,8 @@ export function ProductCardImage({
 }: ProductCardImageProps) {
   const [aspect, setAspect] = useState<number>(1);
   const safeSrc = src?.trim() || PLACEHOLDER_PRODUCT_IMAGE;
+  const isExternal =
+    safeSrc.startsWith("http://") || safeSrc.startsWith("https://");
 
   const onLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
@@ -64,6 +66,7 @@ export function ProductCardImage({
         className={imageClassName}
         onLoad={onLoad}
         onError={onError}
+        unoptimized={isExternal}
       />
     </div>
   );

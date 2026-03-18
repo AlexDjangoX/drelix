@@ -219,6 +219,10 @@ export function ImageUploadCell({ row }: Props) {
             alt={`${nazwa} ${index + 1}`}
             fill
             className="object-cover"
+            unoptimized={
+              (img.thumbnailUrl || img.imageUrl || "").startsWith("http") ||
+              (img.thumbnailUrl || img.imageUrl || "").startsWith("blob:")
+            }
           />
           {confirmingDeleteIndex === index ? (
             <div className="absolute inset-0 flex items-center justify-center gap-1 bg-background/90">
