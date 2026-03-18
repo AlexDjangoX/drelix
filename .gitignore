@@ -29,7 +29,7 @@
 *.pem
 
 # Convex backup exports (contain DB snapshot ZIPs)
-/backups
+
 
 # debug
 /logs

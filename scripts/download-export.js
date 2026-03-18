@@ -1,6 +1,6 @@
 /**
  * Download all data and images from Convex, persisting images into
- * public/product-images/large/ and public/product-images/thumbnails/.
+ * backups/product-images/Large/ and backups/product-images/Thumbnails/.
  *
  * Prerequisites:
  *   - .env.local with NEXT_PUBLIC_CONVEX_URL
@@ -14,8 +14,8 @@
  * Output:
  *   - backups/export-YYYY-MM-DD-HHMMSS/data.json (products, categories, subcategories)
  *   - backups/export-YYYY-MM-DD-HHMMSS/manifest.json (image-to-product mapping)
- *   - public/product-images/large/*.webp
- *   - public/product-images/thumbnails/*.webp
+ *   - backups/product-images/Large/*.webp
+ *   - backups/product-images/Thumbnails/*.webp
  */
 
 const fs = require("fs");
@@ -99,12 +99,12 @@ async function main() {
     `export-${dateStr}-${timeStr}`
   );
   const dataDir = path.join(exportDir, "data");
-  const largeDir = path.join(process.cwd(), "public", "product-images", "large");
+  const largeDir = path.join(process.cwd(), "backups", "product-images", "Large");
   const thumbDir = path.join(
     process.cwd(),
-    "public",
+    "backups",
     "product-images",
-    "thumbnails"
+    "Thumbnails"
   );
 
   fs.mkdirSync(dataDir, { recursive: true });
@@ -166,7 +166,7 @@ async function main() {
   console.log(`\n\nDone.`);
   console.log(`  Data: ${dataDir}/data.json`);
   console.log(`  Manifest: ${exportDir}/manifest.json`);
-  console.log(`  Images: ${ok} saved to public/product-images/{large,thumbnails}/`);
+  console.log(`  Images: ${ok} saved to backups/product-images/{Large,Thumbnails}/`);
   if (fail > 0) {
     console.log(`  Failed: ${fail} images`);
   }
