@@ -29,7 +29,6 @@ type Props = {
   thumbnail: string;
   displayName?: string;
   icon: LucideIcon;
-  color: string;
 };
 
 export function ProductSectionCategoryCard({
@@ -38,7 +37,6 @@ export function ProductSectionCategoryCard({
   thumbnail,
   displayName,
   icon: Icon,
-  color,
 }: Props) {
   const { t } = useLanguage();
   const thumbnailPath = thumbnail || null;
@@ -56,12 +54,13 @@ export function ProductSectionCategoryCard({
             <ProductCardImage
               src={thumbnailPath}
               alt=""
-              className={`relative w-full rounded-xl mb-4 overflow-hidden flex items-center justify-center bg-linear-to-br ${color}`}
+              aspectRatio={1}
+              className="relative w-full rounded-xl mb-4 overflow-hidden flex items-center justify-center bg-white"
               imageClassName="object-contain object-center group-hover:scale-105 transition-transform"
             />
           ) : (
             <div
-              className={`aspect-square relative rounded-xl mb-4 overflow-hidden bg-linear-to-br ${color} flex items-center justify-center`}
+              className="aspect-square relative rounded-xl mb-4 overflow-hidden bg-white flex items-center justify-center"
             >
               <Icon
                 size={40}

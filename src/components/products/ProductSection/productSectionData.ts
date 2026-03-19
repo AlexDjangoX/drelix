@@ -91,7 +91,7 @@ export const CATEGORY_CARDS: {
   {
     slug: 'aprons',
     titleKey: 'productNames.aprons',
-    thumbnail: '/homepage/FARTUCH M023-fartuch-damski-m-023a-0-thumb.webp',
+    thumbnail: '/homepage/FARTUCH.webp',
   },
   {
     slug: 'other',
@@ -108,7 +108,11 @@ export const CATEGORY_CARDS: {
     titleKey: 'productNames.kamizelkiOcieplane',
     thumbnail: '/homepage/KAMCLASSTOP-bezrekawnik-class-top-thumb.webp',
   },
-  { slug: 'vests', titleKey: 'productNames.vests', thumbnail: '' },
+  {
+    slug: 'vests',
+    titleKey: 'productNames.vests',
+    thumbnail: '/homepage/VEST.webp',
+  },
   {
     slug: 'helmets',
     titleKey: 'productNames.helmets',
@@ -118,10 +122,13 @@ export const CATEGORY_CARDS: {
   {
     slug: 'klapki',
     titleKey: 'productNames.klapki',
-    thumbnail:
-      '/homepage/BKLAPK I-buty-zawodowe-klapki-bmkladzpadam-thumb.webp',
+    thumbnail: '/homepage/BKLAP.webp',
   },
-  { slug: 'koszula', titleKey: 'productNames.koszula', thumbnail: '' },
+  {
+    slug: 'koszula',
+    titleKey: 'productNames.koszula',
+    thumbnail: '/homepage/KOSZULA_BLUE.webp',
+  },
   {
     slug: 'jackets',
     titleKey: 'productNames.jackets',
@@ -133,21 +140,25 @@ export const CATEGORY_CARDS: {
     thumbnail:
       '/homepage/KURSOFT-kurtka-professional-classic-one-softshell-thumb.webp',
   },
-  { slug: 'masks', titleKey: 'productNames.masks', thumbnail: '' },
+  {
+    slug: 'masks',
+    titleKey: 'productNames.masks',
+    thumbnail: '/homepage/MASK.webp',
+  },
   {
     slug: 'kneeprotection',
     titleKey: 'productNames.kneeProtection',
-    thumbnail: '',
+    thumbnail: '/homepage/KNEE_PROTECTION.webp',
   },
   {
     slug: 'earprotection',
     titleKey: 'productNames.earProtection',
-    thumbnail: '',
+    thumbnail: '/homepage/EAR_PROTECTION.webp',
   },
   {
     slug: 'odziez-gastronomiczna',
     titleKey: 'productNames.odziezGastronomiczna',
-    thumbnail: '',
+    thumbnail: '/homepage/CHEF.webp',
   },
   {
     slug: 'rainwear',
@@ -160,7 +171,11 @@ export const CATEGORY_CARDS: {
     thumbnail:
       '/homepage/OGRPROF4DYN-ogrodniczki-professional-4-dynamic-thumb.webp',
   },
-  { slug: 'eyewear', titleKey: 'productNames.eyewear', thumbnail: '' },
+  {
+    slug: 'eyewear',
+    titleKey: 'productNames.eyewear',
+    thumbnail: '/homepage/SAFETY_GLASSES.webp',
+  },
   {
     slug: 'polar',
     titleKey: 'productNames.polar',
@@ -171,13 +186,21 @@ export const CATEGORY_CARDS: {
     titleKey: 'productNames.polbuty',
     thumbnail: '/homepage/BPÓŁMAXPOP-max-popular-polbut-red-s1-thumb.webp',
   },
-  { slug: 'reczniki', titleKey: 'productNames.reczniki', thumbnail: '' },
+  {
+    slug: 'reczniki',
+    titleKey: 'productNames.reczniki',
+    thumbnail: '/homepage/TOWELS.webp',
+  },
   {
     slug: 'gloves',
     titleKey: 'productNames.gloves',
     thumbnail: '/homepage/R-RECODRAG-recodrag-rekawice-ochronne-thumb.webp',
   },
-  { slug: 'sandaly', titleKey: 'productNames.sandaly', thumbnail: '' },
+  {
+    slug: 'sandaly',
+    titleKey: 'productNames.sandaly',
+    thumbnail: '/homepage/SANDALY.webp',
+  },
   {
     slug: 'spodnie',
     titleKey: 'productNames.clothing',
@@ -204,5 +227,9 @@ export const CATEGORY_CARDS: {
     titleKey: 'productNames.trzewiki',
     thumbnail: '/homepage/TRZ109-trzewiki-109s1-thumb.webp',
   },
-  { slug: 'wkladki', titleKey: 'productNames.wkladki', thumbnail: '' },
+  {
+    slug: 'wkladki',
+    titleKey: 'productNames.wkladki',
+    thumbnail: '/homepage/weglowa_1200.webp',
+  },
 ];

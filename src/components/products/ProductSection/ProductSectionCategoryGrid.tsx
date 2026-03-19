@@ -3,7 +3,6 @@
 import { ProductSectionCategoryCard } from "@/components/products/ProductSection/ProductSectionCategoryCard";
 import {
   CATEGORY_CARDS,
-  CATEGORY_COLORS,
   CATEGORY_ICONS,
 } from "@/components/products/ProductSection/productSectionData";
 
@@ -17,7 +16,6 @@ export function ProductSectionCategoryGrid() {
           titleKey={card.titleKey}
           thumbnail={card.thumbnail}
           icon={CATEGORY_ICONS[i % CATEGORY_ICONS.length]}
-          color={CATEGORY_COLORS[i % CATEGORY_COLORS.length]}
         />
       ))}
     </div>

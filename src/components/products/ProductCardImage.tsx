@@ -22,6 +22,8 @@ export type ProductCardImageProps = {
   imageClassName?: string;
   /** Called when the image fails to load (e.g. to show a placeholder). */
   onError?: () => void;
+  /** Fixed aspect ratio (e.g. 1 for square). When set, overrides dynamic aspect from image. */
+  aspectRatio?: number;
 };
 
 /**
@@ -36,6 +38,7 @@ export function ProductCardImage({
   className,
   imageClassName = "object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300",
   onError,
+  aspectRatio: fixedAspectRatio,
 }: ProductCardImageProps) {
   const [aspect, setAspect] = useState<number>(1);
   const safeSrc = src?.trim() || PLACEHOLDER_PRODUCT_IMAGE;
@@ -44,11 +47,13 @@ export function ProductCardImage({
 
   const onLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     const img = e.currentTarget;
-    if (img.naturalWidth && img.naturalHeight) {
+    if (img.naturalWidth && img.naturalHeight && fixedAspectRatio == null) {
       const ratio = img.naturalWidth / img.naturalHeight;
       setAspect(Math.min(ASPECT_MAX, Math.max(ASPECT_MIN, ratio)));
     }
-  }, []);
+  }, [fixedAspectRatio]);
+
+  const effectiveAspect = fixedAspectRatio ?? aspect;
 
   return (
     <div
@@ -56,7 +61,7 @@ export function ProductCardImage({
         className ??
         "relative w-full bg-muted flex items-center justify-center overflow-hidden rounded-t-xl"
       }
-      style={{ aspectRatio: aspect }}
+      style={{ aspectRatio: effectiveAspect }}
     >
       <Image
         src={safeSrc}
