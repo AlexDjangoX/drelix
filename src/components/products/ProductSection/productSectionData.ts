@@ -214,7 +214,7 @@ export const CATEGORY_CARDS: {
   {
     slug: 'spodnie-ocieplane',
     titleKey: 'productNames.spodnieOcieplane',
-    thumbnail: '',
+    thumbnail: '/homepage/SPODNIE_OCIEPLANE.webp',
   },
   {
     slug: 't-shirt',
