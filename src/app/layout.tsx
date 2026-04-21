@@ -6,6 +6,7 @@ export const dynamic = "force-static";
 export const revalidate = false;
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/context/language";
 import { JsonLd } from "@/components/seo";
 import { ConvexClientProvider } from "@/context/ConvexClientProvider";
@@ -118,7 +119,9 @@ export default function RootLayout({
             storageKey="drelix-theme"
           >
             <LanguageProvider>
-              {children}
+              <TooltipProvider delayDuration={300}>
+                {children}
+              </TooltipProvider>
               <Toaster />
             </LanguageProvider>
           </ThemeProvider>

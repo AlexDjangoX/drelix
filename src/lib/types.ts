@@ -38,6 +38,7 @@ export type ProductImageUrl = {
 };
 
 export type ProductItem = {
+  /** Product code (Kod) from catalog; used as stable id and for display. */
   id: string;
   src: string;
   largeSrc: string;

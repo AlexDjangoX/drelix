@@ -1,15 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useCallback } from "react";
-import Image from "next/image";
-import { PLACEHOLDER_PRODUCT_IMAGE } from "@/lib/utils";
+import { useState, useCallback } from 'react';
+import Image from 'next/image';
+import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 /** Min/max aspect ratio so cards stay readable (avoid extreme tall or wide). */
 const ASPECT_MIN = 0.7;
 const ASPECT_MAX = 1.35;
 
 const DEFAULT_SIZES =
-  "(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw";
+  '(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw';
 
 export type ProductCardImageProps = {
   src: string;
@@ -24,6 +29,8 @@ export type ProductCardImageProps = {
   onError?: () => void;
   /** Fixed aspect ratio (e.g. 1 for square). When set, overrides dynamic aspect from image. */
   aspectRatio?: number;
+  /** Product Kod — styled tooltip on hover when non-empty. */
+  kod?: string;
 };
 
 /**
@@ -36,30 +43,35 @@ export function ProductCardImage({
   alt,
   sizes = DEFAULT_SIZES,
   className,
-  imageClassName = "object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300",
+  imageClassName = 'object-contain object-center group-hover:scale-[1.02] group-active:scale-100 transition-transform duration-300',
   onError,
   aspectRatio: fixedAspectRatio,
+  kod,
 }: ProductCardImageProps) {
   const [aspect, setAspect] = useState<number>(1);
   const safeSrc = src?.trim() || PLACEHOLDER_PRODUCT_IMAGE;
   const isExternal =
-    safeSrc.startsWith("http://") || safeSrc.startsWith("https://");
+    safeSrc.startsWith('http://') || safeSrc.startsWith('https://');
+  const kodTrim = kod?.trim() ?? '';
 
-  const onLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = e.currentTarget;
-    if (img.naturalWidth && img.naturalHeight && fixedAspectRatio == null) {
-      const ratio = img.naturalWidth / img.naturalHeight;
-      setAspect(Math.min(ASPECT_MAX, Math.max(ASPECT_MIN, ratio)));
-    }
-  }, [fixedAspectRatio]);
+  const onLoad = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      const img = e.currentTarget;
+      if (img.naturalWidth && img.naturalHeight && fixedAspectRatio == null) {
+        const ratio = img.naturalWidth / img.naturalHeight;
+        setAspect(Math.min(ASPECT_MAX, Math.max(ASPECT_MIN, ratio)));
+      }
+    },
+    [fixedAspectRatio],
+  );
 
   const effectiveAspect = fixedAspectRatio ?? aspect;
 
-  return (
+  const frame = (
     <div
       className={
         className ??
-        "relative w-full bg-muted flex items-center justify-center overflow-hidden rounded-t-xl"
+        'relative w-full bg-muted flex items-center justify-center overflow-hidden rounded-t-xl'
       }
       style={{ aspectRatio: effectiveAspect }}
     >
@@ -74,5 +86,18 @@ export function ProductCardImage({
         unoptimized={isExternal}
       />
     </div>
+  );
+
+  if (!kodTrim) {
+    return frame;
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{frame}</TooltipTrigger>
+      <TooltipContent side="top" className="font-mono">
+        Kod: {kodTrim}
+      </TooltipContent>
+    </Tooltip>
   );
 }

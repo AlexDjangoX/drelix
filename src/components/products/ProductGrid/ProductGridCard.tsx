@@ -17,7 +17,7 @@ export function ProductGridCard({ item, onClick }: Props) {
       tabIndex={0}
     >
       <CardContent className="p-0">
-        <ProductCardImage src={item.src} alt={item.name} />
+        <ProductCardImage src={item.src} alt={item.name} kod={item.id} />
         <p className="p-2 sm:p-3 text-xs sm:text-sm font-semibold text-center text-foreground group-hover:text-primary transition-colors truncate">
           {item.name}
         </p>
