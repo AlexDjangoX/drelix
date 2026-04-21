@@ -30,6 +30,7 @@ const mockRow: Record<string, string> = {
   Heading: "",
   Subheading: "",
   Description: "",
+  obuwieWariant: "",
 };
 
 describe("EditProductModal form wiring", () => {

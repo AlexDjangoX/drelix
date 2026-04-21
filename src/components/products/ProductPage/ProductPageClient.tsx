@@ -82,6 +82,7 @@ export function ProductPageClient({ slug, section: initialSection }: Props) {
 
       const netto = row.CenaNetto ?? '';
       const brutto = computeBruttoPrice(netto, row.StawkaVAT ?? '');
+      const w = String(row.obuwieWariant ?? '').trim();
 
       return {
         id: row[COD] ?? '',
@@ -95,6 +96,7 @@ export function ProductPageClient({ slug, section: initialSection }: Props) {
         subheading: row.Subheading?.trim() || undefined,
         description: (row.Description ?? row.Opis)?.trim() || undefined,
         subcategorySlug: row.subcategorySlug?.trim() || undefined,
+        ...(w ? { obuwieWariant: w } : {}),
       };
     });
   }, [section]);
@@ -241,6 +243,7 @@ export function ProductPageClient({ slug, section: initialSection }: Props) {
                 </button>
               )}
               <ProductGrid
+                categorySlug={slug}
                 items={g.items}
                 onItemClick={(i) => open(g.startIndex + i)}
               />

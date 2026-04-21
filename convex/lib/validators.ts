@@ -18,6 +18,15 @@ export const productFieldValidators = {
   Heading: v.optional(v.string()),
   Subheading: v.optional(v.string()),
   Description: v.optional(v.string()),
+  /** Footwear build variant (admin); omit when N/A. */
+  obuwieWariant: v.optional(
+    v.union(
+      v.literal("z"),
+      v.literal("bz"),
+      v.literal("z-bz"),
+      v.literal("pd"),
+    ),
+  ),
 };
 
 /** Single product row from CSV or "Add product" form. */

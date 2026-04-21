@@ -15,7 +15,13 @@ export const PRODUCT_FIELD_KEYS = [
   "Heading",
   "Subheading",
   "Description",
+  /** Footwear line (optional). */
+  "obuwieWariant",
 ] as const;
+
+/** Allowed values stored in Convex for `obuwieWariant`. */
+export const OBUWIE_WARIANT_VALUES = ["z", "bz", "z-bz", "pd"] as const;
+export type ObuwieWariant = (typeof OBUWIE_WARIANT_VALUES)[number];
 
 export type ProductFieldKey = (typeof PRODUCT_FIELD_KEYS)[number];
 
@@ -38,6 +44,7 @@ export const CSV_ALT_BY_CANONICAL: Partial<Record<ProductFieldKey, string>> = {
   OstatniaDataZakupu: "Ostatnia data zakupu",
   /** CSV/Kartoteki often uses "Opis" for long description; map to Description for display. */
   Description: "Opis",
+  obuwieWariant: "Obuwie wariant",
 };
 
 /** Title key for admin-created categories. */

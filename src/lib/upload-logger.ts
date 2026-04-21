@@ -1,6 +1,6 @@
 /**
  * Upload Debug Logger
- * Saves all upload-related logs to localStorage and console
+ * Saves upload-related logs to localStorage for export via the admin UI.
  */
 
 interface LogEntry {

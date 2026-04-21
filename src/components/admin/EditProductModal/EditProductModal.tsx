@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "convex/_generated/api";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -32,6 +32,8 @@ import { editProductSchema, type EditProductFormValues } from "./editProductSche
 import type { CatalogRow } from "@/lib/types";
 import { DISPLAY_KEYS } from "@/lib/types";
 import { DescriptionRichField } from "@/components/admin/EditProductModal/DescriptionRichField";
+import { ObuwieWariantSelect } from "@/components/admin/ObuwieWariantSelect";
+import { normalizeObuwieWariantForForm } from "@/lib/obuwieWariant";
 
 type Props = {
   row: CatalogRow;
@@ -49,6 +51,7 @@ const FORM_KEYS = [
   "Heading",
   "Subheading",
   "Description",
+  "obuwieWariant",
 ] as const;
 
 function rowToDefaultValues(row: CatalogRow): EditProductFormValues {
@@ -64,6 +67,7 @@ function rowToDefaultValues(row: CatalogRow): EditProductFormValues {
     Heading: row["Heading"] ?? "",
     Subheading: row["Subheading"] ?? "",
     Description: row["Description"] ?? row["Opis"] ?? "",
+    obuwieWariant: normalizeObuwieWariantForForm(row["obuwieWariant"]),
   };
 }
 
@@ -74,22 +78,19 @@ export function EditProductModal({
   onSuccess,
 }: Props) {
   const kod = row["Kod"] ?? "";
-  const productItem = useQuery(
-    api.catalog.getProductItemByKod,
-    open && kod ? { kod } : "skip",
-  );
   const updateProduct = useMutation(api.catalog.updateProduct);
   const form = useForm<EditProductFormValues>({
     resolver: zodResolver(editProductSchema),
     defaultValues: rowToDefaultValues(row),
   });
 
-  const sourceRow = (productItem ?? row) as CatalogRow;
-
+  const prevOpenRef = useRef(open);
   useEffect(() => {
-    if (!open) return;
-    form.reset(rowToDefaultValues(sourceRow));
-  }, [open, sourceRow, form]);
+    const openedNow = open && !prevOpenRef.current;
+    prevOpenRef.current = open;
+    if (!openedNow) return;
+    form.reset(rowToDefaultValues(row));
+  }, [open, row, form]);
 
   const isSubmitting = form.formState.isSubmitting;
 
@@ -100,10 +101,12 @@ export function EditProductModal({
       const val = data[key as keyof EditProductFormValues];
       const current =
         key === "categorySlug"
-          ? sourceRow.categorySlug
+          ? row.categorySlug
           : key === "subcategorySlug"
-            ? sourceRow.subcategorySlug
-            : sourceRow[key];
+            ? row.subcategorySlug
+            : key === "obuwieWariant"
+              ? normalizeObuwieWariantForForm(row["obuwieWariant"])
+              : row[key];
       if (String(val ?? "") !== String(current ?? "")) {
         updates[key] = String(val ?? "");
       }
@@ -142,7 +145,7 @@ export function EditProductModal({
               <p className="text-sm font-medium text-muted-foreground mb-2">
                 Zdjęcie produktu
               </p>
-              <ImageUploadCell row={sourceRow} />
+              <ImageUploadCell row={row} />
             </div>
             <div className="flex shrink-0 gap-2">
               <Button
@@ -219,6 +222,24 @@ export function EditProductModal({
                         currentSlug={field.value ?? ""}
                         onSelect={field.onChange}
                         disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="obuwieWariant"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Obuwie wariant</FormLabel>
+                    <FormControl>
+                      <ObuwieWariantSelect
+                        value={field.value}
+                        onChange={field.onChange}
+                        disabled={isSubmitting}
+                        data-testid="edit-product-obuwie-wariant"
                       />
                     </FormControl>
                     <FormMessage />

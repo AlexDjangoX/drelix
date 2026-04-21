@@ -53,6 +53,8 @@ export type ProductItem = {
   description?: string;
   /** For grouping on category page (from subcategories table). */
   subcategorySlug?: string;
+  /** Footwear display variant — shown as a pill on category grid cards. */
+  obuwieWariant?: string;
 };
 
 /** Admin product table column config (label + field key). */

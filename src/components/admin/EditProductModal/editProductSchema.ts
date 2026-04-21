@@ -17,6 +17,7 @@ export const editProductSchema = z.object({
   Heading: z.string().max(MAX_STRING),
   Subheading: z.string().max(MAX_STRING),
   Description: z.string().max(MAX_DESCRIPTION),
+  obuwieWariant: z.enum(["", "z", "bz", "z-bz", "pd"]),
 });
 
 export type EditProductFormValues = z.infer<typeof editProductSchema>;

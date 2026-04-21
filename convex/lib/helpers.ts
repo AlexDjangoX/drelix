@@ -11,6 +11,7 @@ import {
   PRODUCT_FIELD_KEYS,
   CSV_ALT_BY_CANONICAL,
   ALLOWED_UPDATE_KEYS,
+  type ObuwieWariant,
 } from "./constants";
 import { ADMIN_ERRORS } from "./errorMessages";
 
@@ -207,9 +208,15 @@ export async function productToItem(
     (rest.Opis as string | undefined)?.trim() ||
     "";
 
+  const obuwieWariantOut =
+    p.obuwieWariant !== undefined && p.obuwieWariant !== null
+      ? String(p.obuwieWariant)
+      : "";
+
   return {
     ...rest,
     Description: description,
+    obuwieWariant: obuwieWariantOut,
     imageStorageId: resolvedEntries[0]?.imageStorageId ?? "",
     imageUrl,
     thumbnailStorageId: resolvedEntries[0]?.thumbnailStorageId ?? "",
@@ -255,6 +262,29 @@ export async function deleteProductImages(
   return { deleted, failed };
 }
 
+/** Parse admin/CSV value into stored obuwie code, or undefined to omit. */
+export function parseObuwieWariant(raw: string): ObuwieWariant | undefined {
+  const t = raw.trim();
+  if (t === "z" || t === "bz" || t === "z-bz" || t === "pd") return t;
+  return undefined;
+}
+
+/**
+ * Normalize product patch after filterAllowedUpdates: coerce `obuwieWariant`,
+ * remove field when empty or invalid.
+ */
+export function normalizeProductPatch(
+  patch: Record<string, string>,
+): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...patch };
+  if ("obuwieWariant" in out) {
+    const parsed = parseObuwieWariant(String(out.obuwieWariant ?? ""));
+    if (parsed) out.obuwieWariant = parsed;
+    else out.obuwieWariant = undefined;
+  }
+  return out;
+}
+
 /** Map row to product insert shape. Handles both camelCase and CSV alt keys. */
 export function toProductInsert(
   row: Record<string, string>,
@@ -265,12 +295,22 @@ export function toProductInsert(
   const get = (key: (typeof PRODUCT_FIELD_KEYS)[number]) =>
     row[key] ?? row[CSV_ALT_BY_CANONICAL[key] ?? ""] ?? "";
 
+  const obuwieRaw = get("obuwieWariant");
+  const obuwieParsed = parseObuwieWariant(obuwieRaw);
+
   const insert: ProductInsert = {
     ...(Object.fromEntries(
-      PRODUCT_FIELD_KEYS.map((k) => [k, get(k)]),
-    ) as Record<(typeof PRODUCT_FIELD_KEYS)[number], string>),
+      PRODUCT_FIELD_KEYS.filter((k) => k !== "obuwieWariant").map((k) => [
+        k,
+        get(k),
+      ]),
+    ) as Record<
+      Exclude<(typeof PRODUCT_FIELD_KEYS)[number], "obuwieWariant">,
+      string
+    >),
     categorySlug,
   };
+  if (obuwieParsed) insert.obuwieWariant = obuwieParsed;
   const rowSub = row.subcategorySlug?.trim();
   if (rowSub) insert.subcategorySlug = rowSub;
   else if (subcategorySlug?.trim()) insert.subcategorySlug = subcategorySlug.trim();

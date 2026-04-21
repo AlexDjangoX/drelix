@@ -17,6 +17,7 @@ export type ProductInsert = {
   Heading?: string;
   Subheading?: string;
   Description?: string;
+  obuwieWariant?: "z" | "bz" | "z-bz" | "pd";
   categorySlug: string;
   subcategorySlug?: string;
   imageStorageId?: string;
@@ -60,6 +61,7 @@ export type ProductUpdateResult = {
   Heading?: string;
   Subheading?: string;
   Description?: string;
+  obuwieWariant?: "z" | "bz" | "z-bz" | "pd";
   categorySlug: string;
   subcategorySlug?: string;
   imageStorageId?: string;

@@ -161,8 +161,7 @@ export function ImageUploadCell({ row }: Props) {
         });
       }
       toast.success("Zdjęcie zostało dodane", { id: toastId });
-    } catch (e) {
-      console.error("Upload failed", e);
+    } catch {
       toast.error("Nie udało się przesłać zdjęcia", { id: toastId });
     } finally {
       setUploading(false);
@@ -199,8 +198,7 @@ export function ImageUploadCell({ row }: Props) {
         await removeProductImage({ kod, index });
       }
       toast.success("Zdjęcie zostało usunięte", { id: toastId });
-    } catch (err) {
-      console.error("Delete image failed", err);
+    } catch {
       toast.error("Nie udało się usunąć zdjęcia", { id: toastId });
     } finally {
       setDeletingIndex(null);

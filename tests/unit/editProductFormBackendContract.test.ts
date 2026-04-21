@@ -16,6 +16,7 @@ const FORM_UPDATE_KEYS = [
   "Heading",
   "Subheading",
   "Description",
+  "obuwieWariant",
 ] as const;
 
 describe("Edit Product form ↔ backend contract", () => {

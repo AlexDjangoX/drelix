@@ -16,6 +16,7 @@ const validPayload = {
   Heading: "",
   Subheading: "",
   Description: "",
+  obuwieWariant: "" as const,
 };
 
 describe("editProductSchema", () => {

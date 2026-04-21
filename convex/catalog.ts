@@ -27,6 +27,7 @@ import {
   getProductImageEntries,
   toProductInsert,
   filterAllowedUpdates,
+  normalizeProductPatch,
   productToUpdateResult,
 } from "./lib/helpers";
 import { requireAdmin, sanitizeString, validateSlug } from "./lib/convexAuth";
@@ -311,7 +312,7 @@ export const updateProduct = mutation({
       return productToUpdateResult(product);
     }
 
-    await ctx.db.patch(product._id, patch);
+    await ctx.db.patch(product._id, normalizeProductPatch(patch));
     const updated = await ctx.db.get(product._id);
     if (!updated) {
       throw new Error(ADMIN_ERRORS.PRODUCT_NOT_FOUND(validatedKod));
